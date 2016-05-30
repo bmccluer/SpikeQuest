@@ -9,6 +9,7 @@ import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.objects.SpikeObject;
+import com.brendanmccluer.spikequest.objects.ponies.FlimObject;
 
 /**
  * I extend the Abstract screen by creating a spike object with a controller 
@@ -74,11 +75,6 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	 */
 	protected boolean loadAssets() {
 		boolean loaded = game.assetManager.loadAssets() && aSpikeObject.isLoaded();
-		
-		//load default background music if not there
-		//if (loaded && backgroundMusic == null)
-			//backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset(HUB_MAIN_MUSIC_PATH, "Music"));
-		
 		return loaded;
 	}
 	

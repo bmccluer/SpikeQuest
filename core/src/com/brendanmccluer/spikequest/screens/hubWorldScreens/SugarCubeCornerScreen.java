@@ -1,16 +1,24 @@
 package com.brendanmccluer.spikequest.screens.hubWorldScreens;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
+import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
+import com.brendanmccluer.spikequest.objects.ponies.FlamObject;
+import com.brendanmccluer.spikequest.objects.ponies.FlimObject;
 import com.brendanmccluer.spikequest.objects.ponies.PinkieObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
+	private static final String FLIM_FLAM_DIALOG_PATH = "dialog/ponyvilleDialog/flimFlamParaspriteDialog.txt";
 	private SpikeQuestDialogController aDialogController = null;
 	private PinkieObject aPinkieObject = null;
+	private FlimObject aFlimObject = null;
+	private FlamObject aFlamObject = null;
+	private Texture paraspriteCageTexture = new Texture("object/ParaspriteCage.png"); //TODO; USE ANIMATED OBJECT
 			
 	public SugarCubeCornerScreen(SpikeQuestGame game, String aScreenType, String aSpikeSpawnString) {
 		super(game, 1097, 617, 1000, SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_BACKDROP_PATH, aScreenType, aSpikeSpawnString);
@@ -21,8 +29,15 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 			aDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Pinkie", 1, 
 				aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Spike", 0);
 			aPinkieObject = new PinkieObject();
-			
 		}
+		//load flim and flam if ShyAndSeek is complete
+		if(SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY)) {
+			aFlimObject = new FlimObject();
+			aFlamObject = new FlamObject();
+			aDialogController = new SpikeQuestDialogController(aFlimObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flim", 6, 
+					aFlamObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flam", 6);
+		}
+			
 		
 	}
 
@@ -44,7 +59,7 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 		
 		refresh();
 		
-		if (loadAssets()) {
+		if (loadAssets() && (aFlimObject == null || aFlimObject.isLoaded()) && (aFlamObject == null || aFlamObject.isLoaded()) && (aDialogController == null || aDialogController.areTextBalloonsLoaded())) {
 			
 			if (!screenStart)
 				initialize();
@@ -59,6 +74,7 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 			
 			//control
 			controlSpike();
+			
 			
 			//determine end of screen
 			if (("left").equals(getEdgeTouched())) {
@@ -114,6 +130,12 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	
 	protected void draw() {
 		drawBackdrop();
+		if (aFlimObject != null) {
+			aFlimObject.draw(game.batch);
+			aFlamObject.draw(game.batch);
+			game.batch.draw(paraspriteCageTexture, aFlimObject.getCenterX() - 150, 15);
+			aDialogController.drawTheDialogAndAnimateObjects(game.batch, aFlimObject, aFlamObject);
+		}
 		aSpikeObject.draw(game.batch);
 	}
 
@@ -130,21 +152,34 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	protected void initialize() {
 		
 		super.initialize(true);
+		if (aFlimObject != null) {
+			aFlimObject.spawn(gameCamera.getCameraWidth()/2 - 300, 15);
+			aFlimObject.moveRight(0);
+			aFlamObject.spawn(gameCamera.getCameraWidth()/2 - 150, 15);
+			aFlimObject.resize(0.5f);
+			aFlamObject.resize(0.5f);
+			aFlamObject.moveLeft(0);
+			aDialogController.setTextBalloonDefaultPositionsOverObjects(aFlimObject, aFlamObject);
+			aDialogController.useTimer(); //use timer instead of space bar
+		}
 		screenStart = true;
 	}
 	
 	@Override
 	public void dispose() {
-		
 		if (aPinkieObject != null)
 			aPinkieObject.discard();
-		
 		if (aDialogController != null)
 			aDialogController.discardTextBalloons();
+		if (aFlimObject != null)
+			aFlimObject.discard();
+		if (aFlamObject != null)
+			aFlamObject.discard();
 		
 		aDialogController = null;
 		aPinkieObject = null;
-		
+		aFlamObject = null;
+		aFlimObject = null;
 		super.dispose();
 	}
 

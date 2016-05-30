@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
+import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 
 public class SpikeQuestDialogController {
@@ -11,6 +12,7 @@ public class SpikeQuestDialogController {
 	
 	private SpikeQuestTextBalloon firstTextBalloon = null;
 	private SpikeQuestTextBalloon secondTextBalloon = null;
+	private TimerObject timer = null;
 	public String firstTextBalloonName = null;
 	public String secondTextBalloonName = null;
 	public int firstTextIndex = 0;
@@ -22,6 +24,7 @@ public class SpikeQuestDialogController {
 	public boolean dialogEnabled = true;
 	private boolean textBalloonsLoaded = false;
 	private boolean atEndOfDialog = false;
+	
 
 	/**
 	 * I control two text balloons passed. Notice that you must call this
@@ -48,6 +51,14 @@ public class SpikeQuestDialogController {
 		firstTextBalloon.loadSounds(anObjectForFirstText, firstTextBalloonName, firstEndingIndex);
 		secondTextBalloon.loadSounds(anObjectForSecondText, secondTextBalloonName, secondEndingIndex);
 		
+	}
+	
+	/**
+	 * I set if the dialog is controlled by a timer as opposed to the Space bar
+	 */
+	public void useTimer() {
+		timer = new TimerObject();
+		timer.startTimer(0, 3);
 	}
 
 	/**
@@ -88,9 +99,13 @@ public class SpikeQuestDialogController {
 			drawFirstTextFlag = true;
 		}
 
-		// listen for space bar
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()) {
+		// listen for space bar or timer
+		if ((timer == null && (Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()))
+				|| (timer != null && timer.isTimerFinished())) {
 
+			if (timer != null)
+				timer.startTimer(0, 3);
+			
 			// if first textBalloon is done go to second talk balloon
 			if (drawFirstTextFlag && !firstTextBalloon.setNextDialog()) {
 
@@ -293,6 +308,8 @@ public class SpikeQuestDialogController {
 		
 		firstTextBalloon = null;
 		secondTextBalloon = null;
+		if (timer != null)
+			timer.dispose();
 		
 	}
 }

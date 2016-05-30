@@ -28,7 +28,7 @@ public class TextureAtlasCreator {
 		//TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\ShyAndSeekGame\\Bat\\Still", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\animals\\bat", "BatStand");
 		//TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\ShyAndSeekGame\\Bat\\Walk", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\animals\\bat", "BatWalk");
 	//	TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\ShyAndSeekGame\\Frog\\Popup", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\animals\\frog", "FrogPopup");
-		TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\ShyAndSeekGame\\Frog\\Walk", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\animals\\frog", "FrogWalk");
+		//TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\ShyAndSeekGame\\Frog\\Walk", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\animals\\frog", "FrogWalk");
 		
 	}
 
