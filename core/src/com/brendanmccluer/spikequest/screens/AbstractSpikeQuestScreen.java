@@ -1,6 +1,5 @@
 package com.brendanmccluer.spikequest.screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Buttons;
@@ -39,12 +38,12 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 	 * @param delta
 	 */
 	protected void useLoadingScreen(float delta) {
-		/*if (screenStart && loadingScreen != null) {
+		if (screenStart && loadingScreen != null) {
 			disposeLoadingScreen();
 			loadingScreen = null;
 		}
 		else if (!screenStart)
-			renderLoadingScreen(delta);*/
+			renderLoadingScreen(delta);
 	}
 	
 	private void renderLoadingScreen(float delta) {

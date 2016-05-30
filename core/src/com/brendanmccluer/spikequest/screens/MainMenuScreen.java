@@ -63,7 +63,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	        game.batch.end();
            
 	        //Go to start screen
-	        if (Gdx.input.isTouched() || isButtonPressed(newGameButton)) {
+	        if (isButtonPressed(newGameButton)) {
 	        	SpikeQuestSaveFile.deleteSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
 	        	SpikeQuestSaveFile.createNewSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
 	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
@@ -78,8 +78,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	        	if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
 	        		SpikeQuestScreenManager.setDebugging(true);
 	        	}
-	        		
-	        	
+	   
 	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
 	        	
 	        	continueButtonPressed = true;

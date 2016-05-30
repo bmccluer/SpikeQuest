@@ -74,7 +74,7 @@ public class SpikeQuestScreenManager {
 		//TODO DELETE THIS
 		if (debugging) {
 			//handleShyAndSeekScreen(aGame);
-			aGame.setScreen(new ShyAndSeekScreen(aGame));
+			aGame.setScreen(new ShyAndSeekOutroScreen(aGame, "", "right"));
 			//aGame.setScreen(new BalloonGameIntroScreen(aGame));
 			return;
 		}
@@ -110,6 +110,7 @@ public class SpikeQuestScreenManager {
 
 
 	private static void handleShyAndSeekScreen(SpikeQuestGame aGame) {
+		SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 		aGame.setScreen(new ShyAndSeekOutroScreen(aGame, "normal", "right"));
 	}
 

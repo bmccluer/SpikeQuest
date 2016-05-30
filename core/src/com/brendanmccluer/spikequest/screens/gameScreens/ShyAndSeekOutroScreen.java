@@ -20,7 +20,6 @@ public class ShyAndSeekOutroScreen extends AbstractSpikeQuestStandardScreen {
 	public ShyAndSeekOutroScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
 		
 		super(game, 1259, 634, 1100, "backdrop/fluttershyBackOfCottage.png", aScreenType, aSpikePosition);
-		SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 	}
 
 	@Override
