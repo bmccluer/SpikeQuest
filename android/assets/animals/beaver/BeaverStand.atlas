@@ -1,0 +1,13 @@
+
+BeaverStand.png
+size: 68,52
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 66, 50
+  orig: 66, 50
+  offset: 0, 0
+  index: -1

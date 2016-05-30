@@ -1,0 +1,13 @@
+
+RacoonStand.png
+size: 91,62
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 89, 60
+  orig: 89, 60
+  offset: 0, 0
+  index: -1

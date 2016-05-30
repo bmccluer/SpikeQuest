@@ -1,0 +1,30 @@
+[Pinkie0]
+{oh,0.5}
+"Oh I see. That telescope!"
+
+[Spike0]
+"What - what am I gonna do now?"
+
+[Pinkie1]
+"Well that one looks a little broken. Why don’t you buy a new one? I saw one in (whatever 	store) that looks just like it"
+
+[Spike1]
+"Yeah, maybe I could do that. If it looks just like it then she won't even 	know. That's a great idea!"
+
+[Pinkie2]
+"Yep! All you need is (x) amount of bits! Easy peasey."
+
+[Spike2]
+"(x) bits! Where am I supposed to get that kind of money?"
+
+[Pinkie3]
+"Well you just tell Twilight you broke the telescope. After all, she just trusted you with her allllllllllll time favorite possession. Accidents happen you know."
+
+[Spike3]
+"No please Pinkie Pie, you gotta help me!"
+
+[Pinkie4]
+"Hmmm, welllllll you could help me clean up for a party. I could pay you bits for it."
+
+[Spike4]
+"I can do that! Just tell me what to do!"  

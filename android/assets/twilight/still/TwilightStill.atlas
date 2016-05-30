@@ -1,0 +1,88 @@
+
+TwilightStill.png
+size: 668,661
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0010
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0007
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0009
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+
+TwilightStill2.png
+size: 668,661
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1
+
+TwilightStill3.png
+size: 668,661
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 666, 659
+  orig: 666, 659
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,13 @@
+
+FrogStand.png
+size: 231,202
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 229, 200
+  orig: 229, 200
+  offset: 0, 0
+  index: -1

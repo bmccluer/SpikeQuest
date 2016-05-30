@@ -1,0 +1,27 @@
+
+MouseWalk.png
+size: 250,246
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 163
+  size: 237, 83
+  orig: 237, 83
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 2
+  size: 202, 85
+  orig: 202, 85
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 2, 89
+  size: 248, 72
+  orig: 248, 72
+  offset: 0, 0
+  index: -1

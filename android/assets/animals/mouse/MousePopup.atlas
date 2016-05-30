@@ -1,0 +1,13 @@
+
+MousePopup.png
+size: 150,133
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 148, 131
+  orig: 148, 131
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,48 @@
+
+SpikeStand.png
+size: 608,960
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 482
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 306, 20
+  size: 302, 460
+  orig: 302, 460
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 306, 20
+  size: 302, 460
+  orig: 302, 460
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 2, 2
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 2, 2
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 306, 482
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,115 @@
+
+Pinkie.png
+size: 698,624
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0011
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0013
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0009
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0012
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0007
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+
+Pinkie2.png
+size: 698,624
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+
+Pinkie3.png
+size: 698,624
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0004
+  rotate: false
+  xy: 2, 2
+  size: 696, 622
+  orig: 696, 622
+  offset: 0, 0
+  index: -1
+
+Pinkie4.png
+size: 698,607
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0006
+  rotate: false
+  xy: 2, 2
+  size: 696, 605
+  orig: 696, 605
+  offset: 0, 0
+  index: -1
+0010
+  rotate: false
+  xy: 2, 2
+  size: 696, 605
+  orig: 696, 605
+  offset: 0, 0
+  index: -1

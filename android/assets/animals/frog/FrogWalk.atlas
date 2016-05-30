@@ -1,0 +1,40 @@
+
+FrogWalk.png
+size: 569,928
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 466
+  size: 567, 462
+  orig: 567, 462
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 2
+  size: 567, 462
+  orig: 567, 462
+  offset: 0, 0
+  index: -1
+
+FrogWalk2.png
+size: 569,928
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 466
+  size: 567, 462
+  orig: 567, 462
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 567, 462
+  orig: 567, 462
+  offset: 0, 0
+  index: -1

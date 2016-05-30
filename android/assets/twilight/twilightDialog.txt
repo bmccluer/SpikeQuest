@@ -1,0 +1,14 @@
+[Intro0]
+"I'm so excited about tonight Spike! The (whatever thingy) only happens (however long). With everypony  going to (wherever), I just know tonight is going to be special. The kind of night that you always remember!"
+
+[Intro1]
+"Of course, everything has to absolutely perfect. I’ve organized everything. Apple Jack will provide the food, and Rainbow Dash has agreed to clear the skies. Rarity putting up the 	decorations . Fluttershy has musical entertainment for us. Pinkie Pie is of course in charge of the party as a whole… That’s everything, isn’t it?"
+
+[Intro2]
+"(Pauses) Oh wait! I forgot about the telescope! I promised everypony we could use it tonight! Quick, Spike pack it up and take down to Pinkie Pie. I want to sure everything is ready to go for tonight. I’m sure she’s already started preparations."
+
+[Intro3]
+"Just be careful, Spike. The telescope is fragile. I wouldn't want anything to happen to it."
+
+[Intro4]
+"You're right Spike. I know the telescope will be in good hands. Once you're done you can take 	the rest of the day off.  You've earned it."

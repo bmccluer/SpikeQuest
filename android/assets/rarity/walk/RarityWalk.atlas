@@ -1,0 +1,78 @@
+
+RarityWalk.png
+size: 757,595
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 755, 593
+  orig: 755, 593
+  offset: 0, 0
+  index: -1
+
+RarityWalk2.png
+size: 752,598
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0006
+  rotate: false
+  xy: 2, 2
+  size: 750, 596
+  orig: 750, 596
+  offset: 0, 0
+  index: -1
+
+RarityWalk3.png
+size: 769,584
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0005
+  rotate: false
+  xy: 2, 2
+  size: 767, 582
+  orig: 767, 582
+  offset: 0, 0
+  index: -1
+
+RarityWalk4.png
+size: 755,591
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 753, 589
+  orig: 753, 589
+  offset: 0, 0
+  index: -1
+
+RarityWalk5.png
+size: 752,590
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0004
+  rotate: false
+  xy: 2, 2
+  size: 750, 588
+  orig: 750, 588
+  offset: 0, 0
+  index: -1
+
+RarityWalk6.png
+size: 761,575
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 759, 573
+  orig: 759, 573
+  offset: 0, 0
+  index: -1

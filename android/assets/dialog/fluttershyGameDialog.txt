@@ -1,0 +1,32 @@
+[Fluttershy0]
+"Oh goodness. What will I...Oh, where did they go?"
+
+[Spike0]
+"What's the matter Fluttershy?"
+
+[Fluttershy1]
+"Oh Spike, hello, I'm afraid I have a rather big problem. I...um, don't know what to do."
+
+[Spike1]
+"That's great news!"
+
+[Fluttershy2]
+"It is?"
+
+[Spike2]
+"Well, see, you know that big fancy telescope Twilight has? I kind of broke it."
+
+[Fluttershy3]
+"Oh no!"
+
+[Spike3]
+"Now I'm going round Ponyville looking for ponies who need help."
+
+[Fluttershy4]
+"Ummm...I'm confused."
+
+[Spike4]
+"Just tell me what the problem is and I'll help you fix it... maybe you could even spare a few bits?"
+
+[Fluttershy5]
+"Oh I see. Well tonight some of animals are singing for the party. We're supposed to be practicing...but um, they seem to have wandered off. I can't seem to find them anywhere..."

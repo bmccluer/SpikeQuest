@@ -1,0 +1,33 @@
+
+BeaverWalk.png
+size: 615,784
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 394
+  size: 613, 390
+  orig: 613, 390
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 2
+  size: 613, 390
+  orig: 613, 390
+  offset: 0, 0
+  index: -1
+
+BeaverWalk2.png
+size: 615,392
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 613, 390
+  orig: 613, 390
+  offset: 0, 0
+  index: -1

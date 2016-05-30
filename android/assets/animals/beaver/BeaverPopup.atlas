@@ -1,0 +1,13 @@
+
+BeaverPopup.png
+size: 208,153
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 206, 151
+  orig: 206, 151
+  offset: 0, 0
+  index: -1

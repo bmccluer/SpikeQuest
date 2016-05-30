@@ -1,0 +1,78 @@
+
+PinkieWalk.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1
+
+PinkieWalk2.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1
+
+PinkieWalk3.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1
+
+PinkieWalk4.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0004
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1
+
+PinkieWalk5.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0005
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1
+
+PinkieWalk6.png
+size: 983,1550
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0006
+  rotate: false
+  xy: 2, 2
+  size: 981, 1548
+  orig: 981, 1548
+  offset: 0, 0
+  index: -1

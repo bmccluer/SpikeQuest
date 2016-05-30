@@ -1,0 +1,126 @@
+
+RarityTalkMagic.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic2.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic3.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+0007
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic4.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0004
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+0012
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic5.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0009
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic6.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0010
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1
+
+RarityTalkMagic7.png
+size: 590,637
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0011
+  rotate: false
+  xy: 2, 2
+  size: 588, 635
+  orig: 588, 635
+  offset: 0, 0
+  index: -1

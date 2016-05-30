@@ -1,0 +1,13 @@
+
+ScoreOneLives.png
+size: 638,245
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 636, 243
+  orig: 636, 243
+  offset: 0, 0
+  index: -1

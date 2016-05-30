@@ -1,0 +1,65 @@
+
+Derpy.png
+size: 750,761
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 748, 759
+  orig: 748, 759
+  offset: 0, 0
+  index: -1
+
+Derpy2.png
+size: 750,761
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 748, 759
+  orig: 748, 759
+  offset: 0, 0
+  index: -1
+
+Derpy3.png
+size: 750,761
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 2
+  size: 748, 759
+  orig: 748, 759
+  offset: 0, 0
+  index: -1
+
+Derpy4.png
+size: 750,761
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0004
+  rotate: false
+  xy: 2, 2
+  size: 748, 759
+  orig: 748, 759
+  offset: 0, 0
+  index: -1
+
+Derpy5.png
+size: 750,761
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0005
+  rotate: false
+  xy: 2, 2
+  size: 748, 759
+  orig: 748, 759
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,12 @@
+[Pinkie0]
+{watchaDoing,0.5}
+"Whatcha doing?"
+
+[Spike0]
+"Oh Pinkie. I was supposed to deliver this telescope. It's extremely important, so make sure you take real good care...“"
+
+[Pinkie1]
+"What telescope?"
+
+[Spike1]
+"Oh no!"

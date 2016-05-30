@@ -1,0 +1,27 @@
+
+RacoonWalk.png
+size: 546,124
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 180, 122
+  orig: 180, 122
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 184, 2
+  size: 180, 122
+  orig: 180, 122
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 366, 2
+  size: 180, 122
+  orig: 180, 122
+  offset: 0, 0
+  index: -1

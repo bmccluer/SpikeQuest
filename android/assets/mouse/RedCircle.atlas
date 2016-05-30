@@ -1,0 +1,27 @@
+
+RedCircle.png
+size: 183,61
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 63, 2
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 124, 2
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1

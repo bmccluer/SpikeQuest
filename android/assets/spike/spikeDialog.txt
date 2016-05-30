@@ -1,0 +1,11 @@
+[Intro0]
+"(Spike Nods)"
+
+[Intro1]
+"(Spike looks over clipboard. He nods his head.)"
+
+[Intro2]
+"You can count on me Twilight!" 
+
+[Intro3]
+"Don't worry Twilight. You know you can count on your #1 assistant to get the job done right."

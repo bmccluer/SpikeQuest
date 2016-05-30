@@ -1,0 +1,13 @@
+
+OwlPopup.png
+size: 314,343
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 312, 341
+  orig: 312, 341
+  offset: 0, 0
+  index: -1

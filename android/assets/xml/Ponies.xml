@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Pony [
+<!ELEMENT Pony (Size?,Still+,Move?,Talk?,SoundEffects?)>
+<!ATTLIST Pony name ID #REQUIRED>
+<!ELEMENT Still (TextureAtlas+,Frames+)>
+<!ELEMENT Talk (TextureAtlas+,Frames+)>
+<!ELEMENT Move (TextureAtlas+,Frames+)>
+<!ELEMENT TextureAtlas (#PCDATA)>
+<!ELEMENT Frames (#PCDATA)>
+<!ELEMENT SoundEffects (Normal,Exclamation)>
+<!ELEMENT Normal (#PCDATA)>
+<!ELEMENT Exclamation (#PCDATA)>
+]>
+<Pony name="Pinkie">
+<Size>0.33</Size>
+<Still>
+<TextureAtlas>pinkie/Pinkie.atlas</TextureAtlas>
+<Frames>13</Frames>
+</Still>
+<Talk>
+<TextureAtlas>pinkie/talk/PinkieTalk.atlas</TextureAtlas>
+<Frames>17</Frames>
+</Talk>
+</Pony>
+
+

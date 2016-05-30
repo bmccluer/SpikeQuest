@@ -1,0 +1,13 @@
+
+PurpleGem.png
+size: 91,112
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 89, 110
+  orig: 89, 110
+  offset: 0, 0
+  index: -1

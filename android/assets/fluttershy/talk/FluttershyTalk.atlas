@@ -1,0 +1,108 @@
+
+FluttershyTalk.png
+size: 745,615
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+
+FluttershyTalk2.png
+size: 745,615
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0007
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+
+FluttershyTalk3.png
+size: 745,615
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0009
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0012
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+
+FluttershyTalk4.png
+size: 745,615
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0010
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1
+0011
+  rotate: false
+  xy: 2, 2
+  size: 743, 613
+  orig: 743, 613
+  offset: 0, 0
+  index: -1

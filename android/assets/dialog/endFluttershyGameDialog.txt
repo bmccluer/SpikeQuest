@@ -1,0 +1,39 @@
+[Fluttershy0]
+"You can stop...um...looking now Spike. All of them are here now...so... I wanted to say...thanks."
+
+[Spike0]
+"You mean I found them all?"
+
+[Fluttershy1]
+{yay,0.5}
+"Yay!"
+
+[Spike1]
+"Oh great..."
+
+[Fluttershy2]
+"I really can't tell you have relieved I am. I was so worried, I thought maybe something awful had happened...But now, we can start practicing at last."
+
+[Spike2]
+"Yeah, but what am I supposed to do?"
+
+[Fluttershy3]
+"Oh...well...I don't know..."
+
+[Spike3]
+"I was afraid of that."
+
+[Fluttershy4]
+"...Oh! Maybe Rainbow Dash needs help. I'm sure she'd be very appreciative."
+
+[Spike4]
+"Okay. It's worth a try anyway. Thanks Fluttershy!"
+
+[Fluttershy5]
+"You're welcome...and uh...Spike?"
+
+[Spike5]
+"Yes?"
+
+[Fluttershy6]
+"Good luck."

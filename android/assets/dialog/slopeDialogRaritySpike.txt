@@ -1,0 +1,14 @@
+[Rarity0]
+"Spike! Thank goodness. You're just the dragon I need. It's awful! 	It's just dreadful!"
+
+[Spike0]
+"What's wrong Rarity?"
+
+[Rarity1]
+"I just can't decide. Do you like the pink hat? Or the blue?"
+
+[Spike1]
+"Gee Rarity, I don't know. You look so good in everything."
+
+[Rarity2]
+"Oh Spike you're such a dear. Pink it is."

@@ -1,0 +1,33 @@
+
+SpikeFire.png
+size: 687,932
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0002
+  rotate: false
+  xy: 2, 468
+  size: 685, 464
+  orig: 685, 464
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 2, 2
+  size: 685, 464
+  orig: 685, 464
+  offset: 0, 0
+  index: -1
+
+SpikeFire2.png
+size: 685,466
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 683, 464
+  orig: 683, 464
+  offset: 0, 0
+  index: -1

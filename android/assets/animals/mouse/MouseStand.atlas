@@ -1,0 +1,13 @@
+
+MouseStand.png
+size: 238,167
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 236, 165
+  orig: 236, 165
+  offset: 0, 0
+  index: -1
