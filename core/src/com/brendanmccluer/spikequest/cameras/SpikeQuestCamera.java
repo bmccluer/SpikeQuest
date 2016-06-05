@@ -193,10 +193,13 @@ public class SpikeQuestCamera {
 		worldWidth = width;
 		worldHeight = height;
 	}
-
+	
+	public void printMousePos() {
+		System.out.println("X: " + getMousePositionX() + " Y: " + getMousePositionY());
+	}
+	
 	public void discard() {
 		camera = null;
 	}
-	
-	
+		
 }
