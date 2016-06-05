@@ -82,6 +82,16 @@ public class SpikeQuestDialogController {
 		return textBalloonsLoaded;
 	}
 	
+	/**
+	 * I reset the dialog
+	 */
+	public void reset() {
+		firstTextIndex = 0;
+		secondTextIndex = 0;
+		textBalloonsLoaded = false;
+		atEndOfDialog = false;
+	}
+	
 
 	/**
 	 * I set flags for two dialog balloons (drawFirstText and drawSecondText)
