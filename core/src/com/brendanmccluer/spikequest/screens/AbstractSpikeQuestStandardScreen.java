@@ -9,7 +9,6 @@ import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.objects.SpikeObject;
-import com.brendanmccluer.spikequest.objects.ponies.FlimObject;
 
 /**
  * I extend the Abstract screen by creating a spike object with a controller 

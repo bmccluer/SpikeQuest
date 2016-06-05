@@ -75,12 +75,21 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 			//control
 			controlSpike();
 			
+			if(aDialogController != null) {
+				if (aDialogController.areTextBalloonsFinished())
+					aDialogController.reset();
+			}
 			
 			//determine end of screen
 			if (("left").equals(getEdgeTouched())) {
 				dispose();
 				SpikeQuestScreenManager.forwardScreen(this, new PonyvilleParkScreen(game, " ", "right"), game);
 				return;
+			}
+			
+			if (("right").equals(getEdgeTouched()) && SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY)) {
+				dispose();
+				SpikeQuestScreenManager.forwardScreen(this, new PonyvilleCityHallScreen(game, " ", "left"), game);
 			}
 				
 		}
