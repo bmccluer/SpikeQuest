@@ -80,7 +80,7 @@ public class ShyAndSeekIntroScreen extends AbstractSpikeQuestStandardScreen {
 			
 			if (aDialogController.areTextBalloonsFinished()) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new ShyAndSeekScreen(game), game);
+				SpikeQuestScreenManager.forwardScreen(this, new ShyAndSeekInstructionScreen(game), game);
 			}
 				
 		}

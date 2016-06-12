@@ -8,6 +8,7 @@ import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
+import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekInstructionScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
@@ -74,8 +75,9 @@ public class SpikeQuestScreenManager {
 		//TODO DELETE THIS
 		if (debugging) {
 			//handleShyAndSeekScreen(aGame);
-			aGame.setScreen(new ShyAndSeekOutroScreen(aGame, "", "right"));
+			//aGame.setScreen(new SugarCubeCornerScreen(aGame, "normal", "left"));
 			//aGame.setScreen(new BalloonGameIntroScreen(aGame));
+			aGame.setScreen(new ShyAndSeekInstructionScreen(aGame));
 			return;
 		}
 		

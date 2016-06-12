@@ -17,7 +17,7 @@ public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 	@Override
 	public void render(float delta) {
 		refresh();
-		//useLoadingScreen(delta);
+		useLoadingScreen(delta);
 		if (game.assetManager.loadAssets() && loadAssets() && aPinkieObject.isLoaded()) {
 		
 			if (!screenStart) {
