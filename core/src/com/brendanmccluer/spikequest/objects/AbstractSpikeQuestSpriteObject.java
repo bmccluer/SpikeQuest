@@ -66,6 +66,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	public void setCurrentPositionXY(float currentPositionX, float currentPositionY) {
 		this.currentPositionX = currentPositionX;
 		this.currentPositionY = currentPositionY;
+		currentSprite.setPosition(currentPositionX, currentPositionY);
 	}
 	
 	/**

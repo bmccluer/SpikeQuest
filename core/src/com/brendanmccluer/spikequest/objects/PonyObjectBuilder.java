@@ -92,8 +92,7 @@ public class PonyObjectBuilder {
 		//done with these. Discard
 		filePaths = null;
 		frameLengths = null;
-		
-		//TODO delete this and adapt to types "Sound" as well
+
 		Arrays.fill(types, "TextureAtlas");
 		
 		//Build the object
