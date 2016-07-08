@@ -3,6 +3,7 @@ package com.brendanmccluer.spikequest.cameras;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
 public class SpikeQuestCamera {
@@ -81,6 +82,15 @@ public class SpikeQuestCamera {
 	public void attachToBatch(SpriteBatch batch) {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+	}
+
+	/**
+	 * I set the mapRenderer to the camera
+	 * @param mapRenderer
+     */
+	public void attachToTileMapRenderer(TiledMapRenderer mapRenderer) {
+		camera.update();
+		mapRenderer.setView(camera);
 	}
 	
 	/**

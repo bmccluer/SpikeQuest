@@ -25,8 +25,9 @@ public class TankObject extends StandardObject {
 
     /***
      * I update the position and listen for keyboard input
+     * and return the distance moved
      */
-    public void update(float delta) {
+    public Vector2 update(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && velocity.y < speedLimit)
             velocity.y += speed;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && velocity.y > -speedLimit)
@@ -49,7 +50,7 @@ public class TankObject extends StandardObject {
         Vector2 scale = velocity.cpy();
         scale.scl(delta);
         setCurrentPositionXY(currentPositionX + scale.x, currentPositionY + scale.y);
-        scale = null;
+        return scale;
     }
 
     @Override
