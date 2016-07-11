@@ -8,6 +8,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
+import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
+import com.brendanmccluer.spikequest.objects.MountainObject;
 import com.brendanmccluer.spikequest.objects.RingObject;
 import com.brendanmccluer.spikequest.objects.TankObject;
 import com.brendanmccluer.spikequest.objects.ponies.RainbowDashObject;
@@ -26,37 +28,39 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final float FOREGROUND_SPEED_MIN = 200;
     private TankObject aTankObject = new TankObject();
     private RainbowDashObject aRainbowDashObject = new RainbowDashObject();
-    private List<RingObject> rings;
+    private List<AbstractSpikeQuestObject> rings;
+    private List<AbstractSpikeQuestObject> mountains;
     private int numRings = 30;
-    private boolean ringsLoaded;
+    private int numMountains = 10;
     private Random random;
-    TiledMap tiledMap;
-    TiledMapRenderer tiledMapRenderer;
-    float boostSpeed = 0;
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
+    private float boostSpeed = 0;
+    private int[] mountainLocations = {300, 600, 800, 2500, 3500};
 
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
         gameCamera = new SpikeQuestCamera(2500, 20800, 1600);
-       // game.assetManager.setAsset(BACKGROUND_FILE_PATH, "Texture");
         tiledMap = new TmxMapLoader().load("tileMaps/PonyvilleSky.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        rings = new ArrayList<RingObject>();
-        for(int i = 0; i < numRings; i++) {
+        rings = new ArrayList<AbstractSpikeQuestObject>();
+        mountains = new ArrayList<AbstractSpikeQuestObject>();
+        for(int i = 0; i < numRings; i++)
             rings.add(new RingObject());
-        }
+        for(int i = 0; i < numMountains; i++)
+            mountains.add(new MountainObject());
         random = new Random();
     }
 
 
     @Override
     public void render(float delta) {
-
-        if (game.assetManager.loadAssets() && aTankObject.isLoaded() && aRainbowDashObject.isLoaded() && (ringsLoaded || loadRings())) {
+        useLoadingScreen(delta);
+        if (screenStart || (game.assetManager.loadAssets() && aTankObject.isLoaded() && aRainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(mountains))) {
             refresh();
 
             if (!screenStart) {
                 aTankObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
-                currentBackdropTexture = (Texture) game.assetManager.loadAsset(BACKGROUND_FILE_PATH, "Texture");
                 spawnRings();
                 screenStart = true;
             }
@@ -73,6 +77,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             gameCamera.attachToTileMapRenderer(tiledMapRenderer);
             tiledMapRenderer.render();
             game.batch.begin();
+            drawMountains();
             drawRingsBack();
             aTankObject.draw(game.batch);
             drawRingsFront();
@@ -82,37 +87,55 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     }
 
+    private void drawMountains() {
+        for (int posX : mountainLocations)
+            if (isPositionInCamera(posX))
+                return;
+
+    }
+
+
     private void drawRingsBack() {
-        for (RingObject ring : rings) {
-            ring.renderRingBack(game.batch);
+        for (AbstractSpikeQuestObject object : rings) {
+            RingObject ring = (RingObject) object;
+            if (isPositionInCamera(ring.position.x))
+                ring.renderRingBack(game.batch);
         }
     }
 
     private void drawRingsFront() {
-        for (RingObject ring : rings) {
-            ring.renderRingFront(game.batch);
+        for (AbstractSpikeQuestObject object : rings) {
+            RingObject ring = (RingObject) object;
+            if (isPositionInCamera(ring.position.x))
+                ring.renderRingFront(game.batch);
         }
     }
 
-    private boolean loadRings() {
-        ringsLoaded = true;
-        for (RingObject ring : rings) {
-            if (!ring.isLoaded())
-                ringsLoaded = false;
+    private boolean loadListOfObjects(List<AbstractSpikeQuestObject> objects) {
+        boolean loaded = true;
+        for (AbstractSpikeQuestObject object : objects) {
+            if (!object.isLoaded())
+                loaded = false;
         }
-        return ringsLoaded;
+        return loaded;
     }
 
     private void spawnRings() {
-        for (RingObject ring : rings) {
+        for (AbstractSpikeQuestObject object : rings) {
+            RingObject ring = (RingObject) object;
             ring.position = new Vector2(new Random().nextInt(20700) + aTankObject.getCenterX(), random.nextInt(random.nextInt(gameCamera.getWorldHeight() - 150) + 50));
             //ring.position = new Vector2(aTankObject.getCenterX(), aTankObject.getCenterY());
         }
     }
 
     private void updateRings(float delta) {
-        for (RingObject ring : rings) {
+        for (AbstractSpikeQuestObject object : rings) {
+            RingObject ring = (RingObject) object;
             ring.update(delta * (FOREGROUND_SPEED_MIN + boostSpeed));
         }
+    }
+
+    private boolean isPositionInCamera(float posX) {
+        return (posX > (gameCamera.getCameraPositionX() - gameCamera.getCameraWidth()/2 -50) && posX < (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth()/2 + 50));
     }
 }
