@@ -14,6 +14,7 @@ public class TankObject extends StandardObject {
     private static final float STARTING_SIZE = 0.15f;
     private float speed = 100;
     private float speedLimit = 500;
+    private float boostLimit = 1000;
     private Vector2 velocity = new Vector2();
     private float friction = 10;
 
@@ -24,10 +25,10 @@ public class TankObject extends StandardObject {
     }
 
     /***
-     * I update the position and listen for keyboard input
+     * I update the position and listen for keyboard input (also apply boost to object)
      * and return the distance moved
      */
-    public Vector2 update(float delta) {
+    public Vector2 update(float delta, float boost) {
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && velocity.y < speedLimit)
             velocity.y += speed;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && velocity.y > -speedLimit)
@@ -49,7 +50,7 @@ public class TankObject extends StandardObject {
 
         Vector2 scale = velocity.cpy();
         scale.scl(delta);
-        setCurrentPositionXY(currentPositionX + scale.x, currentPositionY + scale.y);
+        setCurrentPositionXY(currentPositionX + scale.x + (boost * delta), currentPositionY + scale.y);
         return scale;
     }
 
