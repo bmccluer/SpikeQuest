@@ -25,11 +25,12 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
             "object/rings/RingFrontYellow.png",
             "object/rings/RingBackYellow.png"};
     private static final String[] fileTypes = {"Texture", "Texture", "Texture", "Texture", "Texture", "Texture"};
-    private static final float STARTING_SIZE = 0.33f;
+    private static final float SIZE = 0.5f;
     private Random random;
     private Texture ringFront;
     private Texture ringBack;
     public Vector2 position;
+    public boolean beenTouched = false;
     public RING_TYPE ringType;
 
     public RingObject() {
@@ -48,7 +49,9 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
 
     @Override
     public boolean isColliding(Rectangle rectangle) {
-        return rectangle.overlaps(new Rectangle(position.x + ringBack.getWidth(),position.y,position.x + ringBack.getWidth(),ringBack.getHeight()));
+        if (rectangle.overlaps(new Rectangle(position.x + ringBack.getWidth() * SIZE,position.y,ringBack.getWidth() * SIZE,ringBack.getHeight() * SIZE)))
+            return true;
+        return false;
     }
 
     public Vector2 position() {
@@ -58,13 +61,13 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
     public void renderRingBack(SpriteBatch batch, SpikeQuestCamera camera) {
         if (position.x > (camera.getCameraPositionX() - camera.getCameraWidth()/2 -ringBack.getWidth())
                 && position.x < (camera.getCameraPositionX() + camera.getCameraWidth()/2 + ringBack.getWidth()))
-            drawTexture(ringBack, batch, position.x, position.y);
+            batch.draw(ringBack, position.x, position.y, ringBack.getWidth() * SIZE, ringBack.getHeight() * SIZE);
     }
 
     public void renderRingFront(SpriteBatch batch, SpikeQuestCamera camera) {
         if (position.x > (camera.getCameraPositionX() - camera.getCameraWidth()/2 -ringFront.getWidth())
                 && position.x < (camera.getCameraPositionX() + camera.getCameraWidth()/2 + ringFront.getWidth()))
-            drawTexture(ringFront, batch, position.x, position.y);
+            batch.draw(ringFront, position.x, position.y, ringFront.getWidth() * SIZE, ringFront.getHeight() * SIZE);
     }
 
     /**

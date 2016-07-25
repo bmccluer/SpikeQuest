@@ -11,8 +11,8 @@ public class TankObject extends StandardObject {
     private static final String[] filePaths = {"animals/tank/TankStand.atlas", "animals/tank/TankStand.atlas"};
     private static final String[] fileTypes = {"TextureAtlas", "TextureAtlas"};
     private static final int[] maxFrames = {1,1};
-    private static final float STARTING_SIZE = 0.15f;
-    private float speed = 100;
+    private static final float STARTING_SIZE = 0.075f;
+    private float speed = 50;
     private float speedLimit = 500;
     private float boostLimit = 1000;
     private Vector2 velocity = new Vector2();
@@ -52,6 +52,10 @@ public class TankObject extends StandardObject {
         scale.scl(delta);
         setCurrentPositionXY(currentPositionX + scale.x + (boost * delta), currentPositionY + scale.y);
         return scale;
+    }
+
+    public void stop() {
+        velocity = Vector2.Zero;
     }
 
     @Override

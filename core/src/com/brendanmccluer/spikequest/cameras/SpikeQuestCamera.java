@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 
 public class SpikeQuestCamera {
 	private OrthographicCamera camera = null;
@@ -83,6 +84,12 @@ public class SpikeQuestCamera {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 	}
+
+	public Matrix4 getProjectionMatrix() {
+		camera.update();
+		return camera.combined;
+	}
+
 
 	/**
 	 * I set the mapRenderer to the camera
