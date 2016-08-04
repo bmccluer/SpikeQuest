@@ -18,6 +18,8 @@ import com.brendanmccluer.spikequest.objects.ponies.RainbowDashObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.tiles.SpikeQuestTiles;
 
+import org.w3c.dom.css.Rect;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +46,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private float boostSpeed = 0;
     private int[] renderLayers = { RENDER_LAYER }; //layers that are rendered in the tile map
     private SpikeQuestCamera foregroundCamera;
+    private float deltaForegroundX = 0;
     private ShapeRenderer shapeRenderer;
 
     public RainbowRaceScreen(SpikeQuestGame game) {
@@ -97,9 +100,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 boostSpeed = 0;
             }
             else {
+                deltaForegroundX = delta * (FOREGROUND_SPEED_MIN + boostSpeed);
                 gameCamera.translateCamera(delta * (BACKGROUND_SPEED_MIN + boostSpeed), 0);
-                foregroundCamera.translateCamera(delta * (FOREGROUND_SPEED_MIN + boostSpeed), 0);
+                foregroundCamera.translateCamera(deltaForegroundX, 0);
                 updateListOfObjects(rings, delta);
+
             }
             if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
                     ((aTankObject.getCenterY() < gameCamera.getCameraHeight()/2 && translateVector.y < 0))) {
@@ -120,9 +125,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             //render the collision objects
             game.batch.end();
             tiledMapRenderer.render(renderLayers);
+            foregroundCamera.attachToBatch(game.batch);
             game.batch.begin();
             drawRingsBack();
             game.batch.end();
+            gameCamera.attachToBatch(game.batch);
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.setProjectionMatrix(gameCamera.getProjectionMatrix());
             shapeRenderer.setColor(Color.BLACK);
@@ -132,6 +139,9 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             shapeRenderer.end();
             game.batch.begin();
             aTankObject.draw(game.batch);
+            game.batch.end();
+            foregroundCamera.attachToBatch(game.batch);
+            game.batch.begin();
             drawRingsFront();
             game.batch.end();
         }
@@ -141,20 +151,20 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     private void drawListOfObjects(List<RainbowRaceObject> objects) {
         for (RainbowRaceObject object : objects)
-            object.render(game.batch, gameCamera);
+            object.render(game.batch, foregroundCamera);
     }
 
     private void drawRingsBack() {
         for (RainbowRaceObject object : rings) {
             RingObject ring = (RingObject) object;
-            ring.renderRingBack(game.batch, gameCamera);
+            ring.renderRingBack(game.batch, foregroundCamera);
         }
     }
 
     private void drawRingsFront() {
         for (RainbowRaceObject object : rings) {
             RingObject ring = (RingObject) object;
-            ring.renderRingFront(game.batch, gameCamera);
+            ring.renderRingFront(game.batch, foregroundCamera);
         }
     }
 
@@ -197,8 +207,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     }*/
 
     private void updateListOfObjects(List<RainbowRaceObject> objects, float delta) {
+        List<Rectangle> rectangles = SpikeQuestTiles.getTileMapRectangles(tileMap, RING_LAYER);
+
+
         for (RainbowRaceObject object : objects) {
-            object.update(delta * (FOREGROUND_SPEED_MIN + boostSpeed));
+            object.update(delta);
             if (object instanceof RingObject && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangle())) {
                 RingObject ringObject = (RingObject) object;
                 boost(ringObject);
