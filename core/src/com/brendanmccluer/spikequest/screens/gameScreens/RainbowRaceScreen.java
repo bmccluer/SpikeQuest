@@ -46,7 +46,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private float boostSpeed = 0;
     private int[] renderLayers = { RENDER_LAYER }; //layers that are rendered in the tile map
     private SpikeQuestCamera foregroundCamera;
-    private float deltaForegroundX = 0;
     private ShapeRenderer shapeRenderer;
 
     public RainbowRaceScreen(SpikeQuestGame game) {
@@ -81,71 +80,79 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 screenStart = true;
             }
 
-            /**UPDATE**/
-            if (boostSpeed > 0) {
-                if (boostSpeed - BOOST_RESISTANCE <= 0)
-                    boostSpeed = 0;
-                else
-                    boostSpeed -= BOOST_RESISTANCE;
-            }
-            Vector2 translateVector = aTankObject.update(delta, boostSpeed);
-            //move background camera
-
-            //Need to translate from sprite location in gameCamera to position in foregroundCamera
-            Rectangle foregroundPositionRectangle = aTankObject.getCollisionRectangle();
-            //foregroundPositionRectangle.x += foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2;
-            foregroundPositionRectangle.x += (foregroundCamera.getCameraPositionX() - gameCamera.getCameraPositionX());
-            if (SpikeQuestTiles.getPolygonObjectCollision(tileMap, foregroundPositionRectangle , COLLISION_LAYER) != null) {
-                aTankObject.stop();
-                boostSpeed = 0;
-            }
-            else {
-                deltaForegroundX = delta * (FOREGROUND_SPEED_MIN + boostSpeed);
-                gameCamera.translateCamera(delta * (BACKGROUND_SPEED_MIN + boostSpeed), 0);
-                foregroundCamera.translateCamera(deltaForegroundX, 0);
-                updateListOfObjects(rings, delta);
-
-            }
-            if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
-                    ((aTankObject.getCenterY() < gameCamera.getCameraHeight()/2 && translateVector.y < 0))) {
-                gameCamera.translateCamera(0,translateVector.y);
-                foregroundCamera.translateCamera(0, translateVector.y);
-            }
-
-            //updateListOfObjects(mountains, delta);
+            update(delta);
 
             /**RENDER**/
+            //ONLY USE GAMECAMERA TO DRAW THE BACKGROUND
             gameCamera.attachToBatch(game.batch);
-            foregroundCamera.attachToTileMapRenderer(tiledMapRenderer);
             game.batch.begin();
             if (gameCamera.getCameraPositionX() - gameCamera.getCameraWidth() < currentBackdropTexture.getWidth())
                 game.batch.draw(currentBackdropTexture, 0,0);
             if (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() > currentBackdropTexture.getWidth() - 35)
                 game.batch.draw(currentBackdropTexture, currentBackdropTexture.getWidth() - 35,0);
-            //render the collision objects
             game.batch.end();
-            tiledMapRenderer.render(renderLayers);
+
+            //Draw foreground objects
+            foregroundCamera.attachToTileMapRenderer(tiledMapRenderer);
             foregroundCamera.attachToBatch(game.batch);
+            tiledMapRenderer.render(renderLayers);
             game.batch.begin();
             drawRingsBack();
             game.batch.end();
-            gameCamera.attachToBatch(game.batch);
+
+            //**DEBUG**/
             shapeRenderer.setAutoShapeType(true);
-            shapeRenderer.setProjectionMatrix(gameCamera.getProjectionMatrix());
+            shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
             shapeRenderer.setColor(Color.BLACK);
             shapeRenderer.begin();
             Rectangle debugRectangle = aTankObject.getCollisionRectangle();
             shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
             shapeRenderer.end();
+            //**/
+
             game.batch.begin();
             aTankObject.draw(game.batch);
-            game.batch.end();
-            foregroundCamera.attachToBatch(game.batch);
-            game.batch.begin();
             drawRingsFront();
             game.batch.end();
         }
 
+
+    }
+
+    /**
+     * All updates to the objects occur here
+     * @param delta
+     */
+    private void update(float delta) {
+        float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed); //change in foreground pos
+        float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed);  //change in background pos
+        Vector2 translateVector = null;
+
+        if (boostSpeed > 0) {
+            if (boostSpeed - BOOST_RESISTANCE <= 0)
+                boostSpeed = 0;
+            else
+                boostSpeed -= BOOST_RESISTANCE;
+        }
+        if (SpikeQuestTiles.getPolygonObjectCollision(tileMap, aTankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
+            aTankObject.stop();
+            boostSpeed = 0;
+        }
+        else {
+            gameCamera.translateCamera(deltaBackgroundX, 0);
+            foregroundCamera.translateCamera(deltaForegroundX, 0);
+            aTankObject.setCurrentPositionX(aTankObject.getCurrentPositionX() + deltaForegroundX);
+            updateListOfObjects(rings, delta);
+
+        }
+        //update Tank according to keyboard
+        translateVector = aTankObject.update(delta);
+        //adjust cameras to tank moving up and down
+        if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
+                ((aTankObject.getCenterY() < gameCamera.getCameraHeight()/2 && translateVector.y < 0))) {
+            gameCamera.translateCamera(0,translateVector.y);
+            foregroundCamera.translateCamera(0, translateVector.y);
+        }
 
     }
 
