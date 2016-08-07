@@ -10,13 +10,13 @@ import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
 import java.util.Random;
 
 /**
- * Created by brend on 6/28/2016.
+ * Created by Brendan on 6/28/2016.
  */
 public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceObject {
     public enum RING_TYPE {
         RED,
         YELLOW,
-        GREEN;
+        GREEN
     }
     private static final String[] filePaths = {"object/rings/FrontRingRed.png",
             "object/rings/RingBackRed.png",
@@ -29,9 +29,14 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
     private Random random;
     private Texture ringFront;
     private Texture ringBack;
+    private float movePosY = 0;
+    private boolean moveUp = true;
     public Vector2 position;
     public boolean beenTouched = false;
     public RING_TYPE ringType;
+    public int moveHeight = 150;
+    public float heightVelocity = 100;
+
 
     public RingObject() {
         super(filePaths, fileTypes);
@@ -49,9 +54,7 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
 
     @Override
     public boolean isColliding(Rectangle rectangle) {
-        if (rectangle.overlaps(new Rectangle(position.x + ringBack.getWidth() * SIZE,position.y,ringBack.getWidth() * SIZE,ringBack.getHeight() * SIZE)))
-            return true;
-        return false;
+        return rectangle.overlaps(new Rectangle(position.x + ringBack.getWidth() * SIZE,position.y,ringBack.getWidth() * SIZE,ringBack.getHeight() * SIZE));
     }
 
     public Vector2 position() {
@@ -79,11 +82,29 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
     }
 
     /**
-     * I move the ring to the left by the speed passed
-     * @param speed
+     * I move the ring up and down, etc.
+     * @param delta
      */
-    public void update(float speed) {
-        position.x -= speed;
+    public void update(float delta) {
+        //Move up and down
+        if (moveUp) {
+            if (movePosY >= moveHeight) {
+                moveUp = false;
+            }
+            else {
+                movePosY += delta * heightVelocity;
+                position.y += delta * heightVelocity;
+            }
+        }
+        else {
+            if (movePosY <= -moveHeight) {
+                moveUp = true;
+            }
+            else {
+                movePosY -= delta * heightVelocity;
+                position.y -= delta * heightVelocity;
+            }
+        }
     }
 
     private void getRandomRing() {
