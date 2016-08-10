@@ -19,13 +19,13 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	
 	private SpikeQuestSoundEffect aCollectionSoundEffect = null;
 	private SpikeQuestSoundEffect aBadGemSoundEffect = null;
-	
-	
+
 	private boolean isActive = false;
 	private int timerMax = 600;
 	private int timerIndex = 0;
 	private int currentIndex;
 	private Random randomGenerator = new Random();
+	public boolean canExpire = true;
 	
 	public GemObject() {
 		super(filePaths, fileTypes);
@@ -49,13 +49,6 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 		
 		isActive = true;
 		setSize(STARTING_SIZE);
-		/*isHit = false;
-		isPopped = false;
-		isSpawned = true;
-		isJumping = false;
-		isBadPop = false;*/
-		
-		
 	}
 	
 	@Override
@@ -77,7 +70,7 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	 * @return
 	 */
 	public boolean getIsActive () {
-		return isActive;
+		return isActive || !canExpire;
 	}
 	
 	/**
@@ -87,7 +80,7 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	@Override
 	public void draw (SpriteBatch batch) {
 		
-		if (isActive) {
+		if (isActive || !canExpire) {
 		
 			timerIndex++;
 			
