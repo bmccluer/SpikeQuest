@@ -69,7 +69,8 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	 * 
 	 * @return
 	 */
-	public boolean getIsActive () {
+	public boolean getIsActive ()
+	{
 		return isActive || !canExpire;
 	}
 	
@@ -84,7 +85,7 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 		
 			timerIndex++;
 			
-			if (timerIndex < 300 || timerIndex % 2 == 0){
+			if (!canExpire || timerIndex < 300 || timerIndex % 2 == 0){
 				super.draw(batch);
 			}
 			
@@ -199,7 +200,7 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	public static void drawGemObjects(List<GemObject> aGemObjectList, SpriteBatch batch) {
 		
 		for (int i = 0; i < aGemObjectList.size(); i++) {
-			if (aGemObjectList.get(i) != null && aGemObjectList.get(i).getIsActive()) 
+			if (aGemObjectList.get(i) != null && aGemObjectList.get(i).getIsActive())
 				aGemObjectList.get(i).draw(batch);
 		}
 		
