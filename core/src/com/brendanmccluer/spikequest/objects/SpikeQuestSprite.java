@@ -19,7 +19,7 @@ public class SpikeQuestSprite {
 	private int maxFrames = 1;
 	private int speed = 10; //default change animation every 1000 steps
 	private int speedIndex = 0;
-	private final String UNABLE_TO_LOAD_TEXTURE_ATLAS_MESSAGE = "Could not find initial region in TextureAtlas provided";
+	private final String UNABLE_TO_LOAD_TEXTURE_ATLAS_MESSAGE = "Could not find initial region in TextureAtlas provided ";
 	private Exception textureAtlasException = null;
 	private boolean isFlipped = false;
 	private float currentSize = 1;
@@ -193,11 +193,10 @@ public class SpikeQuestSprite {
 	 * I take a frame and set the region for the sprite to match that frame. 
 	 * Throws exception
 	 * if the region does not exist
-	 * @param textureAtlas
 	 * @throws Exception
 	 */
 	public void setSpriteRegion (int frame) throws Exception {
-		try{;
+		try{
 			//Regions are anywhere from "0001"-"9999". Format the frame to have leading zeros
 			sprite.setRegion(currentTextureAtlas.findRegion(String.format("%04d", frame)));
 			

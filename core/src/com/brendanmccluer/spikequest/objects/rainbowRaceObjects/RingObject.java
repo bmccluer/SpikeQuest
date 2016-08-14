@@ -1,4 +1,4 @@
-package com.brendanmccluer.spikequest.objects;
+package com.brendanmccluer.spikequest.objects.rainbowRaceObjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
+import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 
 import java.util.Random;
 
@@ -57,8 +58,15 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
         return rectangle.overlaps(new Rectangle(position.x + ringBack.getWidth() * SIZE,position.y,ringBack.getWidth() * SIZE,ringBack.getHeight() * SIZE));
     }
 
+    @Override
     public Vector2 position() {
         return  position;
+    }
+
+    @Override
+    public void setPosition(float xPos, float yPos) {
+        position.x = xPos;
+        position.y = yPos;
     }
 
     public void renderRingBack(SpriteBatch batch, SpikeQuestCamera camera) {
@@ -76,7 +84,8 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
     /**
      * Do not use! Use renderRingBack and renderRingFront
      * @param batch
-     */
+     * @param camera
+     * */
     public void render(SpriteBatch batch, SpikeQuestCamera camera) {
         System.err.println("Error: render on ring was called when renderRingBack or renderRingFront should have been called");
     }

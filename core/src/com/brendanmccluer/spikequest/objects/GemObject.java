@@ -106,6 +106,7 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	public int collectGem () {
 		
 		isActive = false;
+		canExpire = true;
 		timerIndex = 0;
 		
 		//bad gem. Play bad sound
@@ -185,8 +186,8 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 		boolean isLoaded = true;
 		
 		for (int i = 0; i < aGemObjectList.size(); i++) {
-			if (aGemObjectList.get(i) != null)
-				isLoaded = aGemObjectList.get(i).isLoaded();
+			if (aGemObjectList.get(i) != null && !aGemObjectList.get(i).isLoaded())
+				isLoaded = false;
 		}
 		
 		return isLoaded;

@@ -1,0 +1,80 @@
+
+StormCloudStand.png
+size: 652,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 404
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 2
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+
+StormCloudStand2.png
+size: 652,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 404
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+
+StormCloudStand3.png
+size: 652,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0005
+  rotate: false
+  xy: 2, 404
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 2, 2
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+
+StormCloudStand4.png
+size: 652,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0007
+  rotate: false
+  xy: 2, 404
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 650, 400
+  orig: 650, 400
+  offset: 0, 0
+  index: -1

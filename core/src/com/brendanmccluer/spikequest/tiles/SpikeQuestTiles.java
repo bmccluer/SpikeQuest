@@ -52,8 +52,6 @@ public class SpikeQuestTiles {
         for (PolygonMapObject polygonMapObject : objects.getByType(PolygonMapObject.class)) {
             Polygon polygon = polygonMapObject.getPolygon();
             if (isCollision(polygon, rectangle)) {
-                System.out.println("polygon: " + polygon.getX());
-                System.out.println("object: " + rectangle.getX());
                 return polygon;
             }
         }

@@ -14,7 +14,13 @@ import com.brendanmccluer.spikequest.objects.SpikeQuestSprite;
  * contains standard methods rainbow race objects should have
  */
 public interface RainbowRaceObject {
+    /**
+     * WARNING: USE setPosition to change
+     * @return
+     */
     public Vector2 position();
+
+    public void setPosition(float xPos, float yPos);
 
     public void update(float speed);
 
