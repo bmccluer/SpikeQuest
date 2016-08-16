@@ -34,12 +34,15 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final int RING_LAYER = 2;
     private static final int CLOUD_LAYER = 3;
     private static final int GEM_LAYER = 4;
+    //THESE ARE USED AS RATIOS AGAINST THE CAMERA SPEEDS--------
     private static final float BACKGROUND_SPEED_MIN = 5;
     private static final float FOREGROUND_SPEED_MIN = 350;
-    private static final float BOOST_RESISTANCE = 2;
+    private static final float BOOST_RESISTANCE = 0.015f;
+    private static final float RECOVER_SPEED = 0.050f;
+    private static final float BOOST_MAX = 2;
+    private static final float CLOUD_COLLISION_REDUCTION = 0.50f;
+    //----------------------------------------------------------
     private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
-    private static final int BOOST_MAX = 500;
-    private static final int NUM_GEMS = 15;
     private TankObject aTankObject = new TankObject();
     private RainbowDashObject aRainbowDashObject = new RainbowDashObject();
     private List<RainbowRaceObject> rings;
@@ -52,6 +55,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private int[] renderLayers = { RENDER_LAYER }; //layers that are rendered in the tile map
     private SpikeQuestCamera foregroundCamera;
     private ShapeRenderer shapeRenderer;
+    private boolean collidingWithCloud = false;
+
 
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
@@ -144,9 +149,17 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
      * @param delta
      */
     private void update(float delta) {
-        float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed); //change in foreground pos
-        float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed);  //change in background pos
+        //float deltaForegroundX =  delta * (boostSpeed >= 0 ? FOREGROUND_SPEED_MIN + boostSpeed : -FOREGROUND_SPEED_MIN + boostSpeed); //change in foreground pos
+        //float deltaBackgroundX = delta * (boostSpeed >= 0 ? BACKGROUND_SPEED_MIN + boostSpeed : -BACKGROUND_SPEED_MIN + boostSpeed);  //change in background pos
         Vector2 translateVector = null;
+        float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
+        float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
+
+        //apply cloud collsion
+        if (collidingWithCloud) {
+            deltaForegroundX *= CLOUD_COLLISION_REDUCTION;
+            deltaBackgroundX *= CLOUD_COLLISION_REDUCTION;
+        }
 
         if (boostSpeed > 0) {
             if (boostSpeed - BOOST_RESISTANCE <= 0)
@@ -154,15 +167,25 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             else
                 boostSpeed -= BOOST_RESISTANCE;
         }
-        if (SpikeQuestTiles.getPolygonObjectCollision(tileMap, aTankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
-            aTankObject.stop();
-            boostSpeed = 0;
+        else if (boostSpeed < 0) {
+            if (boostSpeed + RECOVER_SPEED >= 0)
+                boostSpeed = 0;
+            else
+                boostSpeed += RECOVER_SPEED;
+        }
+        if (!aTankObject.tankHit && SpikeQuestTiles.getPolygonObjectCollision(tileMap, aTankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
+            aTankObject.crash(deltaForegroundX);
+            boostSpeed = -1.5f;
+            //gameCamera.translateCamera(-deltaBackgroundX, 0);
+            //foregroundCamera.translateCamera(-deltaForegroundX, 0);
+            aTankObject.setCurrentPositionX(aTankObject.getCurrentPositionX() - deltaForegroundX);
         }
         else {
             gameCamera.translateCamera(deltaBackgroundX, 0);
             foregroundCamera.translateCamera(deltaForegroundX, 0);
             aTankObject.setCurrentPositionX(aTankObject.getCurrentPositionX() + deltaForegroundX);
         }
+        collidingWithCloud = false; //reset flag
         updateListOfObjects(rings, delta);
         updateListOfObjects(clouds, delta);
         GemObject.collectGemsTouched(gems, aTankObject);
@@ -175,7 +198,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             gameCamera.translateCamera(0,translateVector.y);
             foregroundCamera.translateCamera(0, translateVector.y);
         }
-
     }
 
     private void drawListOfObjects(List<RainbowRaceObject> objects) {
@@ -233,10 +255,16 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             object.update(delta);
 
             //Specific to Rings
-            if (object instanceof RingObject && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangle())) {
+            if (object instanceof RingObject && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangleFront())) {
                 RingObject ringObject = (RingObject) object;
                 boost(ringObject);
                 ringObject.beenTouched = true;
+                return;
+            }
+
+            //Specific to Clouds
+            if (object instanceof CloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
+                collidingWithCloud = true;
             }
 
         }
@@ -244,15 +272,15 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     private void boost(RingObject ring) {
         switch (ring.ringType) {
-            case RED : increaseBoost(500);
+            case RED : increaseBoost(1.5f);
                 break;
-            case YELLOW : increaseBoost(250);
+            case YELLOW : increaseBoost(1);
                 break;
-            default : increaseBoost(150);
+            default : increaseBoost(0.75f);
         }
     }
 
-    private void increaseBoost(int amount) {
+    private void increaseBoost(float amount) {
         if (boostSpeed + amount >= BOOST_MAX)
             boostSpeed = BOOST_MAX;
         else

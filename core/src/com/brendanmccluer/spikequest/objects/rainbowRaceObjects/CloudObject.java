@@ -51,7 +51,7 @@ public class CloudObject extends StandardObject implements RainbowRaceObject {
 
     @Override
     public boolean isColliding(Rectangle rectangle) {
-        return false;
+        return getCollisionRectangle().overlaps(rectangle);
     }
 
     @Override
