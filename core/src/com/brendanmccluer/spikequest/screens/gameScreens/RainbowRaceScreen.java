@@ -81,7 +81,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         shapeRenderer = new ShapeRenderer();
     }
 
-
     /**
      * I am the main method of the screen
      * @param delta
@@ -141,7 +140,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             game.batch.end();
         }
 
-
     }
 
     /**
@@ -155,8 +153,10 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
 
-        //apply cloud collsion
-        if (collidingWithCloud) {
+        //apply cloud collision
+        if (aTankObject.isShocked() && aTankObject.getCollisionRectangle().y < 0)
+            aTankObject.setCurrentPositionY(0);
+        else if (collidingWithCloud) {
             deltaForegroundX *= CLOUD_COLLISION_REDUCTION;
             deltaBackgroundX *= CLOUD_COLLISION_REDUCTION;
         }
@@ -261,10 +261,15 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 ringObject.beenTouched = true;
                 return;
             }
-
             //Specific to Clouds
             if (object instanceof CloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
                 collidingWithCloud = true;
+                return;
+            }
+            //Specific to StormClouds
+            if (object instanceof StormCloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
+                aTankObject.shock();
+                return;
             }
 
         }

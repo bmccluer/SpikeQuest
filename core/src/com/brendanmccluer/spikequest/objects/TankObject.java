@@ -25,6 +25,7 @@ public class TankObject extends StandardObject {
     private int hitCounter = HIT_MAX;
     private long hitTime = 0;
     private boolean blink = false;
+    private boolean isShocked = false;
 
 
     public TankObject() {
@@ -37,14 +38,19 @@ public class TankObject extends StandardObject {
      * and return the distance moved
      */
     public Vector2 update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && velocity.y < speedLimit)
-            velocity.y += speed;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && velocity.y > -speedLimit)
-            velocity.y -= speed;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && velocity.x > -speedLimit)
-            velocity.x -= speed;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && velocity.x < speedLimit)
-            velocity.x += speed;
+
+
+        if (!isShocked) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) && velocity.y < speedLimit)
+                velocity.y += speed;
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && velocity.y > -speedLimit)
+                velocity.y -= speed;
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && velocity.x > -speedLimit)
+                velocity.x -= speed;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && velocity.x < speedLimit)
+                velocity.x += speed;
+        }
+
 
         //apply friction
         if (velocity.x > 0)
@@ -63,6 +69,7 @@ public class TankObject extends StandardObject {
             if (hitCounter-- <= 0) {
                 hitCounter = HIT_MAX;
                 tankHit = false;
+                isShocked = false;
                 blink = false;
             }
         }
@@ -82,6 +89,11 @@ public class TankObject extends StandardObject {
         velocity = Vector2.Zero;
     }
 
+    /**
+     * I bounce tank back by the impact passed and play crash animation
+     * //TODO add crash animation
+     * @param impact
+     */
     public void crash(float impact) {
         velocity.x = -impact;
         //currentPositionX -= getCollisionRectangle().getWidth();
@@ -89,6 +101,19 @@ public class TankObject extends StandardObject {
         hitTime = System.currentTimeMillis();
 
     }
+
+    //I disable Tank's movements for a while and play shock animation
+    //TODO add shock animation
+    public void shock() {
+        if (!isShocked() && !tankHit) {
+            isShocked = true;
+            velocity = new Vector2(0, -speedLimit*1.5f);
+            tankHit = true;
+            hitTime = System.currentTimeMillis();
+        }
+    }
+
+    public boolean isShocked() { return isShocked; }
 
     /**
      * I return the front collision area of Tank

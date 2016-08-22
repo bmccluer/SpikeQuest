@@ -48,7 +48,7 @@ public class StormCloudObject extends StandardObject implements RainbowRaceObjec
 
     @Override
     public boolean isColliding(Rectangle rectangle) {
-        return false;
+        return getCollisionRectangle().overlaps(rectangle);
     }
 
     @Override
