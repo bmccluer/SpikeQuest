@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
+import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.GemObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.CloudObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.RingObject;
@@ -19,6 +20,7 @@ import com.brendanmccluer.spikequest.objects.TankObject;
 import com.brendanmccluer.spikequest.objects.ponies.RainbowDashObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.StormCloudObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
+import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.tiles.SpikeQuestTiles;
 
 import java.util.ArrayList;
@@ -42,6 +44,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final float BOOST_MAX = 2;
     private static final float CLOUD_COLLISION_REDUCTION = 0.50f;
     //----------------------------------------------------------
+    //STATIC METHODS SHARED BY ALL INSTANCES--------------------
+    private static List<TiledMap> tiledMapList;
+    private static int score = 0;
+    private static int gemCount = 0;
+    //----------------------------------------------------------
     private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
     private TankObject aTankObject = new TankObject();
     private RainbowDashObject aRainbowDashObject = new RainbowDashObject();
@@ -57,14 +64,20 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private ShapeRenderer shapeRenderer;
     private boolean collidingWithCloud = false;
 
-
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
+        if (tiledMapList == null) {
+            //load tiledMapList if it has not been set
+            TmxMapLoader mapLoader = new TmxMapLoader();
+            //tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap.tmx"), mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
+            tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
+        }
+        //get next map off of the list
+        tileMap = tiledMapList.remove(0);
         random = new Random();
         currentBackdropTexture = new Texture(BACKDROP_PATH);
         gameCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
         foregroundCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
-        tileMap = new TmxMapLoader().load("tileMaps/RainbowRaceMap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
         rings = new ArrayList<RainbowRaceObject>();
         clouds = new ArrayList<RainbowRaceObject>();
@@ -77,8 +90,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, GEM_LAYER); i++) {
             gems.add(new GemObject());
         }
-
         shapeRenderer = new ShapeRenderer();
+
     }
 
     /**
@@ -98,6 +111,19 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 spawnListInTileLayer(clouds, CLOUD_LAYER);
                 spawnGems();
                 screenStart = true;
+            }
+
+            /**NEXT SCREEN OR GAME OVER**/
+            if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
+                dispose();
+
+                //go to next screen
+                if (tiledMapList.isEmpty())
+                    SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, score, gemCount, new MainMenuScreen(game)), game);
+                else
+                    SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
+
+                return;
             }
 
             update(delta);
@@ -152,6 +178,9 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         Vector2 translateVector = null;
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
+
+        if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth() - foregroundCamera.getCameraWidth())
+            aTankObject.controlsDisabled = true;
 
         //apply cloud collision
         if (aTankObject.isShocked() && aTankObject.getCollisionRectangle().y < 0)
@@ -255,7 +284,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             object.update(delta);
 
             //Specific to Rings
-            if (object instanceof RingObject && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangleFront())) {
+            if (object instanceof RingObject && !aTankObject.tankHit && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangleFront())) {
                 RingObject ringObject = (RingObject) object;
                 boost(ringObject);
                 ringObject.beenTouched = true;
@@ -269,6 +298,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             //Specific to StormClouds
             if (object instanceof StormCloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
                 aTankObject.shock();
+                boostSpeed = -1.5f;
                 return;
             }
 
@@ -277,11 +307,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     private void boost(RingObject ring) {
         switch (ring.ringType) {
-            case RED : increaseBoost(1.5f);
+            case RED : increaseBoost(2f);
                 break;
-            case YELLOW : increaseBoost(1);
+            case YELLOW : increaseBoost(1.5f);
                 break;
-            default : increaseBoost(0.75f);
+            default : increaseBoost(1.25f);
         }
     }
 

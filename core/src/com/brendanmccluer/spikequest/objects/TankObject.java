@@ -22,6 +22,7 @@ public class TankObject extends StandardObject {
     private Vector2 velocity = new Vector2();
     private float friction = 10;
     public boolean tankHit = false;
+    public boolean controlsDisabled = false;
     private int hitCounter = HIT_MAX;
     private long hitTime = 0;
     private boolean blink = false;
@@ -39,8 +40,7 @@ public class TankObject extends StandardObject {
      */
     public Vector2 update(float delta) {
 
-
-        if (!isShocked) {
+        if (!isShocked && !controlsDisabled) {
             if (Gdx.input.isKeyPressed(Input.Keys.UP) && velocity.y < speedLimit)
                 velocity.y += speed;
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && velocity.y > -speedLimit)
@@ -50,7 +50,6 @@ public class TankObject extends StandardObject {
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && velocity.x < speedLimit)
                 velocity.x += speed;
         }
-
 
         //apply friction
         if (velocity.x > 0)

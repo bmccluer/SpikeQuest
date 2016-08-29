@@ -14,7 +14,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by brend on 7/7/2016.
@@ -85,6 +87,30 @@ public class SpikeQuestTiles {
         MapLayer objectLayer =  aMap.getLayers().get(anObjectLayer);
         return objectLayer.getObjects().getCount();
     }
+
+    /**
+     * I mix the maps passed into a random ordered list
+     * @param maps
+     * @return
+     */
+    public static List<TiledMap> getRandomTileMapList(TiledMap... maps) {
+        List<TiledMap> tiledMapList = new ArrayList<TiledMap>();
+        List<TiledMap> newTiledMapList = new ArrayList<TiledMap>();
+        Random random = new Random();
+        int numMaps = maps.length;
+        int index = 0;
+
+        for (TiledMap map : maps)
+            tiledMapList.add(map);
+
+        for (int i=0; i < numMaps; i++) {
+            index = random.nextInt(tiledMapList.size());
+            newTiledMapList.add(tiledMapList.remove(index));
+        }
+
+        return  newTiledMapList;
+    }
+
 
     // Check if Polygon intersects Rectangle
     //from http://stackoverflow.com/questions/28522313/java-libgdx-how-to-check-polygon-collision-with-rectangle-or-circle
