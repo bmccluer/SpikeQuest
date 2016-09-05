@@ -13,6 +13,7 @@ import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
+import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 import com.brendanmccluer.spikequest.objects.GemObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.CloudObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.RingObject;
@@ -36,6 +37,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final int RING_LAYER = 2;
     private static final int CLOUD_LAYER = 3;
     private static final int GEM_LAYER = 4;
+    private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
     //THESE ARE USED AS RATIOS AGAINST THE CAMERA SPEEDS--------
     private static final float BACKGROUND_SPEED_MIN = 5;
     private static final float FOREGROUND_SPEED_MIN = 350;
@@ -44,18 +46,16 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final float BOOST_MAX = 2;
     private static final float CLOUD_COLLISION_REDUCTION = 0.50f;
     //----------------------------------------------------------
-    //STATIC METHODS SHARED BY ALL INSTANCES--------------------
+    //STATIC OBJECTS SHARED BY ALL INSTANCES--------------------
     private static List<TiledMap> tiledMapList;
     private static int score = 0;
     private static int gemCount = 0;
+    private static TankObject aTankObject;
+    private static RainbowDashObject aRainbowDashObject;
     //----------------------------------------------------------
-    private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
-    private TankObject aTankObject = new TankObject();
-    private RainbowDashObject aRainbowDashObject = new RainbowDashObject();
     private List<RainbowRaceObject> rings;
     private List<RainbowRaceObject> clouds;
     private List<GemObject> gems;
-    private Random random;
     private TiledMap tileMap;
     private TiledMapRenderer tiledMapRenderer;
     private float boostSpeed = 0;
@@ -67,31 +67,40 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
         if (tiledMapList == null) {
-            //load tiledMapList if it has not been set
-            TmxMapLoader mapLoader = new TmxMapLoader();
-            //tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap.tmx"), mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
-            tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
+            initialize();
         }
+        aTankObject.controlsDisabled = false;
+        Random random = new Random();
         //get next map off of the list
         tileMap = tiledMapList.remove(0);
-        random = new Random();
         currentBackdropTexture = new Texture(BACKDROP_PATH);
-        gameCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
-        foregroundCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
         rings = new ArrayList<RainbowRaceObject>();
         clouds = new ArrayList<RainbowRaceObject>();
         gems = new ArrayList<GemObject>();
         for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, RING_LAYER); i++)
             rings.add(new RingObject());
-        for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, CLOUD_LAYER); i++) {
+        for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, CLOUD_LAYER); i++)
             clouds.add(random.nextBoolean() ? new CloudObject() : new StormCloudObject());
-        }
-        for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, GEM_LAYER); i++) {
+        for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, GEM_LAYER); i++)
             gems.add(new GemObject());
-        }
+        gameCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
+        foregroundCamera = new SpikeQuestCamera(1300, currentBackdropTexture.getWidth() * 3, currentBackdropTexture.getHeight());
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
         shapeRenderer = new ShapeRenderer();
+    }
 
+    /**
+     * I initialize all of the static objects shared between instances
+     */
+    private void initialize() {
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        //tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap.tmx"), mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
+        tiledMapList = new ArrayList<TiledMap>();
+        tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap1.tmx"));
+        tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
+        tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap3.tmx"));
+        aTankObject = new TankObject();
+        aRainbowDashObject = new RainbowDashObject();
     }
 
     /**
@@ -221,12 +230,39 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
         //update Tank according to keyboard
         translateVector = aTankObject.update(delta);
+        adjustToBounds(aTankObject, foregroundCamera);
+
         //adjust cameras to tank moving up and down
         if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
                 ((aTankObject.getCenterY() < gameCamera.getCameraPositionY() && translateVector.y < 0))) {
             gameCamera.translateCamera(0,translateVector.y);
             foregroundCamera.translateCamera(0, translateVector.y);
         }
+    }
+
+    /**
+     * I keep the object from going outside the camera bounds
+     * @param anObject
+     * @param aCamera
+     */
+    private void adjustToBounds(AbstractSpikeQuestSpriteObject anObject, SpikeQuestCamera aCamera) {
+        float yMax = aCamera.getCameraPositionY() + aCamera.getCameraHeight()/2;
+        float yMin = 0;
+        float xMax = aCamera.getCameraPositionX() + aCamera.getCameraWidth()/2;
+        float xMin = aCamera.getCameraPositionX() - aCamera.getCameraWidth()/2;
+
+        //check y
+        if (anObject.getCollisionRectangle().getY() + anObject.getCollisionRectangle().getHeight() > yMax)
+            anObject.setCurrentPositionY(yMax - anObject.getCollisionRectangle().getHeight());
+        else if (anObject.getCollisionRectangle().getY() < yMin)
+            anObject.setCurrentPositionY(yMin);
+
+        //check x
+        if (anObject.getCollisionRectangle().getX() + anObject.getCollisionRectangle().getWidth() > xMax)
+            anObject.setCurrentPositionX(xMax - anObject.getCollisionRectangle().getWidth());
+        else if (anObject.getCollisionRectangle().getX() < xMin)
+            anObject.setCurrentPositionX(xMin);
+
     }
 
     private void drawListOfObjects(List<RainbowRaceObject> objects) {
@@ -291,12 +327,12 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 return;
             }
             //Specific to Clouds
-            if (object instanceof CloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
+            if (!aTankObject.tankHit && object instanceof CloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
                 collidingWithCloud = true;
                 return;
             }
             //Specific to StormClouds
-            if (object instanceof StormCloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
+            if (!aTankObject.tankHit && object instanceof StormCloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
                 aTankObject.shock();
                 boostSpeed = -1.5f;
                 return;
