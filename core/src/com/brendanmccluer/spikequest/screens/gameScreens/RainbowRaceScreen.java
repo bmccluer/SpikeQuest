@@ -2,6 +2,7 @@ package com.brendanmccluer.spikequest.screens.gameScreens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -37,6 +38,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final int RING_LAYER = 2;
     private static final int CLOUD_LAYER = 3;
     private static final int GEM_LAYER = 4;
+    private static final long TIME_BETWEEN_START_WORDS = 1500; //in milliseconds
     private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
     //THESE ARE USED AS RATIOS AGAINST THE CAMERA SPEEDS--------
     private static final float BACKGROUND_SPEED_MIN = 5;
@@ -52,17 +54,25 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static int gemCount = 0;
     private static TankObject aTankObject;
     private static RainbowDashObject aRainbowDashObject;
+    private static List<RainbowRaceObject> rings;
+    private static List<RainbowRaceObject> clouds;
+    private static List<GemObject> gems;
+    private static int startCount = 3;
+    private static boolean raceStarted = false;
     //----------------------------------------------------------
-    private List<RainbowRaceObject> rings;
-    private List<RainbowRaceObject> clouds;
-    private List<GemObject> gems;
     private TiledMap tileMap;
     private TiledMapRenderer tiledMapRenderer;
-    private float boostSpeed = 0;
+    private float boostSpeed = BOOST_MAX;
     private int[] renderLayers = { RENDER_LAYER }; //layers that are rendered in the tile map
     private SpikeQuestCamera foregroundCamera;
     private ShapeRenderer shapeRenderer;
     private boolean collidingWithCloud = false;
+    private Sprite startMessageSprite = null;
+    private Sprite readySprite = null;
+    private Sprite setSprite = null;
+    private Sprite goSprite = null;
+    private long time = 0;
+
 
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
@@ -74,9 +84,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         //get next map off of the list
         tileMap = tiledMapList.remove(0);
         currentBackdropTexture = new Texture(BACKDROP_PATH);
-        rings = new ArrayList<RainbowRaceObject>();
-        clouds = new ArrayList<RainbowRaceObject>();
-        gems = new ArrayList<GemObject>();
         for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, RING_LAYER); i++)
             rings.add(new RingObject());
         for(int i = 0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, CLOUD_LAYER); i++)
@@ -99,8 +106,15 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap1.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap3.tmx"));
+        rings = new ArrayList<RainbowRaceObject>();
+        clouds = new ArrayList<RainbowRaceObject>();
+        gems = new ArrayList<GemObject>();
         aTankObject = new TankObject();
         aRainbowDashObject = new RainbowDashObject();
+        readySprite = new Sprite(new Texture("textures/ReadyTexture.png"));
+        setSprite = new Sprite(new Texture("textures/SetTexture.png"));
+        goSprite = new Sprite(new Texture("textures/GoTexture.png"));
+        startMessageSprite = new Sprite();
     }
 
     /**
@@ -122,20 +136,27 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 screenStart = true;
             }
 
-            /**NEXT SCREEN OR GAME OVER**/
-            if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
-                dispose();
+            if (raceStarted) {
+                /**NEXT SCREEN OR GAME OVER**/
+                if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
+                    //go to next screen
+                    if (tiledMapList.isEmpty()) {
+                        dispose();
+                        SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, score, gemCount, new MainMenuScreen(game)), game);
+                    }
+                    else {
+                        disposePartial();
+                        SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
+                    }
+                    return;
+                }
 
-                //go to next screen
-                if (tiledMapList.isEmpty())
-                    SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, score, gemCount, new MainMenuScreen(game)), game);
-                else
-                    SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
-
-                return;
+                update(delta);
             }
 
-            update(delta);
+            if (startCount > 0){
+                updateStartRace(delta);
+            }
 
             /**RENDER**/
             //ONLY USE GAMECAMERA TO DRAW THE BACKGROUND
@@ -172,6 +193,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             drawRingsFront();
             GemObject.drawGemObjects(gems, game.batch);
             drawListOfObjects(clouds);
+            if (startMessageSprite != null) {
+                startMessageSprite.setPosition(foregroundCamera.getCameraPositionX() - startMessageSprite.getWidth() / 2,
+                        foregroundCamera.getCameraPositionY() - startMessageSprite.getHeight() / 2);
+                startMessageSprite.draw(game.batch);
+            }
             game.batch.end();
         }
 
@@ -182,8 +208,6 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
      * @param delta
      */
     private void update(float delta) {
-        //float deltaForegroundX =  delta * (boostSpeed >= 0 ? FOREGROUND_SPEED_MIN + boostSpeed : -FOREGROUND_SPEED_MIN + boostSpeed); //change in foreground pos
-        //float deltaBackgroundX = delta * (boostSpeed >= 0 ? BACKGROUND_SPEED_MIN + boostSpeed : -BACKGROUND_SPEED_MIN + boostSpeed);  //change in background pos
         Vector2 translateVector = null;
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
@@ -192,9 +216,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             aTankObject.controlsDisabled = true;
 
         //apply cloud collision
-        if (aTankObject.isShocked() && aTankObject.getCollisionRectangle().y < 0)
-            aTankObject.setCurrentPositionY(0);
-        else if (collidingWithCloud) {
+        if (aTankObject.isShocked() || collidingWithCloud) {
             deltaForegroundX *= CLOUD_COLLISION_REDUCTION;
             deltaBackgroundX *= CLOUD_COLLISION_REDUCTION;
         }
@@ -230,7 +252,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
         //update Tank according to keyboard
         translateVector = aTankObject.update(delta);
-        adjustToBounds(aTankObject, foregroundCamera);
+        if (!aTankObject.controlsDisabled)
+            adjustToBounds(aTankObject, foregroundCamera);
 
         //adjust cameras to tank moving up and down
         if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
@@ -238,6 +261,41 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             gameCamera.translateCamera(0,translateVector.y);
             foregroundCamera.translateCamera(0, translateVector.y);
         }
+    }
+
+    /**
+     * I run the update for the beginning of the race
+     * and set the raceStarted flag
+     * @param delta
+     */
+    private void updateStartRace(float delta) {
+        int width = startMessageSprite.getRegionWidth();
+        int height = startMessageSprite.getRegionHeight();
+
+        if (time == 0) {
+            time = System.currentTimeMillis();
+            startMessageSprite = readySprite;
+        }
+        else if (System.currentTimeMillis() - time > TIME_BETWEEN_START_WORDS) {
+            startCount--;
+            time = System.currentTimeMillis();
+
+            if (startCount == 2) {
+                startMessageSprite = setSprite;
+                startMessageSprite.setScale(1);
+            }
+            else if (startCount == 1) {
+                startMessageSprite = goSprite;
+                raceStarted = true;
+            }
+            else {
+                startMessageSprite = null;
+                return;
+            }
+        }
+       // startMessageSprite.setSize(width + (width * delta), height * (height * delta));
+        startMessageSprite.setScale(startMessageSprite.getScaleX() + (0.5f * delta));
+
     }
 
     /**
@@ -358,9 +416,42 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             boostSpeed += amount;
     }
 
+    /**
+     * I only dispose objects and clear lists but
+     * do not dispose everything shared by the instances
+     */
+    private void disposePartial() {
+        if (readySprite != null) {
+            readySprite.getTexture().dispose();
+            setSprite.getTexture().dispose();
+            goSprite.getTexture().dispose();
+            startMessageSprite = null;
+            readySprite = null;
+            setSprite = null;
+            goSprite = null;
+        }
+        disposeListOfObjects(clouds);
+        disposeListOfObjects(rings);
+        for (GemObject gem : gems)
+            gem.discard();
+        gems.clear();
+        gameCamera.discard();
+        foregroundCamera.discard();
+        tileMap.dispose();
+    }
+
     @Override
     public void dispose() {
         super.dispose();
+        if (readySprite != null) {
+            readySprite.getTexture().dispose();
+            setSprite.getTexture().dispose();
+            goSprite.getTexture().dispose();
+            readySprite = null;
+            setSprite = null;
+            goSprite = null;
+            startMessageSprite = null;
+        }
         disposeListOfObjects(clouds);
         disposeListOfObjects(rings);
         for (GemObject gem : gems)
