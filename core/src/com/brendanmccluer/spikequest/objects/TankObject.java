@@ -13,7 +13,7 @@ public class TankObject extends StandardObject {
     private static final String[] filePaths = {"animals/tank/TankStand.atlas", "animals/tank/TankStand.atlas"};
     private static final String[] fileTypes = {"TextureAtlas", "TextureAtlas"};
     private static final int[] maxFrames = {1,1};
-    private static final float STARTING_SIZE = 0.075f;
+    private static final float STARTING_SIZE = 0.1f;
     private static final int HIT_MAX = 3;
     private static final int HIT_ZONE_WIDTH = 1;
     private float speed = 50;

@@ -14,7 +14,7 @@ public class TextureAtlasCreator {
 
 		//TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\Rarity\\Stand", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\rarity\\stand", "RarityStand");
 		//TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Clouds\\Clouds", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\clouds\\white", "CloudStand");
-		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Clouds\\DarkCloud", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\clouds\\storm", "StormCloudStand");
+		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Tank", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\animals\\tank", "TankStand");
 	}
 
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
+import com.brendanmccluer.spikequest.common.objects.RainbowRaceProgressBar;
 import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
@@ -54,6 +55,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static int gemCount = 0;
     private static TankObject aTankObject;
     private static RainbowDashObject aRainbowDashObject;
+    private static RainbowRaceProgressBar progressBar;
     private static List<RainbowRaceObject> rings;
     private static List<RainbowRaceObject> clouds;
     private static List<GemObject> gems;
@@ -78,6 +80,10 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         super(game);
         if (tiledMapList == null) {
             initialize();
+        }
+        else {
+            //update part in progress bar
+            progressBar.tankPart++;
         }
         aTankObject.controlsDisabled = false;
         Random random = new Random();
@@ -115,6 +121,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         setSprite = new Sprite(new Texture("textures/SetTexture.png"));
         goSprite = new Sprite(new Texture("textures/GoTexture.png"));
         startMessageSprite = new Sprite();
+        progressBar = new RainbowRaceProgressBar();
     }
 
     /**
@@ -124,15 +131,19 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     @Override
     public void render(float delta) {
         useLoadingScreen(delta);
-        if (screenStart || (game.assetManager.loadAssets() && aTankObject.isLoaded() && aRainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(clouds) && GemObject.gemsLoaded(gems))) {
+        if (screenStart || (game.assetManager.loadAssets() && aTankObject.isLoaded() && aRainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(clouds)
+                && GemObject.gemsLoaded(gems) && progressBar.isLoaded())) {
             refresh();
 
             /**SCREEN START**/
             if (!screenStart) {
                 aTankObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
+                aRainbowDashObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
                 spawnListInTileLayer(rings, RING_LAYER);
                 spawnListInTileLayer(clouds, CLOUD_LAYER);
                 spawnGems();
+                progressBar.position.x = foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 + (foregroundCamera.getCameraWidth() - progressBar.getWidth())/2;
+                progressBar.position.y = foregroundCamera.getCameraPositionY() - foregroundCamera.getCameraHeight()/2 + 50;
                 screenStart = true;
             }
 
@@ -179,13 +190,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             game.batch.end();
 
             //**DEBUG**/
-            shapeRenderer.setAutoShapeType(true);
-            shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
-            shapeRenderer.setColor(Color.BLACK);
-            shapeRenderer.begin();
-            Rectangle debugRectangle = aTankObject.getCollisionRectangle();
-            shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
-            shapeRenderer.end();
+//            shapeRenderer.setAutoShapeType(true);
+//            shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
+//            shapeRenderer.setColor(Color.BLACK);
+//            shapeRenderer.begin();
+//            Rectangle debugRectangle = aTankObject.getCollisionRectangle();
+//            shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
+//            shapeRenderer.end();
             //**/
 
             game.batch.begin();
@@ -193,6 +204,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             drawRingsFront();
             GemObject.drawGemObjects(gems, game.batch);
             drawListOfObjects(clouds);
+            progressBar.draw(game.batch);
             if (startMessageSprite != null) {
                 startMessageSprite.setPosition(foregroundCamera.getCameraPositionX() - startMessageSprite.getWidth() / 2,
                         foregroundCamera.getCameraPositionY() - startMessageSprite.getHeight() / 2);
@@ -261,6 +273,12 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             gameCamera.translateCamera(0,translateVector.y);
             foregroundCamera.translateCamera(0, translateVector.y);
         }
+
+        //update progress bar
+        progressBar.position.x =  foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 + (foregroundCamera.getCameraWidth() - progressBar.getWidth())/2;
+        progressBar.position.y = foregroundCamera.getCameraPositionY() - foregroundCamera.getCameraHeight()/2 + 50;
+        progressBar.updateRainbowMarker(aRainbowDashObject.getCurrentPositionX()/foregroundCamera.getWorldWidth());
+        progressBar.updateTankMarker(aTankObject.getCurrentPositionX()/foregroundCamera.getWorldWidth());
     }
 
     /**
@@ -468,6 +486,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tiledMapRenderer = null;
         tileMap.dispose();
         tileMap = null;
+        progressBar.dispose();
+        progressBar = null;
     }
 
     /**
