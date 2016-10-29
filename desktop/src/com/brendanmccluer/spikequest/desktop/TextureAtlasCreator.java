@@ -12,9 +12,12 @@ public class TextureAtlasCreator {
 	
 	public static void main(String[] args) {
 
-		//TexturePacker.process("C:\\Users\\Brendan\\Documents\\SpikeQuestAssets\\Rarity\\Stand", "C:\\Users\\Brendan\\Documents\\SpikeQuest\\android\\assets\\rarity\\stand", "RarityStand");
 		//TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Clouds\\Clouds", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\clouds\\white", "CloudStand");
-		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Tank", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\animals\\tank", "TankStand");
+		//TexturePacker.process("C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "Ribbon");
+
+		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Fly", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\fly", "RainbowDashFly");
+		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Crouch", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\crouch", "RainbowDashCrouch");
+		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Stand", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\stand", "RainbowDashStand");
 	}
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="1250" height="50" tilewidth="32" tileheight="32" nextobjectid="369">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="1250" height="50" tilewidth="32" tileheight="32" nextobjectid="380">
  <tileset firstgid="1" name="RainbowRaceSet" tilewidth="32" tileheight="32" tilecount="3072" columns="64">
   <image source="../tileSets/RainbowRaceSet.png" width="2048" height="1536"/>
  </tileset>
@@ -187,5 +187,14 @@
   <object id="334" x="5130" y="1142" width="28" height="44"/>
   <object id="355" x="22370.4" y="1108.06" width="28" height="44"/>
   <object id="362" x="36408.2" y="1199.21" width="28" height="44"/>
+ </objectgroup>
+ <objectgroup name="RainbowDashLayer">
+  <object id="369" x="7996.67" y="832" width="8" height="72"/>
+  <object id="370" x="10480" y="844" width="8" height="72"/>
+  <object id="371" x="11104" y="1324" width="8" height="72"/>
+  <object id="372" x="14514" y="1080" width="8" height="14"/>
+  <object id="377" x="15229" y="1068" width="8" height="14"/>
+  <object id="378" x="15307" y="1380" width="8" height="14"/>
+  <object id="379" x="11786" y="1334" width="8" height="72"/>
  </objectgroup>
 </map>

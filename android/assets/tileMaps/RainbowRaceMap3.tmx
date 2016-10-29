@@ -233,4 +233,5 @@
   <object id="316" x="34334" y="1076" width="28" height="44"/>
   <object id="317" x="35504.2" y="1099.21" width="28" height="44"/>
  </objectgroup>
+ <objectgroup name="RainbowDashLayer"/>
 </map>

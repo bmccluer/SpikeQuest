@@ -11,10 +11,15 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Sort;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -75,6 +80,32 @@ public class SpikeQuestTiles {
             locations.add(rectangle);
         }
         return locations;
+    }
+
+    /**
+     * I get all rectangle objects in the layer passed to the method
+     * and sort them from x position least to greatest
+     *
+     * @param aMap
+     * @param anObjectLayer
+     * @return
+     *
+     */
+    public static List<Rectangle> getTileMapRectanglesSortedXAscending(TiledMap aMap, int anObjectLayer) {
+        List<Rectangle> rectangleList = getTileMapRectangles(aMap, anObjectLayer);
+        Rectangle[] locations = new Rectangle[rectangleList.size()];
+        Comparator comparator = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                if (((Rectangle)o1).getX() > ((Rectangle)o2).getX())
+                    return 1;
+                return -1;
+            }
+        };
+        //sort method must have array type and not list type
+        rectangleList.toArray(locations);
+        Sort.instance().sort(locations,comparator);
+        return Arrays.asList(locations);
     }
 
     /**

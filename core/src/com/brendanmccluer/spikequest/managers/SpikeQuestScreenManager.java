@@ -50,6 +50,7 @@ public class SpikeQuestScreenManager {
 			//aGame.setScreen(new SugarCubeCornerScreen(aGame, "normal", "left"));
 			//aGame.setScreen(new BalloonGameIntroScreen(aGame));
 			aGame.setScreen(new RainbowRaceScreen(aGame));
+			debugging = false;
 			return;
 		}
 

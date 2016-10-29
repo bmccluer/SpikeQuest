@@ -23,6 +23,7 @@ public class SpikeQuestSprite {
 	private Exception textureAtlasException = null;
 	private boolean isFlipped = false;
 	private float currentSize = 1;
+    private boolean isPaused = false;
 	
 	public SpikeQuestSprite(TextureAtlas textureAtlas, int frames, float size) throws Exception {
 		sprite = new Sprite();
@@ -151,7 +152,8 @@ public class SpikeQuestSprite {
 			}
 			
 			setSpriteRegion(currentFrame);
-			currentFrame++;
+			if (!isPaused)
+                currentFrame++;
 			
 			//adjust size to match new region and set origin
 			setSize(currentSize);
@@ -169,6 +171,10 @@ public class SpikeQuestSprite {
 		
 		//draw animation
 		sprite.draw(batch);
+	}
+
+	public boolean isPaused() {
+		return isPaused;
 	}
 	
 	
@@ -214,5 +220,14 @@ public class SpikeQuestSprite {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+
+    public void pauseAnimation() {
+        isPaused = true;
+    }
+
+    public void playAnimation() {
+        isPaused = false;
+    }
+
 	
 }

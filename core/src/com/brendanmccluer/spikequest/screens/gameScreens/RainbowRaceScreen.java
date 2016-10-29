@@ -12,7 +12,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
+import com.brendanmccluer.spikequest.common.objects.RainbowRaceFinishLine;
 import com.brendanmccluer.spikequest.common.objects.RainbowRaceProgressBar;
+import com.brendanmccluer.spikequest.common.objects.RainbowRaceStartLine;
+import com.brendanmccluer.spikequest.common.objects.ScoreBoardObject;
+import com.brendanmccluer.spikequest.common.objects.ScoreControlObject;
 import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
@@ -39,6 +43,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static final int RING_LAYER = 2;
     private static final int CLOUD_LAYER = 3;
     private static final int GEM_LAYER = 4;
+    private static final int RAINBOW_DASH_LAYER = 5;
+    private static final int POINTS_RING_RED = 200;
+    private static final int POINTS_RING_YELLOW = 100;
+    private static final int POINTS_RING_GREEN = 50;
+    private static final int POINTS_DARK_CLOUD = -100;
     private static final long TIME_BETWEEN_START_WORDS = 1500; //in milliseconds
     private static final String BACKDROP_PATH = "backdrop/rainbowRaceBackdrop.png";
     //THESE ARE USED AS RATIOS AGAINST THE CAMERA SPEEDS--------
@@ -51,16 +60,19 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     //----------------------------------------------------------
     //STATIC OBJECTS SHARED BY ALL INSTANCES--------------------
     private static List<TiledMap> tiledMapList;
-    private static int score = 0;
-    private static int gemCount = 0;
-    private static TankObject aTankObject;
-    private static RainbowDashObject aRainbowDashObject;
+    private static TankObject tankObject;
+    private static RainbowDashObject rainbowDashObject;
     private static RainbowRaceProgressBar progressBar;
+    private static ScoreBoardObject scoreboard;
     private static List<RainbowRaceObject> rings;
     private static List<RainbowRaceObject> clouds;
     private static List<GemObject> gems;
+    private static List<Rectangle> rainbowDashTargetList;
     private static int startCount = 3;
     private static boolean raceStarted = false;
+    private static float rainbowProgressBarPosition = 0;
+    private static RainbowRaceFinishLine finishLine;
+    private static ScoreControlObject scoreControlObject;
     //----------------------------------------------------------
     private TiledMap tileMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -69,6 +81,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private SpikeQuestCamera foregroundCamera;
     private ShapeRenderer shapeRenderer;
     private boolean collidingWithCloud = false;
+    private RainbowRaceStartLine startLine;
     private Sprite startMessageSprite = null;
     private Sprite readySprite = null;
     private Sprite setSprite = null;
@@ -82,10 +95,10 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             initialize();
         }
         else {
-            //update part in progress bar
+            //updateMainGame part in progress bar
             progressBar.tankPart++;
         }
-        aTankObject.controlsDisabled = false;
+        tankObject.controlsDisabled = false;
         Random random = new Random();
         //get next map off of the list
         tileMap = tiledMapList.remove(0);
@@ -112,16 +125,26 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap1.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap3.tmx"));
+        rainbowDashTargetList = new ArrayList<Rectangle>();
+        for (TiledMap aTileMap : tiledMapList)
+            for (Rectangle aRectangle : SpikeQuestTiles.getTileMapRectanglesSortedXAscending(aTileMap, RAINBOW_DASH_LAYER))
+                rainbowDashTargetList.add(aRectangle);
+        //sort the rainbowDashTargetList
         rings = new ArrayList<RainbowRaceObject>();
         clouds = new ArrayList<RainbowRaceObject>();
         gems = new ArrayList<GemObject>();
-        aTankObject = new TankObject();
-        aRainbowDashObject = new RainbowDashObject();
+        tankObject = new TankObject();
+        rainbowDashObject = new RainbowDashObject();
+        rainbowDashObject.setGravity(0);
         readySprite = new Sprite(new Texture("textures/ReadyTexture.png"));
         setSprite = new Sprite(new Texture("textures/SetTexture.png"));
         goSprite = new Sprite(new Texture("textures/GoTexture.png"));
         startMessageSprite = new Sprite();
         progressBar = new RainbowRaceProgressBar();
+        scoreboard = new ScoreBoardObject();
+        finishLine = new RainbowRaceFinishLine();
+        startLine = new RainbowRaceStartLine();
+        scoreControlObject = new ScoreControlObject();
     }
 
     /**
@@ -131,104 +154,229 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     @Override
     public void render(float delta) {
         useLoadingScreen(delta);
-        if (screenStart || (game.assetManager.loadAssets() && aTankObject.isLoaded() && aRainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(clouds)
-                && GemObject.gemsLoaded(gems) && progressBar.isLoaded())) {
-            refresh();
 
-            /**SCREEN START**/
-            if (!screenStart) {
-                aTankObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
-                aRainbowDashObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
-                spawnListInTileLayer(rings, RING_LAYER);
-                spawnListInTileLayer(clouds, CLOUD_LAYER);
-                spawnGems();
-                progressBar.position.x = foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 + (foregroundCamera.getCameraWidth() - progressBar.getWidth())/2;
-                progressBar.position.y = foregroundCamera.getCameraPositionY() - foregroundCamera.getCameraHeight()/2 + 50;
-                screenStart = true;
-            }
+        if (!screenStart && !(game.assetManager.loadAssets() && tankObject.isLoaded() && rainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(clouds)
+                && GemObject.gemsLoaded(gems) && progressBar.isLoaded() && scoreboard.isLoaded() && finishLine.isLoaded() && (startLine == null || startLine.isLoaded())))
+            return;
 
-            if (raceStarted) {
-                /**NEXT SCREEN OR GAME OVER**/
-                if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
-                    //go to next screen
-                    if (tiledMapList.isEmpty()) {
-                        dispose();
-                        SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, score, gemCount, new MainMenuScreen(game)), game);
-                    }
-                    else {
-                        disposePartial();
-                        SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
-                    }
-                    return;
-                }
+        refresh();
 
-                update(delta);
-            }
+        if (!screenStart)
+            startScreen();
 
-            if (startCount > 0){
-                updateStartRace(delta);
-            }
+        if (raceStarted) {
+           if (forwardScreen())
+               return;
 
-            /**RENDER**/
-            //ONLY USE GAMECAMERA TO DRAW THE BACKGROUND
-            gameCamera.attachToBatch(game.batch);
-            game.batch.begin();
-            if (gameCamera.getCameraPositionX() - gameCamera.getCameraWidth() < currentBackdropTexture.getWidth())
-                game.batch.draw(currentBackdropTexture, 0,0);
-            if ((gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() > currentBackdropTexture.getWidth() - 35) && (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() < (currentBackdropTexture.getWidth() * 2) - 35))
-                game.batch.draw(currentBackdropTexture, currentBackdropTexture.getWidth()  - 35,0);
-            if (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() > (currentBackdropTexture.getWidth() * 2) - 35)
-                game.batch.draw(currentBackdropTexture, (currentBackdropTexture.getWidth() * 2)  - 35,0);
-            game.batch.end();
+            updateMainGame(delta);
+            updateRainbowDash(delta);
 
-            //Draw foreground objects
-            foregroundCamera.attachToTileMapRenderer(tiledMapRenderer);
-            foregroundCamera.attachToBatch(game.batch);
-            tiledMapRenderer.render(renderLayers);
-            game.batch.begin();
-            drawRingsBack();
-            game.batch.end();
-
-            //**DEBUG**/
-//            shapeRenderer.setAutoShapeType(true);
-//            shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
-//            shapeRenderer.setColor(Color.BLACK);
-//            shapeRenderer.begin();
-//            Rectangle debugRectangle = aTankObject.getCollisionRectangle();
-//            shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
-//            shapeRenderer.end();
-            //**/
-
-            game.batch.begin();
-            aTankObject.draw(game.batch);
-            drawRingsFront();
-            GemObject.drawGemObjects(gems, game.batch);
-            drawListOfObjects(clouds);
-            progressBar.draw(game.batch);
-            if (startMessageSprite != null) {
-                startMessageSprite.setPosition(foregroundCamera.getCameraPositionX() - startMessageSprite.getWidth() / 2,
-                        foregroundCamera.getCameraPositionY() - startMessageSprite.getHeight() / 2);
-                startMessageSprite.draw(game.batch);
-            }
-            game.batch.end();
         }
+
+        updateScoreBoard();
+        updateProgressBar();
+        if (!raceStarted)
+            rainbowDashObject.crouch();
+        if (startCount > 0) {
+            updateStartRace(delta);
+        }
+
+        renderObjects();
 
     }
 
     /**
-     * All updates to the objects occur here
+     * I determine if we should go to the next screen
+     * and set next screen if true
+     * @return
+     */
+    private boolean forwardScreen() {
+        if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
+            //go to next screen
+            if (tiledMapList.isEmpty()) {
+                dispose();
+                SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, scoreboard.getScore(), scoreboard.getGems(), new MainMenuScreen(game)), game);
+            }
+            else {
+                disposePartial();
+                SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * I draw all of the objects
+     */
+    private void renderObjects() {
+        /**RENDER**/
+        //ONLY USE GAMECAMERA TO DRAW THE BACKGROUND
+        gameCamera.attachToBatch(game.batch);
+        game.batch.begin();
+        if (gameCamera.getCameraPositionX() - gameCamera.getCameraWidth() < currentBackdropTexture.getWidth())
+            game.batch.draw(currentBackdropTexture, 0,0);
+        if ((gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() > currentBackdropTexture.getWidth() - 35) && (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() < (currentBackdropTexture.getWidth() * 2) - 35))
+            game.batch.draw(currentBackdropTexture, currentBackdropTexture.getWidth()  - 35,0);
+        if (gameCamera.getCameraPositionX() + gameCamera.getCameraWidth() > (currentBackdropTexture.getWidth() * 2) - 35)
+            game.batch.draw(currentBackdropTexture, (currentBackdropTexture.getWidth() * 2)  - 35,0);
+        game.batch.end();
+
+        //Draw foreground objects
+        foregroundCamera.attachToTileMapRenderer(tiledMapRenderer);
+        foregroundCamera.attachToBatch(game.batch);
+        tiledMapRenderer.render(renderLayers);
+        game.batch.begin();
+        drawRingsBack();
+        game.batch.end();
+
+        /**DEBUG**/
+        if (getTargetRectangle() != null) {
+            shapeRenderer.setAutoShapeType(true);
+            shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.begin();
+            Rectangle debugRectangle = getTargetRectangle();
+            shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
+            shapeRenderer.end();
+        }
+
+
+
+        game.batch.begin();
+        if (progressBar.tankPart == 2)
+            finishLine.drawBack(game.batch);
+        if (startLine != null)
+            startLine.drawBack(game.batch);
+        //only draw Rainbow on same screen as Tank
+        if (progressBar.rainbowPart == progressBar.tankPart)
+            rainbowDashObject.draw(game.batch);
+        tankObject.draw(game.batch);
+        if (startLine != null)
+            startLine.drawFront(game.batch);
+        if (progressBar.tankPart == 2)
+            finishLine.drawFront(game.batch);
+        drawRingsFront();
+        GemObject.drawGemObjects(gems, game.batch);
+        drawListOfObjects(clouds);
+        progressBar.draw(game.batch);
+        scoreboard.draw(game.batch);
+        if (startMessageSprite != null) {
+            startMessageSprite.setPosition(foregroundCamera.getCameraPositionX() - startMessageSprite.getWidth() / 2,
+                    foregroundCamera.getCameraPositionY() - startMessageSprite.getHeight() / 2);
+            startMessageSprite.draw(game.batch);
+        }
+        scoreControlObject.draw(game.batch);
+        game.batch.end();
+    }
+
+    /**
+     * I place the objects in their starting positions
+     */
+    private void startScreen() {
+        tankObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
+        if (!raceStarted) {
+            rainbowDashObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
+            rainbowDashObject.changeToFlying();
+        }
+        spawnListInTileLayer(rings, RING_LAYER);
+        spawnListInTileLayer(clouds, CLOUD_LAYER);
+        spawnGems();
+        scoreboard.spawn(0,0);
+        scoreboard.subtractLife();
+        scoreboard.subtractLife();
+        if (progressBar.tankPart == 2)
+            finishLine.setCurrentPositionXY(foregroundCamera.getWorldWidth() - finishLine.getCollisionRectangle().getWidth(), foregroundCamera.getWorldHeight()/2 - finishLine.getCollisionRectangle().getHeight()/2);
+        if (startLine != null) {
+            startLine.position = new Vector2(tankObject.getCenterX() - startLine.getCollisionRectangle().getWidth()/2 + 25, tankObject.getCenterY() - startLine.getCollisionRectangle().getHeight()/2 + 70);
+        }
+        screenStart = true;
+    }
+
+    /**
+     * I move RainbowDash according to the tile map and
+     * also set the progress bar position
      * @param delta
      */
-    private void update(float delta) {
+    private void updateRainbowDash(float delta) {
+        Rectangle aTargetRectangle = getTargetRectangle();
+        float speed = 450 * delta;
+
+        if (aTargetRectangle != null) {
+            rainbowDashObject.moveTowardsPoint(aTargetRectangle.getX(), aTargetRectangle.getY(), speed);
+        }
+        else
+            rainbowDashObject.moveRight(speed);
+
+        rainbowProgressBarPosition += speed;
+
+        if (rainbowProgressBarPosition >= foregroundCamera.getWorldWidth()) {
+            progressBar.rainbowPart++;
+            rainbowProgressBarPosition = 0;
+            //set for next screen
+            rainbowDashObject.setCurrentPositionXY(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
+        }
+    }
+
+    private Rectangle getTargetRectangle() {
+        Rectangle aRectangle = null;
+        Rectangle aTargetRetangle = null;
+
+        if (rainbowDashTargetList.isEmpty())
+            return null;
+
+        aTargetRetangle = rainbowDashTargetList.get(0);
+        aRectangle = rainbowDashObject.getCollisionRectangle();
+
+        //Move to next rectangle?
+        if (rainbowDashObject.getCenterX() >= aTargetRetangle.getX()) {
+            rainbowDashTargetList.remove(0);
+            if (rainbowDashTargetList.isEmpty())
+                return null;
+            aTargetRetangle = rainbowDashTargetList.get(0);
+        }
+
+        return aTargetRetangle;
+    }
+
+    private void updateProgressBar() {
+        progressBar.position.x =  foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 + (foregroundCamera.getCameraWidth() - progressBar.getWidth())/2;
+        progressBar.position.y = foregroundCamera.getCameraPositionY() - foregroundCamera.getCameraHeight()/2 + 50;
+        progressBar.updateRainbowMarker(rainbowProgressBarPosition /foregroundCamera.getWorldWidth());
+        progressBar.updateTankMarker(tankObject.getCurrentPositionX()/foregroundCamera.getWorldWidth());
+    }
+
+    private void updateScoreBoard() {
+        scoreboard.setCurrentPositionX(foregroundCamera.getCameraPositionX() + foregroundCamera.getCameraWidth()/2 - scoreboard.getCollisionRectangle().getWidth());
+        scoreboard.setCurrentPositionY(foregroundCamera.getCameraPositionY() + foregroundCamera.getCameraHeight()/2 - scoreboard.getCollisionRectangle().getHeight());
+    }
+
+    /**
+     * All updates to Tank and collisions
+     * @param delta
+     */
+    private void updateMainGame(float delta) {
         Vector2 translateVector = null;
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
 
-        if (aTankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth() - foregroundCamera.getCameraWidth())
-            aTankObject.controlsDisabled = true;
+
+        if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth() - foregroundCamera.getCameraWidth()) {
+            tankObject.controlsDisabled = true;
+
+            //last section
+            if (progressBar.tankPart == 2) {
+                tankObject.setGravity(0);
+                tankObject.moveTowardsPoint(finishLine.getCenterX() + 1000, finishLine.getCenterY() ,deltaForegroundX);
+                if (tankObject.getCollisionRectangle().getX() > finishLine.getCenterX() - 45)
+                    finishLine.breakRibbon();
+            }
+        }
+
+        scoreboard.addGems(GemObject.collectGemsTouched(gems, tankObject));
 
         //apply cloud collision
-        if (aTankObject.isShocked() || collidingWithCloud) {
+        if (tankObject.isShocked() || collidingWithCloud) {
             deltaForegroundX *= CLOUD_COLLISION_REDUCTION;
             deltaBackgroundX *= CLOUD_COLLISION_REDUCTION;
         }
@@ -245,44 +393,38 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             else
                 boostSpeed += RECOVER_SPEED;
         }
-        if (!aTankObject.tankHit && SpikeQuestTiles.getPolygonObjectCollision(tileMap, aTankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
-            aTankObject.crash(deltaForegroundX);
+        if (!tankObject.tankHit && SpikeQuestTiles.getPolygonObjectCollision(tileMap, tankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
+            tankObject.crash(deltaForegroundX);
             boostSpeed = -1.5f;
             //gameCamera.translateCamera(-deltaBackgroundX, 0);
             //foregroundCamera.translateCamera(-deltaForegroundX, 0);
-            aTankObject.setCurrentPositionX(aTankObject.getCurrentPositionX() - deltaForegroundX);
+            tankObject.setCurrentPositionX(tankObject.getCurrentPositionX() - deltaForegroundX);
         }
         else {
             gameCamera.translateCamera(deltaBackgroundX, 0);
             foregroundCamera.translateCamera(deltaForegroundX, 0);
-            aTankObject.setCurrentPositionX(aTankObject.getCurrentPositionX() + deltaForegroundX);
+            tankObject.setCurrentPositionX(tankObject.getCurrentPositionX() + deltaForegroundX);
         }
         collidingWithCloud = false; //reset flag
         updateListOfObjects(rings, delta);
         updateListOfObjects(clouds, delta);
-        GemObject.collectGemsTouched(gems, aTankObject);
 
-        //update Tank according to keyboard
-        translateVector = aTankObject.update(delta);
-        if (!aTankObject.controlsDisabled)
-            adjustToBounds(aTankObject, foregroundCamera);
+        //updateMainGame Tank according to keyboard
+        translateVector = tankObject.update(delta);
+        if (!tankObject.controlsDisabled)
+            adjustToBounds(tankObject, foregroundCamera);
 
         //adjust cameras to tank moving up and down
-        if ((aTankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
-                ((aTankObject.getCenterY() < gameCamera.getCameraPositionY() && translateVector.y < 0))) {
+        if ((tankObject.getCenterY() > gameCamera.getCameraHeight()/2 && translateVector.y > 0) ||
+                ((tankObject.getCenterY() < gameCamera.getCameraPositionY() && translateVector.y < 0))) {
             gameCamera.translateCamera(0,translateVector.y);
             foregroundCamera.translateCamera(0, translateVector.y);
         }
 
-        //update progress bar
-        progressBar.position.x =  foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 + (foregroundCamera.getCameraWidth() - progressBar.getWidth())/2;
-        progressBar.position.y = foregroundCamera.getCameraPositionY() - foregroundCamera.getCameraHeight()/2 + 50;
-        progressBar.updateRainbowMarker(aRainbowDashObject.getCurrentPositionX()/foregroundCamera.getWorldWidth());
-        progressBar.updateTankMarker(aTankObject.getCurrentPositionX()/foregroundCamera.getWorldWidth());
     }
 
     /**
-     * I run the update for the beginning of the race
+     * I run the updateMainGame for the beginning of the race
      * and set the raceStarted flag
      * @param delta
      */
@@ -396,25 +538,38 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             object.update(delta);
 
             //Specific to Rings
-            if (object instanceof RingObject && !aTankObject.tankHit && !((RingObject) object).beenTouched && object.isColliding(aTankObject.getCollisionRectangleFront())) {
+            if (object instanceof RingObject && !tankObject.tankHit && !((RingObject) object).beenTouched && object.isColliding(tankObject.getCollisionRectangleFront())) {
                 RingObject ringObject = (RingObject) object;
                 boost(ringObject);
                 ringObject.beenTouched = true;
+                switch (ringObject.ringType) {
+                    case RED : addScore(POINTS_RING_RED, tankObject.getCenterX(), tankObject.getCenterY());
+                        break;
+                    case YELLOW : addScore(POINTS_RING_YELLOW, tankObject.getCenterX(), tankObject.getCenterY());
+                        break;
+                    case GREEN : addScore(POINTS_RING_GREEN, tankObject.getCenterX(), tankObject.getCenterY());
+                }
                 return;
             }
             //Specific to Clouds
-            if (!aTankObject.tankHit && object instanceof CloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
+            if (!tankObject.tankHit && object instanceof CloudObject && object.isColliding(tankObject.getCollisionRectangle())) {
                 collidingWithCloud = true;
                 return;
             }
             //Specific to StormClouds
-            if (!aTankObject.tankHit && object instanceof StormCloudObject && object.isColliding(aTankObject.getCollisionRectangle())) {
-                aTankObject.shock();
+            if (!tankObject.tankHit && object instanceof StormCloudObject && object.isColliding(tankObject.getCollisionRectangle())) {
+                tankObject.shock();
                 boostSpeed = -1.5f;
+                addScore(POINTS_DARK_CLOUD, tankObject.getCenterX(), tankObject.getCenterY());
                 return;
             }
 
         }
+    }
+
+    private void addScore(int points, float xPos, float yPos) {
+        scoreboard.addScore(points);
+        scoreControlObject.createNewScore(points, xPos, yPos);
     }
 
     private void boost(RingObject ring) {
@@ -439,6 +594,10 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
      * do not dispose everything shared by the instances
      */
     private void disposePartial() {
+        if (startLine != null) {
+            startLine.discard();
+            startLine = null;
+        }
         if (readySprite != null) {
             readySprite.getTexture().dispose();
             setSprite.getTexture().dispose();
@@ -488,6 +647,10 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tileMap = null;
         progressBar.dispose();
         progressBar = null;
+        finishLine.discard();
+        finishLine = null;
+        scoreControlObject.discard();
+        scoreControlObject = null;
     }
 
     /**
