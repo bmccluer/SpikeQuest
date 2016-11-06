@@ -1,0 +1,41 @@
+
+RibbonFront.png
+size: 520,489
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 328
+  size: 258, 161
+  orig: 258, 161
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 165
+  size: 258, 161
+  orig: 258, 161
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 262, 328
+  size: 258, 161
+  orig: 258, 161
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 258, 161
+  orig: 258, 161
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 262, 165
+  size: 258, 161
+  orig: 258, 161
+  offset: 0, 0
+  index: -1

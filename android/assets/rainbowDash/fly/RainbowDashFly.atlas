@@ -1,0 +1,13 @@
+
+RainbowDashFly.png
+size: 816,320
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 814, 318
+  orig: 814, 318
+  offset: 0, 0
+  index: -1

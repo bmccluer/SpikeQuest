@@ -1,0 +1,13 @@
+
+RainbowDashStand.png
+size: 545,460
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 543, 458
+  orig: 543, 458
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,13 @@
+
+RainbowDashCrouch.png
+size: 823,373
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 821, 371
+  orig: 821, 371
+  offset: 0, 0
+  index: -1

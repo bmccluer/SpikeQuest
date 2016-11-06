@@ -1,0 +1,41 @@
+
+Ribbon.png
+size: 786,1017
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 680
+  size: 391, 337
+  orig: 391, 337
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
+  xy: 2, 341
+  size: 391, 337
+  orig: 391, 337
+  offset: 0, 0
+  index: -1
+0003
+  rotate: false
+  xy: 395, 680
+  size: 391, 337
+  orig: 391, 337
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 391, 337
+  orig: 391, 337
+  offset: 0, 0
+  index: -1
+0005
+  rotate: false
+  xy: 395, 341
+  size: 391, 337
+  orig: 391, 337
+  offset: 0, 0
+  index: -1
