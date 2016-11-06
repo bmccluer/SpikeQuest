@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="1250" height="50" tilewidth="32" tileheight="32" nextobjectid="333">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="1250" height="50" tilewidth="32" tileheight="32" nextobjectid="384">
  <tileset firstgid="1" name="RainbowRaceSet" tilewidth="32" tileheight="32" tilecount="3072" columns="64">
   <image source="../tileSets/RainbowRaceSet.png" width="2048" height="1536"/>
  </tileset>
@@ -233,5 +233,56 @@
   <object id="316" x="34334" y="1076" width="28" height="44"/>
   <object id="317" x="35504.2" y="1099.21" width="28" height="44"/>
  </objectgroup>
- <objectgroup name="RainbowDashLayer"/>
+ <objectgroup name="RainbowDashLayer">
+  <object id="333" x="1880" y="925" width="8" height="14"/>
+  <object id="334" x="4130" y="943" width="8" height="14"/>
+  <object id="335" x="4500" y="823" width="8" height="14"/>
+  <object id="336" x="4868" y="821" width="8" height="14"/>
+  <object id="337" x="5074" y="1025" width="8" height="14"/>
+  <object id="339" x="7414" y="1025" width="8" height="14"/>
+  <object id="340" x="8366" y="779" width="8" height="14"/>
+  <object id="341" x="9014" y="783" width="8" height="14"/>
+  <object id="342" x="9272" y="1063" width="8" height="14"/>
+  <object id="343" x="10618" y="1005" width="8" height="14"/>
+  <object id="344" x="11680" y="793" width="8" height="14"/>
+  <object id="345" x="14348" y="725" width="8" height="14"/>
+  <object id="346" x="15428" y="691" width="8" height="14"/>
+  <object id="347" x="16552" y="867" width="8" height="14"/>
+  <object id="348" x="17062" y="1045" width="8" height="14"/>
+  <object id="349" x="17592" y="917" width="8" height="14"/>
+  <object id="350" x="18042" y="991" width="8" height="14"/>
+  <object id="351" x="18406" y="1291" width="8" height="14"/>
+  <object id="352" x="20538" y="1265" width="8" height="14"/>
+  <object id="353" x="20870" y="969" width="8" height="14"/>
+  <object id="354" x="21080" y="665" width="8" height="14"/>
+  <object id="355" x="21392" y="615" width="8" height="14"/>
+  <object id="356" x="22454" y="699" width="8" height="14"/>
+  <object id="357" x="22794" y="979" width="8" height="14"/>
+  <object id="358" x="23272" y="1127" width="8" height="14"/>
+  <object id="359" x="23750" y="1201" width="8" height="14"/>
+  <object id="360" x="24456" y="891" width="8" height="14"/>
+  <object id="361" x="25182" y="895" width="8" height="14"/>
+  <object id="362" x="25366" y="1049" width="8" height="14"/>
+  <object id="363" x="25776" y="1043" width="8" height="14"/>
+  <object id="364" x="26528" y="1027" width="8" height="14"/>
+  <object id="365" x="26996" y="775" width="8" height="14"/>
+  <object id="366" x="27338" y="759" width="8" height="14"/>
+  <object id="367" x="27674" y="981" width="8" height="14"/>
+  <object id="368" x="28774" y="999" width="8" height="14"/>
+  <object id="369" x="29270" y="867" width="8" height="14"/>
+  <object id="370" x="29966" y="873" width="8" height="14"/>
+  <object id="371" x="30262" y="1081" width="8" height="14"/>
+  <object id="372" x="30494" y="1079" width="8" height="14"/>
+  <object id="373" x="30938" y="1021" width="8" height="14"/>
+  <object id="374" x="31580" y="1023" width="8" height="14"/>
+  <object id="375" x="32520" y="957" width="8" height="14"/>
+  <object id="376" x="33466" y="951" width="8" height="14"/>
+  <object id="377" x="34144" y="1093" width="8" height="14"/>
+  <object id="378" x="35658.2" y="1092.94" width="8" height="14"/>
+  <object id="379" x="36265.7" y="1035.42" width="8" height="14"/>
+  <object id="380" x="36911.2" y="1183.91" width="8" height="14"/>
+  <object id="381" x="37438.4" y="1189.97" width="8" height="14"/>
+  <object id="382" x="38877.8" y="1174.82" width="8" height="14"/>
+  <object id="383" x="39856.6" y="1053.61" width="8" height="14"/>
+ </objectgroup>
 </map>

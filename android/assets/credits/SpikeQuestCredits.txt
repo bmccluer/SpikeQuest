@@ -33,8 +33,27 @@ Sound:
 	http://soundbible.com/
 		RICHERlandTV
 		Gniffelbaf
-		
-		
+
+	"Cuckoo Clock Sound".  Mike Koenig (soundbible.com)
+    Licensed under Public Domain
+    http://soundbible.com/1261-Cuckoo-Clock.html
+
+	"Metal Clang".  Mike Koenig (soundbible.com)
+    Licensed under Creative Commons: By Attribution 3.0
+    http://soundbible.com/1781-Metal-Clang.html
+
+    "Air Horn".  Mike Koenig (soundbible.com)
+    Licensed under Creative Commons: By Attribution 3.0
+    http://soundbible.com/1542-Air-Horn.html
+
+    "Bottle Rocket.wav".  battlestar10 (soundbible.com)
+    Licensed under Creative Commons: By Attribution 3.0
+    http://soundbible.com/709-Bottle-Rocket.html
+
+    "Short Beep Tone".
+    Licensed for Personal Use
+	http://soundbible.com/91-Short-Beep-Tone.html
+
 	http://incompetech.com/music/royalty-free/
 	http://www.nosoapradio.us/
 	http://www.freesoundeffects.com/
@@ -51,6 +70,10 @@ Sound:
 	"double squeak 2.wav". sforsman (freesound.org)
 	Licensed under Creative Commons
 	https://www.freesound.org/people/sforsman/sounds/273934/
+
+	"lightning strike.wav". parnellij (freesound.org)
+    Licensed under Creative Commons
+    https://www.freesound.org/people/parnellij/sounds/74892/
 	
 	
 Music:
@@ -67,6 +90,9 @@ Music:
 	"Monkeys Spinning Monkeys" Kevin MacLeod (incompetech.com)
 	Licensed under Creative Commons: By Attribution 3.0 License
 	http://creativecommons.org/licenses/by/3.0/
+
+	"Platformer2"
+	http://www.dl-sounds.com/royalty-free/platformer2/
 	
 Animation:
 	Pinkie Pie Bouncing 						by LittleshyFIM

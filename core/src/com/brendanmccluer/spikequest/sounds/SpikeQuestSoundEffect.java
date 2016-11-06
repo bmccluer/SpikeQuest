@@ -51,6 +51,12 @@ public class SpikeQuestSoundEffect {
 				soundPlaying = false;
 		}
 	}
+
+	public void playSound (boolean canOverlap, float pitch, float volume) {
+		playSound(canOverlap);
+		setPitch(pitch);
+		setVolume(volume);
+	}
 	
 	/**
 	 * This method only works if playSound continues to be called with canOverlap set to "false"

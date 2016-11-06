@@ -16,6 +16,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	protected SpikeQuestSprite currentSprite = null;
 	protected float currentSize = 1;
 	protected boolean objectFacingRight = true;
+	protected boolean isSpawned = false;
 	protected float gravity = 0.1f;
 	protected float gravityWeight = 0.3f;
 	protected float ground = 0; 
@@ -125,11 +126,16 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 			
 			//set the ground height
 			ground = currentPositionY;
+			isSpawned = true;
 		} 
 
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public boolean isSpawned() {
+		return isSpawned;
 	}
 	
 	/**

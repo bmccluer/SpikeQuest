@@ -1,5 +1,8 @@
 package com.brendanmccluer.spikequest.screens.gameScreens;
 
+import com.badlogic.gdx.assets.loaders.SoundLoader;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +24,7 @@ import com.brendanmccluer.spikequest.interfaces.RainbowRaceObject;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 import com.brendanmccluer.spikequest.objects.GemObject;
+import com.brendanmccluer.spikequest.objects.ponies.DerpyObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.CloudObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.RingObject;
 import com.brendanmccluer.spikequest.objects.TankObject;
@@ -28,6 +32,8 @@ import com.brendanmccluer.spikequest.objects.ponies.RainbowDashObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.StormCloudObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
+import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
+import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 import com.brendanmccluer.spikequest.tiles.SpikeQuestTiles;
 
 import java.util.ArrayList;
@@ -67,12 +73,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private static List<RainbowRaceObject> rings;
     private static List<RainbowRaceObject> clouds;
     private static List<GemObject> gems;
-    private static List<Rectangle> rainbowDashTargetList;
+    private static List<List<Rectangle>> rainbowDashTargetLists;
     private static int startCount = 3;
     private static boolean raceStarted = false;
     private static float rainbowProgressBarPosition = 0;
     private static RainbowRaceFinishLine finishLine;
     private static ScoreControlObject scoreControlObject;
+    private static DerpyObject derpyObject;
     //----------------------------------------------------------
     private TiledMap tileMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -81,12 +88,17 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private SpikeQuestCamera foregroundCamera;
     private ShapeRenderer shapeRenderer;
     private boolean collidingWithCloud = false;
+    private boolean isLoseGame = false;
+    private boolean restart = false;
     private RainbowRaceStartLine startLine;
     private Sprite startMessageSprite = null;
     private Sprite readySprite = null;
     private Sprite setSprite = null;
     private Sprite goSprite = null;
     private long time = 0;
+    private SpikeQuestSoundEffect lightningSfx, bottleRocketSfx, metalClangSfx, cuckooClockSfx,
+    shortBeepSfx, airHornSfx;
+    private SpikeQuestMusic raceMusic;
 
 
     public RainbowRaceScreen(SpikeQuestGame game) {
@@ -125,10 +137,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap1.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap3.tmx"));
-        rainbowDashTargetList = new ArrayList<Rectangle>();
-        for (TiledMap aTileMap : tiledMapList)
+        rainbowDashTargetLists = new ArrayList<List<Rectangle>>();
+        for (TiledMap aTileMap : tiledMapList) {
+            List<Rectangle> rainbowDashTargetList = new ArrayList<Rectangle>();
             for (Rectangle aRectangle : SpikeQuestTiles.getTileMapRectanglesSortedXAscending(aTileMap, RAINBOW_DASH_LAYER))
                 rainbowDashTargetList.add(aRectangle);
+            rainbowDashTargetLists.add(rainbowDashTargetList);
+        }
         //sort the rainbowDashTargetList
         rings = new ArrayList<RainbowRaceObject>();
         clouds = new ArrayList<RainbowRaceObject>();
@@ -145,6 +160,14 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         finishLine = new RainbowRaceFinishLine();
         startLine = new RainbowRaceStartLine();
         scoreControlObject = new ScoreControlObject();
+        derpyObject = new DerpyObject();
+        game.assetManager.setAsset("sounds/LightningStrike.wav", "Sound");
+        game.assetManager.setAsset("sounds/BottleRocketSound.wav", "Sound");
+        game.assetManager.setAsset("sounds/MetalClang.wav", "Sound");
+        game.assetManager.setAsset("sounds/CuckooClock.wav", "Sound");
+        game.assetManager.setAsset("sounds/AirHorn.wav", "Sound");
+        game.assetManager.setAsset("sounds/ShortBeepTone.wav", "Sound");
+        game.assetManager.setAsset("music/Platformer2.mp3", "Music");
     }
 
     /**
@@ -156,7 +179,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         useLoadingScreen(delta);
 
         if (!screenStart && !(game.assetManager.loadAssets() && tankObject.isLoaded() && rainbowDashObject.isLoaded() && loadListOfObjects(rings) && loadListOfObjects(clouds)
-                && GemObject.gemsLoaded(gems) && progressBar.isLoaded() && scoreboard.isLoaded() && finishLine.isLoaded() && (startLine == null || startLine.isLoaded())))
+                && GemObject.gemsLoaded(gems) && progressBar.isLoaded() && scoreboard.isLoaded() && finishLine.isLoaded() && derpyObject.isLoaded() && (startLine == null || startLine.isLoaded())))
             return;
 
         refresh();
@@ -165,12 +188,17 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             startScreen();
 
         if (raceStarted) {
-           if (forwardScreen())
+            if (forwardScreen())
                return;
 
-            updateMainGame(delta);
-            updateRainbowDash(delta);
+            isLoseGame = getTargetRectangle() == null && progressBar.rainbowPart >= 3;
+            //check lose game
+            if (isLoseGame)
+                updateLoseGame(delta);
+            else
+                updateMainGame(delta);
 
+            updateRainbowDash(delta);
         }
 
         updateScoreBoard();
@@ -191,8 +219,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
      * @return
      */
     private boolean forwardScreen() {
+        //go to next screen
+        if (restart) {
+            dispose();
+            SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
+            return true;
+        }
         if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
-            //go to next screen
             if (tiledMapList.isEmpty()) {
                 dispose();
                 SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, scoreboard.getScore(), scoreboard.getGems(), new MainMenuScreen(game)), game);
@@ -231,7 +264,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         game.batch.end();
 
         /**DEBUG**/
-        if (getTargetRectangle() != null) {
+        /*if (getTargetRectangle() != null) {
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.setProjectionMatrix(foregroundCamera.getProjectionMatrix());
             shapeRenderer.setColor(Color.BLACK);
@@ -239,9 +272,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             Rectangle debugRectangle = getTargetRectangle();
             shapeRenderer.box(debugRectangle.x, debugRectangle.y,0, debugRectangle.width, debugRectangle.height, 0);
             shapeRenderer.end();
-        }
-
-
+        }*/
 
         game.batch.begin();
         if (progressBar.tankPart == 2)
@@ -267,6 +298,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             startMessageSprite.draw(game.batch);
         }
         scoreControlObject.draw(game.batch);
+        if (isLoseGame)
+            derpyObject.draw(game.batch);
         game.batch.end();
     }
 
@@ -290,6 +323,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         if (startLine != null) {
             startLine.position = new Vector2(tankObject.getCenterX() - startLine.getCollisionRectangle().getWidth()/2 + 25, tankObject.getCenterY() - startLine.getCollisionRectangle().getHeight()/2 + 70);
         }
+        lightningSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/LightningStrike.wav", "Sound")), 100);
+        bottleRocketSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/BottleRocketSound.wav", "Sound")), 100);
+        metalClangSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/MetalClang.wav", "Sound")), 100);
+        cuckooClockSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/CuckooClock.wav", "Sound")), 100);
+        shortBeepSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/ShortBeepTone.wav", "Sound")), 100);
+        airHornSfx = new SpikeQuestSoundEffect(((Sound) game.assetManager.loadAsset("sounds/AirHorn.wav", "Sound")), 100);
+        raceMusic = new SpikeQuestMusic(((Music) game.assetManager.loadAsset("music/Platformer2.mp3", "Music")));
         screenStart = true;
     }
 
@@ -320,23 +360,27 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     private Rectangle getTargetRectangle() {
         Rectangle aRectangle = null;
-        Rectangle aTargetRetangle = null;
+        Rectangle aTargetRectangle = null;
+        List<Rectangle> rainbowDashTargetList = null;
 
-        if (rainbowDashTargetList.isEmpty())
+        if (progressBar.rainbowPart < rainbowDashTargetLists.size())
+            rainbowDashTargetList = rainbowDashTargetLists.get(progressBar.rainbowPart);
+
+        if (rainbowDashTargetList == null || rainbowDashTargetList.isEmpty())
             return null;
 
-        aTargetRetangle = rainbowDashTargetList.get(0);
+        aTargetRectangle = rainbowDashTargetList.get(0);
         aRectangle = rainbowDashObject.getCollisionRectangle();
 
         //Move to next rectangle?
-        if (rainbowDashObject.getCenterX() >= aTargetRetangle.getX()) {
+        if (rainbowDashObject.getCenterX() >= aTargetRectangle.getX()) {
             rainbowDashTargetList.remove(0);
             if (rainbowDashTargetList.isEmpty())
                 return null;
-            aTargetRetangle = rainbowDashTargetList.get(0);
+            aTargetRectangle = rainbowDashTargetList.get(0);
         }
 
-        return aTargetRetangle;
+        return aTargetRectangle;
     }
 
     private void updateProgressBar() {
@@ -358,8 +402,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private void updateMainGame(float delta) {
         Vector2 translateVector = null;
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
+        //float deltaForegroundX =  delta * 450; //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
-
 
         if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth() - foregroundCamera.getCameraWidth()) {
             tankObject.controlsDisabled = true;
@@ -395,6 +439,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         }
         if (!tankObject.tankHit && SpikeQuestTiles.getPolygonObjectCollision(tileMap, tankObject.getCollisionRectangle() , COLLISION_LAYER) != null) {
             tankObject.crash(deltaForegroundX);
+            metalClangSfx.playSound(true, 0.5f, 0.35f);
+            cuckooClockSfx.playSound(true, 0.8f, 0.25f);
             boostSpeed = -1.5f;
             //gameCamera.translateCamera(-deltaBackgroundX, 0);
             //foregroundCamera.translateCamera(-deltaForegroundX, 0);
@@ -435,6 +481,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         if (time == 0) {
             time = System.currentTimeMillis();
             startMessageSprite = readySprite;
+            shortBeepSfx.playSound(true, 1f, 1);
         }
         else if (System.currentTimeMillis() - time > TIME_BETWEEN_START_WORDS) {
             startCount--;
@@ -443,10 +490,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             if (startCount == 2) {
                 startMessageSprite = setSprite;
                 startMessageSprite.setScale(1);
+                shortBeepSfx.playSound(true, 1f, 1);
             }
             else if (startCount == 1) {
                 startMessageSprite = goSprite;
                 raceStarted = true;
+                airHornSfx.playSound(true);
+                raceMusic.playMusic(true);
             }
             else {
                 startMessageSprite = null;
@@ -456,6 +506,22 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
        // startMessageSprite.setSize(width + (width * delta), height * (height * delta));
         startMessageSprite.setScale(startMessageSprite.getScaleX() + (0.5f * delta));
 
+    }
+
+    private void updateLoseGame(float delta) {
+        if(!derpyObject.isSpawned()) {
+            derpyObject.spawn(0,0);
+            derpyObject.setGravity(0);
+            derpyObject.setBanner("Try Again!");
+            derpyObject.setBannerTextSize(2);
+            derpyObject.setCurrentPositionXY(foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 - derpyObject.getCollisionRectangle().getWidth(),
+                    foregroundCamera.getCameraPositionY() + foregroundCamera.getCameraHeight()/2 - derpyObject.getCollisionRectangle().getHeight());
+        }
+
+        if(derpyObject.getCollisionRectangle().getX() > foregroundCamera.getCameraPositionX())
+            restart = true;
+
+        derpyObject.moveRight(delta * 150);
     }
 
     /**
@@ -543,11 +609,17 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 boost(ringObject);
                 ringObject.beenTouched = true;
                 switch (ringObject.ringType) {
-                    case RED : addScore(POINTS_RING_RED, tankObject.getCenterX(), tankObject.getCenterY());
+                    case RED :
+                        addScore(POINTS_RING_RED, tankObject.getCenterX(), tankObject.getCenterY());
+                        bottleRocketSfx.playSound(true, 1.5f, 0.25f);
                         break;
-                    case YELLOW : addScore(POINTS_RING_YELLOW, tankObject.getCenterX(), tankObject.getCenterY());
+                    case YELLOW :
+                        addScore(POINTS_RING_YELLOW, tankObject.getCenterX(), tankObject.getCenterY());
+                        bottleRocketSfx.playSound(true, 1.8f, 0.25f);
                         break;
-                    case GREEN : addScore(POINTS_RING_GREEN, tankObject.getCenterX(), tankObject.getCenterY());
+                    case GREEN :
+                        addScore(POINTS_RING_GREEN, tankObject.getCenterX(), tankObject.getCenterY());
+                        bottleRocketSfx.playSound(true, 2f, 0.25f);
                 }
                 return;
             }
@@ -561,6 +633,8 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
                 tankObject.shock();
                 boostSpeed = -1.5f;
                 addScore(POINTS_DARK_CLOUD, tankObject.getCenterX(), tankObject.getCenterY());
+                lightningSfx.playSound(true);
+                cuckooClockSfx.playSound(true, 0.8f, 0.25f);
                 return;
             }
 
@@ -629,6 +703,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             goSprite = null;
             startMessageSprite = null;
         }
+        rainbowDashTargetLists.clear();
         disposeListOfObjects(clouds);
         disposeListOfObjects(rings);
         for (GemObject gem : gems)
@@ -643,14 +718,29 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         if (shapeRenderer != null)
             shapeRenderer.dispose();
         tiledMapRenderer = null;
-        tileMap.dispose();
-        tileMap = null;
+        for (TiledMap aTileMap : tiledMapList)
+            tileMap.dispose();
+        tiledMapList.clear();
+        tiledMapList = null;
         progressBar.dispose();
         progressBar = null;
         finishLine.discard();
         finishLine = null;
         scoreControlObject.discard();
         scoreControlObject = null;
+        derpyObject.discard();
+        derpyObject = null;
+        raceStarted = false;
+        startCount = 3;
+        rainbowProgressBarPosition = 0;
+        bottleRocketSfx = null;
+        lightningSfx = null;
+        cuckooClockSfx = null;
+        metalClangSfx = null;
+        shortBeepSfx = null;
+        airHornSfx = null;
+        raceMusic.stopMusic();
+        raceMusic = null;
     }
 
     /**
