@@ -90,6 +90,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private boolean collidingWithCloud = false;
     private boolean isLoseGame = false;
     private boolean restart = false;
+    private boolean isWinGame = false;
     private RainbowRaceStartLine startLine;
     private Sprite startMessageSprite = null;
     private Sprite readySprite = null;
@@ -191,10 +192,13 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             if (forwardScreen())
                return;
 
-            isLoseGame = getTargetRectangle() == null && progressBar.rainbowPart >= 3;
+            isLoseGame = !isWinGame && getTargetRectangle() == null && progressBar.rainbowPart >= 3;
             //check lose game
-            if (isLoseGame)
+            if (isLoseGame) {
                 updateLoseGame(delta);
+                if (!finishLine.getIsRibbonBroke())
+                    finishLine.breakRibbon();
+            }
             else
                 updateMainGame(delta);
 
@@ -225,16 +229,17 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
             return true;
         }
-        if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth()) {
-            if (tiledMapList.isEmpty()) {
+        if (tankObject.getCurrentPositionX() >= foregroundCamera.getWorldWidth() + 100) {
+            if (finishLine.getIsRibbonBroke() && (System.currentTimeMillis() - time) > 3000) {
                 dispose();
                 SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, scoreboard.getScore(), scoreboard.getGems(), new MainMenuScreen(game)), game);
+                return true;
             }
-            else {
+            else if (!tiledMapList.isEmpty()) {
                 disposePartial();
                 SpikeQuestScreenManager.forwardScreen(this, new RainbowRaceScreen(game), game);
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -402,6 +407,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private void updateMainGame(float delta) {
         Vector2 translateVector = null;
         float deltaForegroundX =  delta * (FOREGROUND_SPEED_MIN + boostSpeed*FOREGROUND_SPEED_MIN); //change in foreground pos
+        //TO DEBUG RAINBOW USE THIS
         //float deltaForegroundX =  delta * 450; //change in foreground pos
         float deltaBackgroundX = delta * (BACKGROUND_SPEED_MIN + boostSpeed*BACKGROUND_SPEED_MIN);  //change in background pos
 
@@ -409,11 +415,14 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
             tankObject.controlsDisabled = true;
 
             //last section
-            if (progressBar.tankPart == 2) {
+            if (progressBar.tankPart == 2 && !isWinGame) {
                 tankObject.setGravity(0);
                 tankObject.moveTowardsPoint(finishLine.getCenterX() + 1000, finishLine.getCenterY() ,deltaForegroundX);
-                if (tankObject.getCollisionRectangle().getX() > finishLine.getCenterX() - 45)
+                if (tankObject.getCollisionRectangle().getX() > finishLine.getCenterX() - 45) {
                     finishLine.breakRibbon();
+                    time = System.currentTimeMillis();
+                    isWinGame = true;
+                }
             }
         }
 

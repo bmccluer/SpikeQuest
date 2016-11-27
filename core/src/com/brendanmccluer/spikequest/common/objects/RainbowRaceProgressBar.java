@@ -12,6 +12,7 @@ public class RainbowRaceProgressBar extends AbstractSpikeQuestObject{
     private static final String[] filePaths = {"object/rainbowRaceProgressBar/ProgressBarTexture.png", "object/rainbowRaceProgressBar/RainbowMarkerTexture.png", "object/rainbowRaceProgressBar/TankMarkerTexture.png"};
     private static final String[] fileTypes = {"Texture", "Texture", "Texture"};
     private static final int FINISH_FLAG_WIDTH = 20;
+    private static final int TANK_OFFSET = -5; //OFFSET NEEDED TO KEEP TANK AND RAINBOW DASH ALIGNED
     private Texture progressBarTexture, rainbowMarkerTexture, tankMarkerTexture;
     public Vector2 position = new Vector2();
     private float tankPercent = 0, rainbowPercent = 0;
@@ -37,7 +38,7 @@ public class RainbowRaceProgressBar extends AbstractSpikeQuestObject{
     public void draw(SpriteBatch batch) {
         drawTexture(progressBarTexture, batch, position.x, position.y);
         drawTexture(rainbowMarkerTexture, batch, position.x - rainbowMarkerTexture.getWidth()/2 + (partWidth * rainbowPart) + rainbowPercent * partWidth, position.y + 35);
-        drawTexture(tankMarkerTexture, batch, position.x + - tankMarkerTexture.getWidth()/2 + (partWidth * tankPart) + tankPercent * partWidth, position.y + 35);
+        drawTexture(tankMarkerTexture, batch, TANK_OFFSET + position.x + - tankMarkerTexture.getWidth()/2 + (partWidth * tankPart) + tankPercent * partWidth, position.y + 35);
     }
 
     public float getWidth() {

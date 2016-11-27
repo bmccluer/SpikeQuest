@@ -9,7 +9,7 @@ import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
-import com.brendanmccluer.spikequest.objects.ButtonObject;
+import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 
 /**
  * I render the MainMenu screen
@@ -20,6 +20,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	private ButtonObject continueButton = new ButtonObject("Continue");
 	private ButtonObject newGameButton = new ButtonObject("New Game");
 	private ButtonObject creditsButton = new ButtonObject("Credits");
+	private ButtonObject gameSelectButton = new ButtonObject("Game Select");
 	
 	//used for Screen Manager
 	public boolean continueButtonPressed = false;
@@ -32,8 +33,9 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		gameCamera = new SpikeQuestCamera(1700, 1554, 917);
 		continueButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY());
 		newGameButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 100);
-		creditsButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 200);
-		
+		gameSelectButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 200);
+		creditsButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 300);
+
 		//use asset manager to set resources
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
 	}
@@ -43,7 +45,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		gameCamera.attachToBatch(game.batch);
 		
 		
-		if (game.assetManager.loadAssets() && continueButton.isLoaded() && newGameButton.isLoaded() && creditsButton.isLoaded()) {
+		if (game.assetManager.loadAssets() && continueButton.isLoaded() && newGameButton.isLoaded() && creditsButton.isLoaded() && gameSelectButton.isLoaded()) {
 			
 			if (!screenStart) {
 				
@@ -57,6 +59,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 			game.batch.draw(currentBackdropTexture, 0, 0);
 			continueButton.draw(game.batch);
 			newGameButton.draw(game.batch);
+			gameSelectButton.draw(game.batch);
 			creditsButton.draw(game.batch);
 			
 			//game.batch.draw(mainMenuImage, aSpikeQuestCamera.getMousePositionX(), aSpikeQuestCamera.getMousePositionY());
@@ -85,11 +88,15 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	        	setNextScreen();
 	        	
 	        }
+			else if (isButtonPressed(gameSelectButton)) {
+
+				SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+				dispose();
+				SpikeQuestScreenManager.forwardScreen(this, new GameSelectScreen(game), game);
+			}
 	        else if (isButtonPressed(creditsButton)) {
-	        	
-	        	setNextScreen();
+	        	//TODO; Add credits screen
 	        }
-        
 		}
         
 	}
@@ -100,11 +107,13 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		continueButton.discard();
 		creditsButton.discard();
 		newGameButton.discard();
+		gameSelectButton.discard();
 		gameCamera.discard();
 		
 		continueButton = null;
 		creditsButton = null;
 		newGameButton = null;
+		gameSelectButton = null;
 		gameCamera = null;
 		
 		

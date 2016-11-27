@@ -15,9 +15,9 @@ public class TextureAtlasCreator {
 		//TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowRace\\Clouds\\Clouds", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\clouds\\white", "CloudStand");
 		//TexturePacker.process("C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "Ribbon");
 
-		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Fly", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\fly", "RainbowDashFly");
-		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Crouch", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\crouch", "RainbowDashCrouch");
-		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\RainbowDash\\Stand", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\stand", "RainbowDashStand");
+
+		TexturePacker.process("C:\\Users\\brend\\Google Drive\\SpikeQuest\\PinkieBalloonGame", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\buttons\\gameSelectButtons\\PinkiesBalloonGame", "PinkiesBalloonGameButton");
+
 	}
 
 }

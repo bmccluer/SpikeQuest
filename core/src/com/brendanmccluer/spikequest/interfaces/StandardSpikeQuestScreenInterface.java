@@ -1,4 +1,4 @@
-package com.brendanmccluer.spikequest.screens;
+package com.brendanmccluer.spikequest.interfaces;
 
 import com.badlogic.gdx.Screen;
 

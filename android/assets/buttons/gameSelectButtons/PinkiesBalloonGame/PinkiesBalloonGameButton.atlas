@@ -1,0 +1,48 @@
+
+PinkiesBalloonGameButton.png
+size: 476,1020
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+path7476-2.png balloon2
+  rotate: false
+  xy: 2, 682
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1
+path7476-2.png discord balloon2
+  rotate: false
+  xy: 2, 342
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1
+path7476-8.png balloon3
+  rotate: false
+  xy: 240, 682
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1
+path7476-8.png discord balloon3
+  rotate: false
+  xy: 2, 2
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1
+path7476.png balloon1
+  rotate: false
+  xy: 240, 342
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1
+path7476.png discord balloon1
+  rotate: false
+  xy: 240, 2
+  size: 236, 338
+  orig: 236, 338
+  offset: 0, 0
+  index: -1

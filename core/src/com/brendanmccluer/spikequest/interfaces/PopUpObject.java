@@ -1,4 +1,4 @@
-package com.brendanmccluer.spikequest.objects;
+package com.brendanmccluer.spikequest.interfaces;
 
 public interface PopUpObject {
 	

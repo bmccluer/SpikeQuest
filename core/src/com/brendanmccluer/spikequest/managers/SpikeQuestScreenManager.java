@@ -3,6 +3,7 @@ package com.brendanmccluer.spikequest.managers;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
+import com.brendanmccluer.spikequest.screens.GameSelectScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
@@ -49,7 +50,8 @@ public class SpikeQuestScreenManager {
 			//handleShyAndSeekScreen(aGame);
 			//aGame.setScreen(new SugarCubeCornerScreen(aGame, "normal", "left"));
 			//aGame.setScreen(new BalloonGameIntroScreen(aGame));
-			aGame.setScreen(new RainbowRaceScreen(aGame));
+			//aGame.setScreen(new RainbowRaceScreen(aGame));
+			aGame.setScreen(new GameSelectScreen(aGame));
 			debugging = false;
 			return;
 		}

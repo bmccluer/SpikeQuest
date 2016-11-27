@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
+import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
-import com.brendanmccluer.spikequest.objects.ButtonObject;
+import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 /**
  * Generic Class for all screens to implement
@@ -27,7 +28,8 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 	protected Texture currentBackdropTexture = null;
 	protected String screenType = "";
 	protected SpikeQuestLoadingScreen loadingScreen = null;
-	
+
+	//TODO create initialize method instead of loading everything in constructor
 	public AbstractSpikeQuestScreen (SpikeQuestGame game) {
 		this.game = game;
 	}
@@ -58,13 +60,13 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 			loadingScreen.dispose();
 	}
 	
-	
+
 	/**
 	 * I check if a button is pressed (if the camera is set)
-	 * @param aButtonObject
+	 * @param aButtonObjectInterface
 	 * @return
 	 */
-	protected boolean isButtonPressed(ButtonObject aButtonObject) {
+	protected boolean isButtonPressed(ButtonObject aButtonObjectInterface) {
 		/*if (Gdx.app.getType().equals(ApplicationType.Android)) {
 			if (gameCamera != null) {
 				return aButtonObject.checkMouseOver(Gdx.input.is, yMousePos)
@@ -72,7 +74,7 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 		}*/
 			
 		if (gameCamera != null) {
-			return aButtonObject.checkMouseOver(gameCamera.getMousePositionX(), gameCamera.getMousePositionY()) &&
+			return aButtonObjectInterface.checkMouseOver(gameCamera.getMousePositionX(), gameCamera.getMousePositionY()) &&
 					Gdx.input.isButtonPressed(Buttons.LEFT);
 		}
 		

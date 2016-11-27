@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="60" height="35" tilewidth="32" tileheight="32" nextobjectid="15">
+ <imagelayer name="Backdrop">
+  <image source="../backdrop/GameSelectionBackdrop.png" width="1961" height="1121"/>
+ </imagelayer>
+ <objectgroup name="Buttons">
+  <object id="8" x="125.606" y="257.515" width="316.667" height="156.667"/>
+  <object id="11" x="572.666" y="259" width="316.667" height="156.667"/>
+  <object id="12" x="1020.17" y="259.166" width="316.667" height="156.667"/>
+  <object id="13" x="1470.67" y="257.666" width="316.667" height="156.667"/>
+ </objectgroup>
+ <objectgroup name="BackButton">
+  <object id="14" x="128.667" y="897.667" width="316.667" height="156.667"/>
+ </objectgroup>
+</map>

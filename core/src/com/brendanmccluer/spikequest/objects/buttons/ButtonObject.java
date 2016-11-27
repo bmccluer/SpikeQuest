@@ -1,11 +1,14 @@
-package com.brendanmccluer.spikequest.objects;
+package com.brendanmccluer.spikequest.objects.buttons;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
+import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 
+@Deprecated
 public class ButtonObject extends AbstractSpikeQuestObject {
 	private final static String BUTTON_PATH = "buttons/mainMenuButton.png";
 	private Texture buttonTexture = null;
@@ -43,7 +46,8 @@ public class ButtonObject extends AbstractSpikeQuestObject {
 	 * @param yPos
 	 * @return
 	 */
-	public boolean checkMouseOver (float xMousePos, float yMousePos) {
+
+	public boolean checkMouseOver(float xMousePos, float yMousePos) {
 		
 	
 		if (buttonSprite.getBoundingRectangle().contains(xMousePos, yMousePos)) {
@@ -61,6 +65,7 @@ public class ButtonObject extends AbstractSpikeQuestObject {
 	 * @param xPos
 	 * @param yPos
 	 */
+
 	public void draw(SpriteBatch aSpriteBatch) {
 		
 		if (objectLoaded) {
@@ -73,13 +78,14 @@ public class ButtonObject extends AbstractSpikeQuestObject {
 		
 	}
 	
-	public void setPosition (float xPos, float yPos) {
+
+	public void setPosition(float xPos, float yPos) {
 		buttonSprite.setX(xPos);
 		buttonSprite.setY(yPos);
 	}
 	
-	@Override
-	public boolean isLoaded () {
+
+	public boolean isLoaded() {
 		
 		boolean isLoaded = super.isLoaded();
 		
@@ -95,8 +101,8 @@ public class ButtonObject extends AbstractSpikeQuestObject {
 		return isLoaded;
 	}
 	
-	@Override
-	public void discard () {
+
+	public void discard() {
 		buttonText = null;
 		
 		super.discard();

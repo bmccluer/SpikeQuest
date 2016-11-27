@@ -21,6 +21,7 @@ public class RainbowRaceFinishLine extends AbstractSpikeQuestSpriteObject {
     private Texture finishBackTexture, finishFrontTexture;
     private TextureAtlas ribbonFrontAtlas, ribbonBackAtlas;
     private SpikeQuestSprite ribbonBackSprite;
+    private boolean isRibbonBroke = false;
 
     public RainbowRaceFinishLine() {
         super(filePaths, fileTypes);
@@ -56,10 +57,16 @@ public class RainbowRaceFinishLine extends AbstractSpikeQuestSpriteObject {
     }
 
     public void breakRibbon() {
-        currentSprite.playAnimation();
-        ribbonBackSprite.playAnimation();
+        if (!isRibbonBroke) {
+            currentSprite.playAnimation();
+            ribbonBackSprite.playAnimation();
+            isRibbonBroke = true;
+        }
     }
 
+    public boolean getIsRibbonBroke () {
+        return isRibbonBroke;
+    }
     @Override
     public void setCurrentPositionXY(float currentPositionX, float currentPositionY) {
         super.setCurrentPositionXY(currentPositionX, currentPositionY);
