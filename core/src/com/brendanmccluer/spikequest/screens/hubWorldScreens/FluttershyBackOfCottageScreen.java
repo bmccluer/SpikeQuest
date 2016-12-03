@@ -6,20 +6,25 @@ import com.brendanmccluer.spikequest.objects.ponies.FluttershyObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScreen {
-	private FluttershyObject aFluttershyObject = new FluttershyObject();
+	private FluttershyObject fluttershyObject = null;
+
 	public FluttershyBackOfCottageScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
-		
 		super(game, 1259, 634, 1100, "backdrop/fluttershyBackOfCottage.png", aScreenType, aSpikePosition);
-		
 	}
 
-	@Override
+    @Override
+    public void initialize() {
+        super.initialize();
+        fluttershyObject = new FluttershyObject();
+    }
+
+    @Override
 	public void render(float delta) {
 		refresh();
 		//useLoadingScreen(delta);
-		if (game.assetManager.loadAssets() && loadAssets() && aFluttershyObject.isLoaded()) {
+		if (game.assetManager.loadAssets() && loadAssets() && fluttershyObject.isLoaded()) {
 			if (!screenStart) {
-				initialize(true);		
+				startScreen(true);
 				screenStart = true;
 			}
 			//attach to batch after initialization
@@ -27,8 +32,8 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
 			game.batch.begin();
 			drawBackdrop();
 			drawBitsAndGems();
-			aSpikeObject.draw(game.batch);
-			//aFluttershyObject.draw(game.batch);
+			spikeObject.draw(game.batch);
+			//fluttershyObject.draw(game.batch);
 			game.batch.end();	
 			controlSpike();
 		}
@@ -37,7 +42,13 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
 		if (("right").equals(getEdgeTouched())) {
 			dispose();
 			SpikeQuestScreenManager.forwardScreen(this, new FluttershyCottageScreen(game, " ", "left"), game);
-			return;
 		}
 	}
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        fluttershyObject.discard();
+        fluttershyObject = null;
+    }
 }

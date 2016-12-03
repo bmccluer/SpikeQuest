@@ -13,9 +13,13 @@ public class BalloonGameIntroScreen extends AbstractSpikeQuestScreen {
 	
 	public BalloonGameIntroScreen(SpikeQuestGame game) {
 		super(game);
-		gameCamera = new SpikeQuestCamera(1675, 1564, 931); //screen properties
-		//move the camera slightly to center the picture
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
+	}
+
+	@Override
+	public void initialize() {
+        gameCamera = new SpikeQuestCamera(1675, 1564, 931); //screen properties
+        //move the camera slightly to center the picture
+        game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
 	}
 
 	@Override

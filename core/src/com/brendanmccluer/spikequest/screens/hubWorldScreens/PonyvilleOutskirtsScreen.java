@@ -9,9 +9,7 @@ import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekIntroScreen;
 public class PonyvilleOutskirtsScreen extends AbstractSpikeQuestStandardScreen {
 	
 	PonyvilleOutskirtsScreen (SpikeQuestGame game, String aScreenType, String aSpikePosition) {
-		
 		super(game, 1550, 620, 1000, "backdrop/ponyvilleOutskirts.png", aScreenType, aSpikePosition);
-		
 	}
 	
 	@Override
@@ -21,7 +19,7 @@ public class PonyvilleOutskirtsScreen extends AbstractSpikeQuestStandardScreen {
 		if (game.assetManager.loadAssets() && loadAssets()) {
 		
 			if (!screenStart) {
-				initialize(true);
+				startScreen(true);
 				screenStart = true;
 			}
 			
@@ -31,7 +29,7 @@ public class PonyvilleOutskirtsScreen extends AbstractSpikeQuestStandardScreen {
 			game.batch.begin();
 			drawBackdrop();
 			drawBitsAndGems();
-			aSpikeObject.draw(game.batch);
+			spikeObject.draw(game.batch);
 			game.batch.end();
 			
 			controlSpike();

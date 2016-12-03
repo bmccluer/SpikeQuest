@@ -21,7 +21,7 @@ import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
  *
  */
 public class SaveScoreScreen extends AbstractSpikeQuestScreen {
-	private final float FONT_X_POSITION;
+	private float fontXPosition;
 	private final int POINTS_PER_BIT = 1000;
 	private final int MAX_BITS_ALLOWED = 10;
 	private final String BACKGROUND_MUSIC_PATH = "music/saveScoreScreenMusic.mp3";
@@ -32,11 +32,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 	//private int totalGems = SpikeQuestSaveFile.getGems();
 	private int totalGems = 0;
 	private int numberOfSpaces = 0;
-	private BitmapFont scoreFont = new BitmapFont();
-	private BitmapFont bitsFont = new BitmapFont();
-	private BitmapFont gemsFont = new BitmapFont();
-	private BitmapFont totalScoreFont = new BitmapFont();
-	private BitmapFont totalGemsFont = new BitmapFont();
+	private BitmapFont scoreFont, bitsFont, gemsFont, totalScoreFont, totalGemsFont = null;
 	private AbstractSpikeQuestScreen callingScreen = null;
 	
 	
@@ -46,54 +42,58 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 	 * @param game
 	 * @param score
 	 * @param gems
-	 * @param aMusicTrackPath
 	 * @param aCallingScreen
 	 */
 	public SaveScoreScreen(SpikeQuestGame game, int score, int gems, AbstractSpikeQuestScreen aCallingScreen) {
 		super(game);
-		
-		SpikeQuestSaveFile.setSaveFile(game.SAVE_FILE_NAME);
-		this.score = score;
-		//this.bits = bits;
-		this.gems = gems;
-		
-		callingScreen = aCallingScreen;
-		game.assetManager.setAsset(BACKGROUND_MUSIC_PATH, "Music");
-	
-		//Do not show next screen
-		//aNextScreen.hide();
-		
-		setFont(scoreFont);
-		setFont(bitsFont);
-		setFont(gemsFont);
-		setFont(totalScoreFont);
-		setFont(totalGemsFont);
-		
-		//calculate bits
-		bits = Math.round(score/POINTS_PER_BIT);
-		
-		if (bits == 0)
-			bits = 1;
-		
-		//maximum bits allowed
-		if (bits > MAX_BITS_ALLOWED) {
-			bits = MAX_BITS_ALLOWED;
-		}
-		
-		//save bits
-		SpikeQuestSaveFile.addBits(bits);
-		totalBits = SpikeQuestSaveFile.getBits();
-		
-		//save gems
-		SpikeQuestSaveFile.addGems(gems);
-		totalGems = SpikeQuestSaveFile.getGems();
-		
-		gameCamera = new SpikeQuestCamera(1800, 1554, 917); //screen properties
-		FONT_X_POSITION = gameCamera.getCameraWidth()/2 + 350;
-		
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
+        this.score = score;
+        this.gems = gems;
+        callingScreen = aCallingScreen;
 	}
-	
+
+	@Override
+	public void initialize() {
+        scoreFont = new BitmapFont();
+        bitsFont = new BitmapFont();
+        gemsFont = new BitmapFont();
+        totalScoreFont = new BitmapFont();
+        totalGemsFont = new BitmapFont();
+
+        SpikeQuestSaveFile.setSaveFile(game.SAVE_FILE_NAME);
+
+        game.assetManager.setAsset(BACKGROUND_MUSIC_PATH, "Music");
+
+        setFont(scoreFont);
+        setFont(bitsFont);
+        setFont(gemsFont);
+        setFont(totalScoreFont);
+        setFont(totalGemsFont);
+
+        //calculate bits
+        bits = Math.round(score/POINTS_PER_BIT);
+
+        if (bits == 0)
+            bits = 1;
+
+        //maximum bits allowed
+        if (bits > MAX_BITS_ALLOWED) {
+            bits = MAX_BITS_ALLOWED;
+        }
+
+        //save bits
+        SpikeQuestSaveFile.addBits(bits);
+        totalBits = SpikeQuestSaveFile.getBits();
+
+        //save gems
+        SpikeQuestSaveFile.addGems(gems);
+        totalGems = SpikeQuestSaveFile.getGems();
+
+        gameCamera = new SpikeQuestCamera(1800, 1554, 917); //screen properties
+        fontXPosition = gameCamera.getCameraWidth()/2 + 350;
+
+        game.assetManager.setAsset(SpikeQuestStaticFilePaths.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
+	}
+
 	/**
 	 * I set the font of each BitmapFont
 	 * 
@@ -129,19 +129,19 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 			game.batch.draw(currentBackdropTexture, 0, 0);
 			
 			if (numberOfSpaces > 0) {
-				scoreFont.draw(game.batch, Integer.toString(score), FONT_X_POSITION, gameCamera.getCameraHeight()/2 + 250);
+				scoreFont.draw(game.batch, Integer.toString(score), fontXPosition, gameCamera.getCameraHeight()/2 + 250);
 			}
 			if (numberOfSpaces > 1) {
-				bitsFont.draw(game.batch, Integer.toString(bits), FONT_X_POSITION, gameCamera.getCameraHeight()/2 + 115);
+				bitsFont.draw(game.batch, Integer.toString(bits), fontXPosition, gameCamera.getCameraHeight()/2 + 115);
 			}
 			if (numberOfSpaces > 2) {
-				bitsFont.draw(game.batch, Integer.toString(gems), FONT_X_POSITION, gameCamera.getCameraHeight()/2 - 20);
+				bitsFont.draw(game.batch, Integer.toString(gems), fontXPosition, gameCamera.getCameraHeight()/2 - 20);
 			}
 			if (numberOfSpaces > 3) {
-				bitsFont.draw(game.batch, Integer.toString(totalBits), FONT_X_POSITION, gameCamera.getCameraHeight()/2 - 185);
+				bitsFont.draw(game.batch, Integer.toString(totalBits), fontXPosition, gameCamera.getCameraHeight()/2 - 185);
 			}
 			if (numberOfSpaces > 4) {
-				bitsFont.draw(game.batch, Integer.toString(totalGems), FONT_X_POSITION, gameCamera.getCameraHeight()/2 - 305);
+				bitsFont.draw(game.batch, Integer.toString(totalGems), fontXPosition, gameCamera.getCameraHeight()/2 - 305);
 			}
 			if (numberOfSpaces > 5) {
 				//call the screen manager

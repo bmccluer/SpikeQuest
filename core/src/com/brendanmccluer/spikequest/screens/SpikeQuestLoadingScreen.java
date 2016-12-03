@@ -7,17 +7,24 @@ import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.SpikeObject;
 
 public class SpikeQuestLoadingScreen extends AbstractSpikeQuestScreen {
-	SpikeObject spikeObject = new SpikeObject();
-	BitmapFont font = new BitmapFont();
-	TimerObject timer = new TimerObject();
+	SpikeObject spikeObject = null;
+	BitmapFont font = null;
+	TimerObject timer = null;
 	String loading = "";
 	int ellipses = 0;
 	
 	public SpikeQuestLoadingScreen(SpikeQuestGame game) {
 		super(game);
-		gameCamera = new SpikeQuestCamera(1000, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_HEIGHT);
 	}
-	
+
+	@Override
+	public void initialize() {
+		spikeObject = new SpikeObject();
+		font = new BitmapFont();
+		timer = new TimerObject();
+        gameCamera = new SpikeQuestCamera(1000, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_HEIGHT);
+	}
+
 	@Override
 	public void render(float delta) {
 		refresh();

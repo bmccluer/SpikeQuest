@@ -14,71 +14,78 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 
 public class CliffBottomScreen extends AbstractSpikeQuestScreen {
-	private SpikeObject aSpikeObject = new SpikeObject();
-	private PinkieObject aPinkieObject = new PinkieObject();
-	private WagonObject aWagonObject = new WagonObject();
+	private SpikeObject spikeObject = null;
+	private PinkieObject pinkieObject = null;
+	private WagonObject wagonObject = null;
 	private float wagonLandingPosition = -200;
 	private float cameraShake = 50;
-	private SpikeQuestSoundEffect aCrashSoundEffect = null;
-	private SpikeQuestSoundEffect aScreamSoundEffect = null;
-	private SpikeQuestTextBalloon aSpikeTextBalloon = new SpikeQuestTextBalloon("dialog/cliffBottom.txt");
-	private SpikeQuestTextBalloon aPinkieTextBalloon = new SpikeQuestTextBalloon("dialog/cliffBottom.txt");
-	private SpikeQuestDialogController aDialogController = new SpikeQuestDialogController (aPinkieObject, aPinkieTextBalloon, "Pinkie", 4, aSpikeObject, aSpikeTextBalloon, "Spike", 4);
+	private SpikeQuestSoundEffect crashSoundEffect, screamSoundEffect = null;
+	private SpikeQuestTextBalloon spikeQuestTextBalloon, pinkieTextBalloon = null;
+	private SpikeQuestDialogController dialogController = null;
 	
 	public CliffBottomScreen(SpikeQuestGame game, SpikeQuestSoundEffect aCrashSoundEffect, SpikeQuestSoundEffect aScreamSoundEffect) {
 		super(game);
-		
+
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
 		gameCamera = new SpikeQuestCamera(1300, 1355, 762);
-		this.aCrashSoundEffect = aCrashSoundEffect;
-		this.aScreamSoundEffect = aScreamSoundEffect;
-		
+		this.crashSoundEffect = aCrashSoundEffect;
+		this.screamSoundEffect = aScreamSoundEffect;
+	}
+
+	@Override
+	public void initialize() {
+		spikeObject = new SpikeObject();
+		pinkieObject = new PinkieObject();
+		wagonObject = new WagonObject();
+		spikeQuestTextBalloon = new SpikeQuestTextBalloon("dialog/cliffBottom.txt");
+		pinkieTextBalloon = new SpikeQuestTextBalloon("dialog/cliffBottom.txt");
+		dialogController = new SpikeQuestDialogController (pinkieObject, pinkieTextBalloon, "Pinkie", 4, spikeObject, spikeQuestTextBalloon, "Spike", 4);
 	}
 
 	@Override
 	public void render(float delta) {
 		
 		refresh();
-		if (game.assetManager.loadAssets() && aPinkieTextBalloon.isLoaded() && aSpikeTextBalloon.isLoaded() && aWagonObject.isLoaded() && aSpikeObject.isLoaded() && aPinkieObject.isLoaded()) {
+		if (game.assetManager.loadAssets() && pinkieTextBalloon.isLoaded() && spikeQuestTextBalloon.isLoaded() && wagonObject.isLoaded() && spikeObject.isLoaded() && pinkieObject.isLoaded()) {
 			
 			gameCamera.attachToBatch(game.batch);
 			if (!screenStart) {
 				spawnObjects();
 				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
 				screenStart = true;
-				aDialogController.dialogEnabled = false;
+				dialogController.dialogEnabled = false;
 			}
 			
 			//each of these events happen left to right
 			if (makeWagonFall() && shakeCamera() && moveSpikeNextToWagon() && movePinkieNextToSpike()) {
-				aDialogController.dialogEnabled = true;
-				aDialogController.setTextBalloonDefaultPositionsOverObjects(aPinkieObject, aSpikeObject);
+				dialogController.dialogEnabled = true;
+				dialogController.setTextBalloonDefaultPositionsOverObjects(pinkieObject, spikeObject);
 				
 				//screen end
-				if (aDialogController.secondTextIndex == 5) {
+				if (dialogController.secondTextIndex == 5) {
 					dispose();
 					SpikeQuestScreenManager.setNextScreen(this, game);
 					return;
 				}
 				
 				//flip Spike before he talks
-				if (aSpikeObject.getIsFacingRight()) 
-					aSpikeObject.moveLeft(0);
+				if (spikeObject.getIsFacingRight())
+					spikeObject.moveLeft(0);
 				
 			}
 			
 			game.batch.begin();
 				game.batch.draw(currentBackdropTexture, 0, 0);
-				aDialogController.drawTheDialogAndAnimateObjects(game.batch, aPinkieObject, aSpikeObject);
-				aWagonObject.draw(game.batch);
-				aPinkieObject.draw(game.batch);
-				aSpikeObject.draw(game.batch);
+				dialogController.drawTheDialogAndAnimateObjects(game.batch, pinkieObject, spikeObject);
+				wagonObject.draw(game.batch);
+				pinkieObject.draw(game.batch);
+				spikeObject.draw(game.batch);
 				
-				/*if (aDialogController.drawSecondTextFlag) 
-					aSpikeTextBalloon.drawDialog(game.batch, aSpikeObject.getCurrentPositionX()-150, aSpikeObject.getCurrentPositionY() + 200);
+				/*if (dialogController.drawSecondTextFlag)
+					spikeQuestTextBalloon.drawDialog(game.batch, spikeObject.getCurrentPositionX()-150, spikeObject.getCurrentPositionY() + 200);
 				*/
-				/*if (aDialogController.drawFirstTextFlag) 
-					aPinkieTextBalloon.drawDialog(game.batch, aPinkieObject.getCurrentPositionX()-80, aPinkieObject.getCurrentPositionY() + 300);
+				/*if (dialogController.drawFirstTextFlag)
+					pinkieTextBalloon.drawDialog(game.batch, pinkieObject.getCurrentPositionX()-80, pinkieObject.getCurrentPositionY() + 300);
 				 */
 				
 			game.batch.end();
@@ -86,9 +93,9 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	}
 
 	private boolean movePinkieNextToSpike() {
-		if (aPinkieObject.getCurrentPositionX() < aSpikeObject.getCurrentPositionX() - 200) {
-			aPinkieObject.moveRight(5);
-			aSpikeObject.standStill();
+		if (pinkieObject.getCurrentPositionX() < spikeObject.getCurrentPositionX() - 200) {
+			pinkieObject.moveRight(5);
+			spikeObject.standStill();
 			return false;
 		}
 		return true;
@@ -100,8 +107,8 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	 * @return
 	 */
 	private boolean moveSpikeNextToWagon() {
-		if (aSpikeObject.getCurrentPositionX() < aWagonObject.getCurrentPositionX() - 200) {
-			aSpikeObject.moveRight(10);
+		if (spikeObject.getCurrentPositionX() < wagonObject.getCurrentPositionX() - 200) {
+			spikeObject.moveRight(10);
 			return false;
 		}
 		return true;
@@ -112,15 +119,15 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	 * I set the objects
 	 */
 	private void spawnObjects() {
-		aSpikeObject.spawn(-300, 0);
-		aPinkieObject.spawn(-300,0);
-		aWagonObject.spawn(gameCamera.getCameraWidth()/2, 800);
+		spikeObject.spawn(-300, 0);
+		pinkieObject.spawn(-300,0);
+		wagonObject.spawn(gameCamera.getCameraWidth()/2, 800);
 		
 		//flip wagon and fall
-		aWagonObject.rotate(180);
-		aWagonObject.setGroundPosition(wagonLandingPosition);
-		aWagonObject.setGravity(3);
-		aCrashSoundEffect.playSound(false);
+		wagonObject.rotate(180);
+		wagonObject.setGroundPosition(wagonLandingPosition);
+		wagonObject.setGravity(3);
+		crashSoundEffect.playSound(false);
 	}
 	
 	/**
@@ -129,12 +136,12 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	 * @return
 	 */
 	private boolean makeWagonFall() {
-		if (aWagonObject.getCurrentPositionY() == wagonLandingPosition) {
+		if (wagonObject.getCurrentPositionY() == wagonLandingPosition) {
 			return true;
 		}
 		else {
 			
-			aWagonObject.standStill();
+			wagonObject.standStill();
 			return false;
 		}
 	}
@@ -165,21 +172,21 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	
 	@Override
 	public void dispose() {
-		aCrashSoundEffect.discard();
-		aCrashSoundEffect = null;
-		aScreamSoundEffect.discard();
-		aScreamSoundEffect = null;
-		aDialogController = null;
-		aPinkieObject.discard();
-		aPinkieObject = null;
-		aSpikeObject.discard();
-		aSpikeObject = null;
-		aPinkieTextBalloon.discard();
-		aPinkieTextBalloon = null;
-		aSpikeTextBalloon.discard();
-		aSpikeTextBalloon = null;
-		aWagonObject.discard();
-		aWagonObject = null;
+		crashSoundEffect.discard();
+		crashSoundEffect = null;
+		screamSoundEffect.discard();
+		screamSoundEffect = null;
+		dialogController = null;
+		pinkieObject.discard();
+		pinkieObject = null;
+		spikeObject.discard();
+		spikeObject = null;
+		pinkieTextBalloon.discard();
+		pinkieTextBalloon = null;
+		spikeQuestTextBalloon.discard();
+		spikeQuestTextBalloon = null;
+		wagonObject.discard();
+		wagonObject = null;
 		game.assetManager.disposeAllAssets();
 	}
 }

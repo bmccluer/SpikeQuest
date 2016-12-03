@@ -13,9 +13,12 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 	
 	public PonyvilleParkScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
 		super(game, 1089, 613, 1000, "backdrop/ponyvillePark.png", aScreenType, aSpikePosition);
-		
+	}
+
+	@Override
+	public void initialize() {
+		super.initialize();
 		game.assetManager.setAsset(TREE_PATH, "Texture");
-		
 	}
 
 	@Override
@@ -25,7 +28,7 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 		if (loadAssets()) {
 			
 			if (!screenStart)
-				initialize();
+				startScreen();
 			
 			//attach to batch after initialization
 			gameCamera.attachToBatch(game.batch);
@@ -33,15 +36,15 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 			game.batch.begin();
 			drawBackdrop();
 			drawBitsAndGems();
-			aSpikeObject.draw(game.batch);
+			spikeObject.draw(game.batch);
 			game.batch.draw(treeTexture, gameCamera.getWorldWidth() - treeTexture.getWidth(), 0);
 			game.batch.end();
 			
 			//move spike slighty further left
 			if (!spikeReady && "right".equals(spikePosition)) {
-				aSpikeObject.moveLeft(aSpikeObject.SPIKE_STANDARD_SPEED);
+				spikeObject.moveLeft(spikeObject.SPIKE_STANDARD_SPEED);
 				
-				if (aSpikeObject.getCurrentPositionX() <= gameCamera.getWorldWidth() - treeTexture.getWidth())
+				if (spikeObject.getCurrentPositionX() <= gameCamera.getWorldWidth() - treeTexture.getWidth())
 					spikeReady = true;
 			}
 			
@@ -66,11 +69,11 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 		
 	}
 		
-	protected void initialize () {
+	protected void startScreen() {
 		screenStart = true;
 		treeTexture = (Texture) game.assetManager.loadAsset(TREE_PATH, "Texture");
 		
-		super.initialize(false);
+		super.startScreen(false);
 		
 	}
 	

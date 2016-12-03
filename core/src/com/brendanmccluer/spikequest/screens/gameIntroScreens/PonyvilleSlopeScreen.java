@@ -17,23 +17,15 @@ import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 
 public class PonyvilleSlopeScreen extends AbstractSpikeQuestScreen {
 	private SpikeObject aSpikeObject = null;
-	private PinkieObject aPinkieObject = new PinkieObject();
-	private WagonObject aWagonObject = new WagonObject();
-	private RarityObject aRarityObject = new RarityObject();
-	private HatObject aPinkHatObject = new HatObject();
-	private HatObject aBlueHatObject = new HatObject();
-	
-	private SpikeQuestDialogController aRaritySpikeDialogController = new SpikeQuestDialogController(aRarityObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Rarity", 2, 
-			aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Spike", 1);
-	
-	private SpikeQuestDialogController aPinkieSpikeDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Pinkie", 1, 
-			aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Spike", 1);
-	
+	private PinkieObject aPinkieObject = null;
+	private WagonObject aWagonObject = null;
+	private RarityObject aRarityObject = null;
+	private HatObject aPinkHatObject = null;
+	private HatObject aBlueHatObject = null;
+	private SpikeQuestDialogController aRaritySpikeDialogController, aPinkieSpikeDialogController = null;
 	private float wagonSpeed = 0.3f;
 	private boolean soundPlayed = false;
-	
-	
-	
+
 	/**
 	 * I come after ponyville 
 	 * start. Pass the game, music, spikeObject, and Camera
@@ -44,19 +36,31 @@ public class PonyvilleSlopeScreen extends AbstractSpikeQuestScreen {
 	 */
 	public PonyvilleSlopeScreen(SpikeQuestGame game, SpikeQuestMusic backgroundMusic, SpikeObject aSpikeObject, SpikeQuestCamera aSpikeCamera) {
 		super(game);
-		this.backgroundMusic = backgroundMusic;
-		this.aSpikeObject = aSpikeObject;
-		
-		this.gameCamera = aSpikeCamera;
-		
-		//position the camera up a little for the slope
-		aSpikeCamera.setPositionBottomLeft();
-		aSpikeCamera.setPosition(900, 390);
-		aSpikeCamera.setCameraSize(20);
-		
-		aRarityObject.loadSounds("spikeyWikey");
-		
-		game.assetManager.setAsset("backdrop/slope.png", "Texture");
+        //position the camera up a little for the slope
+        aSpikeCamera.setPositionBottomLeft();
+        aSpikeCamera.setPosition(900, 390);
+        aSpikeCamera.setCameraSize(20);
+        this.backgroundMusic = backgroundMusic;
+        this.aSpikeObject = aSpikeObject;
+        this.gameCamera = aSpikeCamera;
+	}
+
+	@Override
+	public void initialize() {
+        aPinkieObject = new PinkieObject();
+        aWagonObject = new WagonObject();
+        aRarityObject = new RarityObject();
+        aPinkHatObject = new HatObject();
+        aBlueHatObject = new HatObject();
+
+        aRarityObject.loadSounds("spikeyWikey");
+
+        game.assetManager.setAsset("backdrop/slope.png", "Texture");
+
+        aRaritySpikeDialogController = new SpikeQuestDialogController(aRarityObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Rarity", 2,
+                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Spike", 1);
+        aPinkieSpikeDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Pinkie", 1,
+                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Spike", 1);
 	}
 
 	@Override

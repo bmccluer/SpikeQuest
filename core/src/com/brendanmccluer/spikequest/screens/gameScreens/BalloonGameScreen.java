@@ -31,7 +31,6 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	private final int SPIKE_DISCORD_BALLOON_BEFORE_GROUND_POINTS = 50;
 	private final int SPIKE_DISCORD_BALLOON_POINTS = 10;
 	public final int FIRST_PLAY_POINTS_MAX = 2000;
-	//private final int SPIKE_REGULAR_POP_BALLOON_POINTS = 25;
 	private final int TOTAL_BALLOONS = 15;
 	private final int INCREASE_BALLOON_SCORE = 500;
 	private final int INCREASE_POP_SCORE = 700;
@@ -41,16 +40,16 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	
 	private boolean drawDerpy = true;
 	
-	private SpikeObject aSpikeObject = new SpikeObject();
-	private PinkieObject aPinkieObject = new PinkieObject();
-	private List<BalloonObject> aBalloonObjectList = new ArrayList<BalloonObject>();
-	private List<GemObject> aGemObjectList = new ArrayList<GemObject>();
-	private List slotList = new ArrayList();
-	private List slotIsFilled = new ArrayList();
-	private SpikeQuestController aController = new SpikeQuestController();
-	private Random aRandomGenerator = new Random();
-	private ScoreControlObject aScoreControl = new ScoreControlObject(); 
-	private ScoreBoardObject aScoreBoardObject = new ScoreBoardObject();
+	private SpikeObject aSpikeObject = null;
+	private PinkieObject aPinkieObject = null;
+	private List<BalloonObject> aBalloonObjectList = null;
+	private List<GemObject> aGemObjectList = null;
+	private List slotList = null;
+	private List slotIsFilled = null;
+	private SpikeQuestController aController = null;
+	private Random aRandomGenerator = null;
+	private ScoreControlObject aScoreControl = null;
+	private ScoreBoardObject aScoreBoardObject = null;
 	private DerpyObject aDerpyObject = null;
 	private SpikeQuestMusic backgroundMusic = null;
 	
@@ -63,22 +62,36 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	
 	public BalloonGameScreen(SpikeQuestGame game, String aScreenType) {
 		super(game);
-		
 		setScreenType(aScreenType);
-		
+	}
+
+	@Override
+	public void initialize() {
+		aSpikeObject = new SpikeObject();
+		aPinkieObject = new PinkieObject();
+		aBalloonObjectList = new ArrayList<>();
+		aGemObjectList = new ArrayList<>();
+		slotList = new ArrayList();
+		slotIsFilled = new ArrayList();
+		aController = new SpikeQuestController();
+		aRandomGenerator = new Random();
+		aScoreControl = new ScoreControlObject();
+		aScoreBoardObject = new ScoreBoardObject();
+		aDerpyObject = new DerpyObject();
+
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH, "Texture");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH, "Music");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SPIKE_ALARM_SOUND_PATH, "Sound");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.GREEN_BACKDROP_PATH, "Texture");
-		
+
 		game.bitmapFont = new BitmapFont();
 		game.bitmapFont.scale(1.5f);
-		
+
 		gameCamera = new SpikeQuestCamera(1500, BACKDROP_WIDTH, BACKDROP_HEIGHT);
 		createBalloonObjects(TOTAL_BALLOONS);
 		createGemObjects(TOTAL_BALLOONS+5);
-		
-		if (("firstPlay").equals(screenType)) 
+
+		if (("firstPlay").equals(screenType))
 			aDerpyObject = new DerpyObject();
 	}
 
@@ -544,14 +557,14 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 }
 
 	//private boolean spikeCollideWithBalloon(BalloonObject aBalloonObject) {
-		/*float aSpikeObjectHead = aSpikeObject.getCurrentPositionY() + 100;
+		/*float aSpikeObjectHead = spikeObject.getCurrentPositionY() + 100;
 		float aBalloonObjectBottom = aBalloonObject.getCurrentPositionY() - 20;
 		float aBalloonObjectHead = aBalloonObject.getCurrentPositionY() + 20;
 		
 		return (aSpikeObjectHead >= aBalloonObjectBottom &&
 				aSpikeObjectHead < aBalloonObjectHead &&
-				aBalloonObject.getCurrentPositionX() > aSpikeObject.getCurrentPositionX()-50 && 
-						aBalloonObject.getCurrentPositionX() <= aSpikeObject.getCurrentPositionX() + 50);
+				aBalloonObject.getCurrentPositionX() > spikeObject.getCurrentPositionX()-50 &&
+						aBalloonObject.getCurrentPositionX() <= spikeObject.getCurrentPositionX() + 50);
 		*/
 		
 		

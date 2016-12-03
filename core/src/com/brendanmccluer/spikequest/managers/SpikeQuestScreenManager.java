@@ -3,14 +3,11 @@ package com.brendanmccluer.spikequest.managers;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
-import com.brendanmccluer.spikequest.screens.GameSelectScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
-import com.brendanmccluer.spikequest.screens.gameScreens.RainbowRaceScreen;
-import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekInstructionScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
@@ -30,11 +27,9 @@ public class SpikeQuestScreenManager {
 		return debugging;
 	}
 
-
 	public static void setDebugging(boolean debugging) {
 		SpikeQuestScreenManager.debugging = debugging;
 	}
-
 
 	/**
 	 * I read the save file and determine which scene to set next. I also set
@@ -43,17 +38,12 @@ public class SpikeQuestScreenManager {
 	 * 
 	 * @param aCallingScreen
 	 * @param aGame
+     * TODO Use Screen Stack
 	 */
 	public static void setNextScreen (AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
 		//TODO DELETE THIS
 		if (debugging) {
-			//handleShyAndSeekScreen(aGame);
-			//aGame.setScreen(new SugarCubeCornerScreen(aGame, "normal", "left"));
-			//aGame.setScreen(new BalloonGameIntroScreen(aGame));
-			//aGame.setScreen(new RainbowRaceScreen(aGame));
-			aGame.setScreen(new GameSelectScreen(aGame));
-			debugging = false;
-			return;
+			//nothing
 		}
 
 		//MainMenuScreen is calling
@@ -62,7 +52,7 @@ public class SpikeQuestScreenManager {
 		
 		//CliffBottom calling
 		else if (aCallingScreen instanceof CliffBottomScreen)
-			aGame.setScreen(new BalloonGameIntroScreen(aGame));
+			forwardScreen(aCallingScreen, new BalloonGameIntroScreen(aGame), aGame);
 		
 		//BalloonGameIntro calling
 		else if (aCallingScreen instanceof BalloonGameIntroScreen)
@@ -88,17 +78,17 @@ public class SpikeQuestScreenManager {
 		if (aMainMenuScreen.continueButtonPressed) { 
 		
 			if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY) && SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY))
-				aGame.setScreen(new FluttershyBackOfCottageScreen(aGame, "normal", "left"));
+				forwardScreen(aMainMenuScreen, new FluttershyBackOfCottageScreen(aGame, "normal", "left"), aGame);
 			else if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY))
 				setSugarCubeCornerScreen(aGame);
 			else 
 				//instructions screen
-				aGame.setScreen(new BalloonGameIntroScreen(aGame));
+				forwardScreen(aMainMenuScreen, new BalloonGameIntroScreen(aGame), aGame);
 		
 		}
 		//new game
 		else 
-			aGame.setScreen(new IntroScreen(aGame));
+			forwardScreen(aMainMenuScreen, new IntroScreen(aGame), aGame);
 	}
 
 
@@ -116,7 +106,7 @@ public class SpikeQuestScreenManager {
 
 	private static void handleShyAndSeekScreen(SpikeQuestGame aGame) {
 		SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
-		aGame.setScreen(new ShyAndSeekOutroScreen(aGame, "normal", "right"));
+        forwardScreen(null, new ShyAndSeekOutroScreen(aGame, "normal", "right"), aGame);
 	}
 
 
@@ -129,8 +119,7 @@ public class SpikeQuestScreenManager {
 		else
 			aBalloonGameScreen = new BalloonGameScreen(aGame, "firstPlay");
 		
-		aGame.setScreen(aBalloonGameScreen);
-		
+		forwardScreen(null, aBalloonGameScreen, aGame);
 	}
 
 
@@ -159,8 +148,9 @@ public class SpikeQuestScreenManager {
 	 */
 	public static void forwardScreen (AbstractSpikeQuestScreen aCallingScreen, AbstractSpikeQuestScreen aScreenToForward,  SpikeQuestGame aGame) {
 	
-		//null second screen
-		aCallingScreen = null;
+		//TODO Handle dispose at this level and have screens not dispose themselves
+		//aCallingScreen.dispose();
+        aScreenToForward.initialize();
 		aGame.setScreen(aScreenToForward);
 	
 	}
@@ -178,10 +168,7 @@ public class SpikeQuestScreenManager {
 			aSugarCubeCornerScreen = new SugarCubeCornerScreen(aGame, "normal", "right");
 		else 
 			aSugarCubeCornerScreen = new SugarCubeCornerScreen(aGame, "intro", "right");
-	
-		
-		
-		
-		aGame.setScreen(aSugarCubeCornerScreen);
+
+		forwardScreen(null, aSugarCubeCornerScreen, aGame);
 	}
 }

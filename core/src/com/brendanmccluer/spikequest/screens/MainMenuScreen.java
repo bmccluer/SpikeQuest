@@ -17,28 +17,33 @@ import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
  *
  */
 public class MainMenuScreen extends AbstractSpikeQuestScreen {
-	private ButtonObject continueButton = new ButtonObject("Continue");
-	private ButtonObject newGameButton = new ButtonObject("New Game");
-	private ButtonObject creditsButton = new ButtonObject("Credits");
-	private ButtonObject gameSelectButton = new ButtonObject("Game Select");
+	private ButtonObject continueButton, newGameButton, creditsButton, gameSelectButton = null;
 	
 	//used for Screen Manager
 	public boolean continueButtonPressed = false;
 	public boolean newButtonPressed = false;
-	
+
 	public MainMenuScreen (SpikeQuestGame game) {
 		super(game);
-		
-		//set camera
-		gameCamera = new SpikeQuestCamera(1700, 1554, 917);
-		continueButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY());
-		newGameButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 100);
-		gameSelectButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 200);
-		creditsButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 300);
-
-		//use asset manager to set resources
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
 	}
+
+    @Override
+    public void initialize() {
+        continueButton = new ButtonObject("Continue");
+        newGameButton = new ButtonObject("New Game");
+        creditsButton = new ButtonObject("Credits");
+        gameSelectButton = new ButtonObject("Game Select");
+
+        //set camera
+        gameCamera = new SpikeQuestCamera(1700, 1554, 917);
+        continueButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY());
+        newGameButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 100);
+        gameSelectButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 200);
+        creditsButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 300);
+
+        //use asset manager to set resources
+        game.assetManager.setAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
+    }
 	
 	public void render (float delta){
 		refresh();
@@ -115,16 +120,13 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		newGameButton = null;
 		gameSelectButton = null;
 		gameCamera = null;
-		
-		
+
 		super.dispose();
 	}
 	
 	private void setNextScreen() {
-		
 		dispose();
     	SpikeQuestScreenManager.setNextScreen(this, game);
-    	return;
 	}
 	
 	

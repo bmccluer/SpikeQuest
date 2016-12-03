@@ -14,31 +14,34 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	private static final String FLIM_FLAM_DIALOG_PATH = "dialog/ponyvilleDialog/flimFlamParaspriteDialog.txt";
-	private SpikeQuestDialogController aDialogController = null;
-	private PinkieObject aPinkieObject = null;
-	private FlimObject aFlimObject = null;
-	private FlamObject aFlamObject = null;
-	private Texture paraspriteCageTexture = new Texture("object/ParaspriteCage.png"); //TODO; USE ANIMATED OBJECT
+	private SpikeQuestDialogController dialogController = null;
+	private PinkieObject pinkieObject = null;
+	private FlimObject flimObject = null;
+	private FlamObject flamObject = null;
+	private Texture paraspriteCageTexture = null;
 			
 	public SugarCubeCornerScreen(SpikeQuestGame game, String aScreenType, String aSpikeSpawnString) {
 		super(game, 1097, 617, 1000, SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_BACKDROP_PATH, aScreenType, aSpikeSpawnString);
-		
+	}
+
+	@Override
+	public void initialize() {
+		super.initialize();
+		paraspriteCageTexture = new Texture("object/ParaspriteCage.png"); //TODO; USE ANIMATED OBJECT
 		//load required assets for intro
 		if (("intro").equalsIgnoreCase(screenType)) {
-			
-			aDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Pinkie", 1, 
-				aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Spike", 0);
-			aPinkieObject = new PinkieObject();
+
+			dialogController = new SpikeQuestDialogController(pinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Pinkie", 1,
+					spikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Spike", 0);
+			pinkieObject = new PinkieObject();
 		}
 		//load flim and flam if ShyAndSeek is complete
 		if(SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY)) {
-			aFlimObject = new FlimObject();
-			aFlamObject = new FlamObject();
-			aDialogController = new SpikeQuestDialogController(aFlimObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flim", 6, 
-					aFlamObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flam", 6);
+			flimObject = new FlimObject();
+			flamObject = new FlamObject();
+			dialogController = new SpikeQuestDialogController(flimObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flim", 6,
+					flamObject, new SpikeQuestTextBalloon(FLIM_FLAM_DIALOG_PATH), "Flam", 6);
 		}
-			
-		
 	}
 
 	@Override
@@ -59,10 +62,10 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 		
 		refresh();
 		
-		if (loadAssets() && (aFlimObject == null || aFlimObject.isLoaded()) && (aFlamObject == null || aFlamObject.isLoaded()) && (aDialogController == null || aDialogController.areTextBalloonsLoaded())) {
+		if (loadAssets() && (flimObject == null || flimObject.isLoaded()) && (flamObject == null || flamObject.isLoaded()) && (dialogController == null || dialogController.areTextBalloonsLoaded())) {
 			
 			if (!screenStart)
-				initialize();
+				startScreenIntro();
 			
 			//ALWAYS ATTACH CAMERA TO BATCH AFTER INITIALIZATION
 			gameCamera.attachToBatch(game.batch);
@@ -75,9 +78,9 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 			//control
 			controlSpike();
 			
-			if(aDialogController != null) {
-				if (aDialogController.areTextBalloonsFinished())
-					aDialogController.reset();
+			if(dialogController != null) {
+				if (dialogController.areTextBalloonsFinished())
+					dialogController.reset();
 			}
 			
 			//determine end of screen
@@ -105,10 +108,10 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 		
 		refresh();
 		
-		if (loadAssets() && aPinkieObject.isLoaded() && aDialogController.areTextBalloonsLoaded()) {
+		if (loadAssets() && pinkieObject.isLoaded() && dialogController.areTextBalloonsLoaded()) {
 			
 			if (!screenStart) {
-				//initialize
+				//startScreen
 				initializeIntro();
 			}
 			
@@ -121,7 +124,7 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 			game.batch.end();
 			
 			//determine end of screen
-			if (aDialogController.areTextBalloonsFinished()) {
+			if (dialogController.areTextBalloonsFinished()) {
 				screenType = "normal";
 				screenStart = false;
 			}
@@ -132,63 +135,63 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	
 	protected void drawIntro() {
 		draw();
-		aPinkieObject.draw(game.batch);
-		aDialogController.drawTheDialogAndAnimateObjects(game.batch, aPinkieObject, aSpikeObject);
+		pinkieObject.draw(game.batch);
+		dialogController.drawTheDialogAndAnimateObjects(game.batch, pinkieObject, spikeObject);
 		
 	}
 	
 	protected void draw() {
 		drawBackdrop();
-		if (aFlimObject != null) {
-			aFlimObject.draw(game.batch);
-			aFlamObject.draw(game.batch);
-			game.batch.draw(paraspriteCageTexture, aFlimObject.getCenterX() - 150, 15);
-			aDialogController.drawTheDialogAndAnimateObjects(game.batch, aFlimObject, aFlamObject);
+		if (flimObject != null) {
+			flimObject.draw(game.batch);
+			flamObject.draw(game.batch);
+			game.batch.draw(paraspriteCageTexture, flimObject.getCenterX() - 150, 15);
+			dialogController.drawTheDialogAndAnimateObjects(game.batch, flimObject, flamObject);
 		}
-		aSpikeObject.draw(game.batch);
+		spikeObject.draw(game.batch);
 	}
 
 	
 	protected void initializeIntro() {
-		initialize();
-		aSpikeObject.spawn(gameCamera.getCameraWidth()/2 + 200, 0);
-		aSpikeObject.moveLeft(0);
-		aPinkieObject.spawn(gameCamera.getCameraWidth()/2 - 200, 0);
-		aDialogController.setTextBalloonDefaultPositionsOverObjects(aPinkieObject, aSpikeObject);
+		startScreenIntro();
+		spikeObject.spawn(gameCamera.getCameraWidth()/2 + 200, 0);
+		spikeObject.moveLeft(0);
+		pinkieObject.spawn(gameCamera.getCameraWidth()/2 - 200, 0);
+		dialogController.setTextBalloonDefaultPositionsOverObjects(pinkieObject, spikeObject);
 	
 	}
 	
-	protected void initialize() {
+	protected void startScreenIntro() {
 		
-		super.initialize(true);
-		if (aFlimObject != null) {
-			aFlimObject.spawn(gameCamera.getCameraWidth()/2 - 300, 15);
-			aFlimObject.moveRight(0);
-			aFlamObject.spawn(gameCamera.getCameraWidth()/2 - 150, 15);
-			aFlimObject.resize(0.5f);
-			aFlamObject.resize(0.5f);
-			aFlamObject.moveLeft(0);
-			aDialogController.setTextBalloonDefaultPositionsOverObjects(aFlimObject, aFlamObject);
-			aDialogController.useTimer(); //use timer instead of space bar
+		super.startScreen(true);
+		if (flimObject != null) {
+			flimObject.spawn(gameCamera.getCameraWidth()/2 - 300, 15);
+			flimObject.moveRight(0);
+			flamObject.spawn(gameCamera.getCameraWidth()/2 - 150, 15);
+			flimObject.resize(0.5f);
+			flamObject.resize(0.5f);
+			flamObject.moveLeft(0);
+			dialogController.setTextBalloonDefaultPositionsOverObjects(flimObject, flamObject);
+			dialogController.useTimer(); //use timer instead of space bar
 		}
 		screenStart = true;
 	}
 	
 	@Override
 	public void dispose() {
-		if (aPinkieObject != null)
-			aPinkieObject.discard();
-		if (aDialogController != null)
-			aDialogController.discardTextBalloons();
-		if (aFlimObject != null)
-			aFlimObject.discard();
-		if (aFlamObject != null)
-			aFlamObject.discard();
+		if (pinkieObject != null)
+			pinkieObject.discard();
+		if (dialogController != null)
+			dialogController.discardTextBalloons();
+		if (flimObject != null)
+			flimObject.discard();
+		if (flamObject != null)
+			flamObject.discard();
 		
-		aDialogController = null;
-		aPinkieObject = null;
-		aFlamObject = null;
-		aFlimObject = null;
+		dialogController = null;
+		pinkieObject = null;
+		flamObject = null;
+		flimObject = null;
 		super.dispose();
 	}
 

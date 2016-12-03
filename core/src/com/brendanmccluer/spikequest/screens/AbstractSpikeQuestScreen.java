@@ -1,14 +1,13 @@
 package com.brendanmccluer.spikequest.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
-import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
+import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
@@ -20,7 +19,7 @@ import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
  *
  *
  */
-public abstract class AbstractSpikeQuestScreen implements Screen {
+public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 	protected SpikeQuestGame game;
 	protected SpikeQuestCamera gameCamera = null; 
 	protected boolean screenStart = false;
@@ -29,11 +28,10 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 	protected String screenType = "";
 	protected SpikeQuestLoadingScreen loadingScreen = null;
 
-	//TODO create initialize method instead of loading everything in constructor
 	public AbstractSpikeQuestScreen (SpikeQuestGame game) {
 		this.game = game;
 	}
-		
+
 	/**
 	 * I display the loading screen if screenStart is not true. I also dispose loading screen 
 	 * when loading screen done
@@ -49,9 +47,11 @@ public abstract class AbstractSpikeQuestScreen implements Screen {
 	}
 	
 	private void renderLoadingScreen(float delta) {
-		if (loadingScreen == null)
+		if (loadingScreen == null) {
 			loadingScreen = new SpikeQuestLoadingScreen(game);
-		
+			loadingScreen.initialize();
+		}
+
 		loadingScreen.render(delta);
 	}
 	

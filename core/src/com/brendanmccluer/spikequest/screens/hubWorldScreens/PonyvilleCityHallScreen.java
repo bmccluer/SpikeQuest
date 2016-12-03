@@ -7,9 +7,7 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 public class PonyvilleCityHallScreen extends AbstractSpikeQuestStandardScreen {
 	
 	PonyvilleCityHallScreen (SpikeQuestGame game, String aScreenType, String aSpikePosition) {
-		
 		super(game, 1080, 608, 1050, "backdrop/outsideCityHall.png", aScreenType, aSpikePosition);
-		
 	}
 	
 	@Override
@@ -19,7 +17,7 @@ public class PonyvilleCityHallScreen extends AbstractSpikeQuestStandardScreen {
 		if (game.assetManager.loadAssets() && loadAssets()) {
 		
 			if (!screenStart) {
-				initialize(true);
+				startScreen(true);
 				screenStart = true;
 			}
 			
@@ -29,7 +27,7 @@ public class PonyvilleCityHallScreen extends AbstractSpikeQuestStandardScreen {
 			game.batch.begin();
 			drawBackdrop();
 			drawBitsAndGems();
-			aSpikeObject.draw(game.batch);
+			spikeObject.draw(game.batch);
 			game.batch.end();
 			
 			controlSpike();

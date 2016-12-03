@@ -18,18 +18,17 @@ import com.brendanmccluer.spikequest.objects.SpikeObject;
  *
  */
 public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQuestScreen {
-	private BitmapFont bitFont = new BitmapFont();
-	private BitmapFont gemFont = new BitmapFont();
+	private BitmapFont bitFont, gemFont = null;
 	private final int XSPACING = 10;
 	private final int YSPACING = 40;
-	protected SpikeObject aSpikeObject = new SpikeObject();
-	protected SpikeQuestController aController = null;
+	private int backdropWidth, backdropHeight, cameraSize = 0;
+	protected SpikeObject spikeObject = null;
+	protected SpikeQuestController controller = null;
 	protected final String BACKDROP_PATH;
 	private final String BIT_PATH = "object/bit/Bit.png";
 	private final String GEM_PATH = "object/gems/GreenGemTexture.png";
 	protected String spikePosition = "";
-	protected String totalGems = Integer.toString(SpikeQuestSaveFile.getGems());
-	protected String totalBits = Integer.toString(SpikeQuestSaveFile.getBits());
+	protected String totalGems, totalBits = null;
 	protected static final String HUB_MAIN_MUSIC_PATH = "music/hubMusicMain.mp3";
 	
 	protected Texture bitTexture = null;
@@ -39,22 +38,36 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	public AbstractSpikeQuestStandardScreen(SpikeQuestGame game, int aBackdropWidth, int aBackdropHeight, int aCameraSize,
 			String aBackdropPath, String aScreenType, String spawnSpikePosition) {
 		super(game);
-		
-		gameCamera = new SpikeQuestCamera(aCameraSize, aBackdropWidth, aBackdropHeight);
-		aController = new SpikeQuestController();
+
 		BACKDROP_PATH = aBackdropPath;
 		spikePosition = spawnSpikePosition;
+		backdropWidth = aBackdropWidth;
+		backdropHeight = aBackdropHeight;
+		cameraSize = aCameraSize;
 		
 		setScreenType(aScreenType);
+	}
+
+	@Override
+	public void initialize() {
+		bitFont = new BitmapFont();
+		gemFont = new BitmapFont();
+		spikeObject = new SpikeObject();
+		gameCamera = new SpikeQuestCamera(cameraSize, backdropWidth, backdropHeight);
+		controller = new SpikeQuestController();
+        totalGems = Integer.toString(SpikeQuestSaveFile.getGems());
+        totalBits = Integer.toString(SpikeQuestSaveFile.getBits());
+
 		game.assetManager.setAsset(BACKDROP_PATH, "Texture");
 		game.assetManager.setAsset(BIT_PATH, "Texture");
 		game.assetManager.setAsset(GEM_PATH, "Texture");
-		
+
 		//set music if not there
 		if (game.assetManager.loadAsset(HUB_MAIN_MUSIC_PATH, "Music") == null)
 			game.assetManager.setAsset(HUB_MAIN_MUSIC_PATH, "Music");
+
 	}
-	
+
 	/**
 	 * I control spike
 	 * 
@@ -63,7 +76,7 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 		
 		if (loadAssets()) {
 			
-			aController.controlListener(aSpikeObject, gameCamera, aSpikeObject.SPIKE_STANDARD_SPEED);
+			controller.controlListener(spikeObject, gameCamera, spikeObject.SPIKE_STANDARD_SPEED);
 			
 		}
 	}
@@ -73,44 +86,43 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	 * 
 	 */
 	protected boolean loadAssets() {
-		boolean loaded = game.assetManager.loadAssets() && aSpikeObject.isLoaded();
+		boolean loaded = game.assetManager.loadAssets() && spikeObject.isLoaded();
 		return loaded;
 	}
 	
 	/**
-	 * I initialize the screen
+	 * I start the screen
 	 */
-	protected void initialize (boolean useMusic) {
-		
+	protected void startScreen(boolean useMusic) {
 		currentBackdropTexture = (Texture) game.assetManager.loadAsset(BACKDROP_PATH, "Texture");
 		bitTexture = (Texture) game.assetManager.loadAsset(BIT_PATH, "Texture");
 		gemTexture = (Texture) game.assetManager.loadAsset(GEM_PATH, "Texture");
 		
 		//spawn spike
-		aSpikeObject.spawn(0, 0);
+		spikeObject.spawn(0, 0);
 		
 		//relocate if coming from right
 		if ("right".equalsIgnoreCase(spikePosition)) {
-			aSpikeObject.setCurrentPositionX(gameCamera.getWorldWidth() - aSpikeObject.getCollisionRectangle().getWidth());
-			aSpikeObject.moveLeft(0);
-			aSpikeObject.standStill();
+			spikeObject.setCurrentPositionX(gameCamera.getWorldWidth() - spikeObject.getCollisionRectangle().getWidth());
+			spikeObject.moveLeft(0);
+			spikeObject.standStill();
 			
 			//move camera to Spike
-			if (aSpikeObject.getCurrentPositionX() > gameCamera.getCameraPositionX())
-				gameCamera.translateCamera(aSpikeObject.getCurrentPositionX() - gameCamera.getCameraPositionX(), 0);
+			if (spikeObject.getCurrentPositionX() > gameCamera.getCameraPositionX())
+				gameCamera.translateCamera(spikeObject.getCurrentPositionX() - gameCamera.getCameraPositionX(), 0);
 		}
 		//play music
 		if (useMusic)
 			((Music) game.assetManager.loadAsset(HUB_MAIN_MUSIC_PATH,"Music")).play();
 		else 
 			((Music) game.assetManager.loadAsset(HUB_MAIN_MUSIC_PATH,"Music")).stop();;
-		
+
+		screenStart = true;
 	}
 	
 	/**
 	 * I draw the amount of bit and gems at the top left of the camera
-	 * 
-	 * @param batch
+	 *
 	 */
 	protected void drawBitsAndGems () {
 		
@@ -139,19 +151,19 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	protected String getEdgeTouched () {
 		String edgePosition = "";
 		
-		if (aSpikeObject.getCenterX() < 0) {
+		if (spikeObject.getCenterX() < 0) {
 			edgePosition = "left";
 		}
 		
-		else if (aSpikeObject.getCenterX() > gameCamera.getWorldWidth()) {
+		else if (spikeObject.getCenterX() > gameCamera.getWorldWidth()) {
 			edgePosition = "right";
 		}
 		
-		else if (aSpikeObject.getCenterY() > gameCamera.getWorldHeight()) {
+		else if (spikeObject.getCenterY() > gameCamera.getWorldHeight()) {
 			edgePosition = "top";
 		}
 		
-		else if (aSpikeObject.getCenterY() < 0)
+		else if (spikeObject.getCenterY() < 0)
 			edgePosition = "bottom";
 		
 			
@@ -178,8 +190,8 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 		gemFont = null;
 		bitFont = null;
 		
-		aSpikeObject.discard();
-		aSpikeObject = null;
+		spikeObject.discard();
+		spikeObject = null;
 		gameCamera.discard();
 		gameCamera = null;
 	}

@@ -104,8 +104,12 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
     public RainbowRaceScreen(SpikeQuestGame game) {
         super(game);
+    }
+
+    @Override
+    public void initialize() {
         if (tiledMapList == null) {
-            initialize();
+            startNewGame();
         }
         else {
             //updateMainGame part in progress bar
@@ -129,26 +133,24 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     }
 
     /**
-     * I initialize all of the static objects shared between instances
+     * I startScreen all of the static objects shared between instances
      */
-    private void initialize() {
+    private void startNewGame() {
         TmxMapLoader mapLoader = new TmxMapLoader();
         //tiledMapList = SpikeQuestTiles.getRandomTileMapList(mapLoader.load("tileMaps/RainbowRaceMap.tmx"), mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
-        tiledMapList = new ArrayList<TiledMap>();
+        tiledMapList = new ArrayList<>();
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap1.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap2.tmx"));
         tiledMapList.add(mapLoader.load("tileMaps/RainbowRaceMap3.tmx"));
-        rainbowDashTargetLists = new ArrayList<List<Rectangle>>();
+        rainbowDashTargetLists = new ArrayList<>();
         for (TiledMap aTileMap : tiledMapList) {
-            List<Rectangle> rainbowDashTargetList = new ArrayList<Rectangle>();
-            for (Rectangle aRectangle : SpikeQuestTiles.getTileMapRectanglesSortedXAscending(aTileMap, RAINBOW_DASH_LAYER))
-                rainbowDashTargetList.add(aRectangle);
+            List<Rectangle> rainbowDashTargetList = new ArrayList<>();
+            rainbowDashTargetList.addAll(SpikeQuestTiles.getTileMapRectanglesSortedXAscending(aTileMap, RAINBOW_DASH_LAYER));
             rainbowDashTargetLists.add(rainbowDashTargetList);
         }
-        //sort the rainbowDashTargetList
-        rings = new ArrayList<RainbowRaceObject>();
-        clouds = new ArrayList<RainbowRaceObject>();
-        gems = new ArrayList<GemObject>();
+        rings = new ArrayList<>();
+        clouds = new ArrayList<>();
+        gems = new ArrayList<>();
         tankObject = new TankObject();
         rainbowDashObject = new RainbowDashObject();
         rainbowDashObject.setGravity(0);

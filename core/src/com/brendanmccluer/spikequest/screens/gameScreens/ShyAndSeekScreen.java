@@ -37,14 +37,14 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	private static final String FLUTTERSHY_HEAD = "fluttershy/shyAndSeek/backOfHead.png";
 	private static final String BACKGROUND_MUSIC = "music/shyAndSeekMusic.mp3";
 	private static final String[] FLUTTERSHY_SOUNDS = {"comeOn","it'sOk","nothingToBeAfraidOf","yay"};
-	private TimerObject animalTimer = new TimerObject();
-	private List<AbstractAnimalObject> availableAnimals = new ArrayList<AbstractAnimalObject>();
-	private List<AbstractCoverObject> availableCovers = new ArrayList<AbstractCoverObject>();
-	private List<AbstractPopUpObject> animalDrawOnCoversList = new ArrayList<AbstractPopUpObject>();
-	private List<GemObject> gemObjects = new ArrayList<GemObject>();
+	private TimerObject animalTimer = null;
+	private List<AbstractAnimalObject> availableAnimals = null;
+	private List<AbstractCoverObject> availableCovers = null;
+	private List<AbstractPopUpObject> animalDrawOnCoversList = null;
+	private List<GemObject> gemObjects = null;
 	private int animalTimerSeconds = 2;
 	private int animalPopupSeconds = 5;
-	private Random randomGenerator = new Random();
+	private Random randomGenerator = null;
 	private float animalMoveSpeed = 2;
 	private int animalFoundScore = 50;
 	private AbstractAnimalObject animalToFind = null;
@@ -52,73 +52,85 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	private boolean fluttershyPopUp = false;
 	private float fluttershyPopUpSpeed = 3f;
 	private SpikeQuestMusic backgroundMusic = null;
-	private FluttershyObject fluttershyObject = new FluttershyObject();
-	private ScoreControlObject scoreControl = new ScoreControlObject();
+	private FluttershyObject fluttershyObject = null;
+	private ScoreControlObject scoreControl = null;
 	private int bonusMult = 2; 
-	private BitmapFont bonusFont = new BitmapFont();
+	private BitmapFont bonusFont = null;
 	private Sprite fluttershyHeadSprite = null;
 	private DerpyObject derpyObject = null;
-	
-	//use timer with score
-	private ScoreBoardObject scoreBoardObject = new ScoreBoardObject(true);
-	
-	private AbstractCoverObject[] coverObjects = { 
-			new AboveDoorRightCover()
-			,new BirdHouseCover()
-			,new BridgeRightCover()
-			,new BushLeftOfDoorCover()
-			,new CaveLeftCover()
-			,new DoorCover()
-			,new LogCover()
-			,new RoadLeftCover()
-			,new TopLeftWindowCover()
-			,new TopOfCottageCover()
-			,new TreeCaveLeftCover()
-			,new TreeTopRightCover()
-			,new TunnelUnderBridgeCover()
-			,new WindowFrontLeftCover()
-	};
-	
-	private MouseRedCircleObject aCircleObject = new MouseRedCircleObject();
-	private AbstractAnimalObject[] animalObjects = {
-			new BatObject()
-			,new BeaverObject()
-			,new FrogObject()
-			,new MouseObject()
-			,new OwlObject()
-			,new BatObject()
-			,new BeaverObject()
-			,new FrogObject()
-			,new MouseObject()
-			,new OwlObject()
-	};
-	
-	
+	private ScoreBoardObject scoreBoardObject = null;
+	private AbstractCoverObject[] coverObjects = null;
+	private AbstractAnimalObject[] animalObjects = null;
+	private MouseRedCircleObject aCircleObject = null;
+
 	/**
 	 * Initial load
 	 * @param game
 	 */
 	public ShyAndSeekScreen(SpikeQuestGame game) {
-		
 		super(game);
+	}
+
+	@Override
+	public void initialize() {
+		animalTimer = new TimerObject();
+		availableAnimals = new ArrayList<>();
+		availableCovers = new ArrayList<>();
+		animalDrawOnCoversList = new ArrayList<>();
+		gemObjects = new ArrayList<>();
+		randomGenerator = new Random();
+		fluttershyObject = new FluttershyObject();
+		scoreControl = new ScoreControlObject();
+		bonusFont = new BitmapFont();
+		//use timer with score
+		scoreBoardObject = new ScoreBoardObject(true);
+		coverObjects = new AbstractCoverObject[] {
+				new AboveDoorRightCover()
+				,new BirdHouseCover()
+				,new BridgeRightCover()
+				,new BushLeftOfDoorCover()
+				,new CaveLeftCover()
+				,new DoorCover()
+				,new LogCover()
+				,new RoadLeftCover()
+				,new TopLeftWindowCover()
+				,new TopOfCottageCover()
+				,new TreeCaveLeftCover()
+				,new TreeTopRightCover()
+				,new TunnelUnderBridgeCover()
+				,new WindowFrontLeftCover()
+		};
+		aCircleObject = new MouseRedCircleObject();
+		animalObjects = new AbstractAnimalObject[] {
+				new BatObject()
+				,new BeaverObject()
+				,new FrogObject()
+				,new MouseObject()
+				,new OwlObject()
+				,new BatObject()
+				,new BeaverObject()
+				,new FrogObject()
+				,new MouseObject()
+				,new OwlObject()
+		};
 		gameCamera = new SpikeQuestCamera(1050, 1055, 594);
 		game.assetManager.setAsset(BACKDROP_SCREEN, "Texture");
 		game.assetManager.setAsset(FLUTTERSHY_HEAD, "Texture");
 		game.assetManager.setAsset(BACKGROUND_MUSIC, "Music");
 		fluttershyObject.loadSounds(FLUTTERSHY_SOUNDS);
-		
+
 		if ("Intro".equalsIgnoreCase(screenType)) {
 			derpyObject = new DerpyObject();
 			derpyObject.setBanner("Don't forget about Gems!");
 		}
-		
+
 		for (AbstractAnimalObject i : animalObjects) {
 			availableAnimals.add(i);
 			i.setGravity(0);
 		}
 		for (AbstractCoverObject i : coverObjects)
 			availableCovers.add(i);
-		
+
 		createGemObjects(15);
 	}
 

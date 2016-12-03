@@ -6,35 +6,39 @@ import com.brendanmccluer.spikequest.objects.ponies.PinkieObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
-	private PinkieObject aPinkieObject;
+	private PinkieObject pinkieObject;
 	
 	PonyvilleStatueScreen (SpikeQuestGame game, String aScreenType, String aSpikePosition) {
-		
 		super(game, 1024, 576, 1000, "backdrop/ponyvilleStatue.png", aScreenType, aSpikePosition);
-		aPinkieObject = new PinkieObject();
 	}
-	
+
+	@Override
+	public void initialize() {
+		super.initialize();
+		pinkieObject = new PinkieObject();
+	}
+
 	@Override
 	public void render(float delta) {
 		refresh();
 		useLoadingScreen(delta);
-		if (game.assetManager.loadAssets() && loadAssets() && aPinkieObject.isLoaded()) {
+		if (game.assetManager.loadAssets() && loadAssets() && pinkieObject.isLoaded()) {
 		
 			if (!screenStart) {
-				initialize(true);
-				aPinkieObject.spawn(427.41937f, 79.91205f);
-				aPinkieObject.resize(0.25f);
+				startScreen(true);
+				pinkieObject.spawn(427.41937f, 79.91205f);
+				pinkieObject.resize(0.25f);
 				screenStart = true;
 			}
 			
 			//attach to batch after initialization
 			gameCamera.attachToBatch(game.batch);
-			aPinkieObject.moveRight(0);
+			pinkieObject.moveRight(0);
 			game.batch.begin();
 			drawBackdrop();
 			drawBitsAndGems();
-			aPinkieObject.draw(game.batch);
-			aSpikeObject.draw(game.batch);
+			pinkieObject.draw(game.batch);
+			spikeObject.draw(game.batch);
 			game.batch.end();
 			
 			controlSpike();
@@ -55,4 +59,9 @@ public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 		}
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		pinkieObject.discard();
+	}
 }

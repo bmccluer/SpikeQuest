@@ -13,17 +13,19 @@ import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 public class CliffScreen extends AbstractSpikeQuestScreen {
 	private WagonObject aWagonObject = new WagonObject();
 	private float cliffPosition = 500;
-	private SpikeQuestSoundEffect aScreamSoundEffect= null;
-	private SpikeQuestSoundEffect aCrashSoundEffect = null;
+	private SpikeQuestSoundEffect screamSoundEffect = null;
+	private SpikeQuestSoundEffect crashSoundEffect = null;
 	
 	public CliffScreen(SpikeQuestGame game) {
 		super(game);
-		
+	}
+
+	@Override
+	public void initialize() {
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH, "Texture");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound");
 		gameCamera = new SpikeQuestCamera(1200, 1452, 817);
-		
 	}
 
 	@Override
@@ -40,8 +42,8 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 				aWagonObject.resize(0.5f);
 				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH, "Texture");
 				
-				aScreamSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound"), 100);
-				aCrashSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound"), 100);
+				screamSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound"), 100);
+				crashSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound"), 100);
 				
 				screenStart = true;
 			}
@@ -54,11 +56,11 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 					//fall!
 					aWagonObject.setGroundPosition(-200);
 					aWagonObject.rotate(-2);
-					aScreamSoundEffect.playSound(false);
+					screamSoundEffect.playSound(false);
 					//sound is done playing
-					if (!aScreamSoundEffect.isPlaying()) {
+					if (!screamSoundEffect.isPlaying()) {
 						dispose();
-						SpikeQuestScreenManager.forwardScreen(this, new CliffBottomScreen(game, aCrashSoundEffect, aScreamSoundEffect), game);
+						SpikeQuestScreenManager.forwardScreen(this, new CliffBottomScreen(game, crashSoundEffect, screamSoundEffect), game);
 						return;
 					}
 					
@@ -86,9 +88,7 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 		gameCamera.discard();
 		aWagonObject.discard();
 		game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH);
-		
 		aWagonObject = null;
-		
 	}
 
 }

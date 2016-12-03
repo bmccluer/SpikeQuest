@@ -14,30 +14,36 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 
 public class IntroScreen extends AbstractSpikeQuestScreen {
-		private final int CAMERA_SIZE = 900;
-		private final float OBJECT_SIZE_RATIO = 1.5f; //set objects to be twice their size
-		
-		private SpikeQuestCamera aSpikeQuestCamera = new SpikeQuestCamera(CAMERA_SIZE, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_WIDTH);;
-		private TwilightObject aTwilightObject = new TwilightObject(); 
-		private SpikeObject aSpikeObject = new SpikeObject();
-		private SpikeQuestDialogController aDialogController = new SpikeQuestDialogController(aTwilightObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Twilight", 4,
-				aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Spike", 3);
-		
-		public IntroScreen (SpikeQuestGame game) {
-			super(game);
+    private final int CAMERA_SIZE = 900;
+    private final float OBJECT_SIZE_RATIO = 1.5f; //set objects to be twice their size
+    private SpikeQuestCamera spikeQuestCamera = null;
+    private TwilightObject twilightObject = null;
+    private SpikeObject spikeObject = null;
+    private SpikeQuestDialogController dialogController = null;
 
-			game.assetManager.setAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
-			game.assetManager.setAsset("music/ponyvilleMusic.mp3", "Music");
-		}
-		
-		public void render (float delta) {
+    public IntroScreen (SpikeQuestGame game) {
+        super(game);
+    }
+
+    @Override
+    public void initialize() {
+        spikeQuestCamera = new SpikeQuestCamera(CAMERA_SIZE, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_WIDTH);;
+        twilightObject = new TwilightObject();
+        spikeObject = new SpikeObject();
+        dialogController = new SpikeQuestDialogController(twilightObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Twilight", 4,
+                spikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Spike", 3);
+        game.assetManager.setAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
+        game.assetManager.setAsset("music/ponyvilleMusic.mp3", "Music");
+    }
+
+	public void render (float delta) {
 			//clear the screen
 			refresh();
 			useLoadingScreen(delta);
 			
-			if (game.assetManager.loadAssets() && aTwilightObject.isLoaded() && aSpikeObject.isLoaded() && aDialogController.areTextBalloonsLoaded()) { 
+			if (game.assetManager.loadAssets() && twilightObject.isLoaded() && spikeObject.isLoaded() && dialogController.areTextBalloonsLoaded()) {
 				
-				aSpikeQuestCamera.attachToBatch(game.batch);
+				spikeQuestCamera.attachToBatch(game.batch);
 				//game start
 				if (!screenStart) {
 					
@@ -55,25 +61,25 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 					
 					game.batch.begin();
 					game.batch.draw(currentBackdropTexture,0,0);
-					aTwilightObject.draw(game.batch);
-					aSpikeObject.draw(game.batch);
-					aDialogController.drawTheDialogAndAnimateObjects(game.batch, aTwilightObject, aSpikeObject);
+					twilightObject.draw(game.batch);
+					spikeObject.draw(game.batch);
+					dialogController.drawTheDialogAndAnimateObjects(game.batch, twilightObject, spikeObject);
 					game.batch.end();
 					
 					
 					
 					/*if (twilightTalking) {
-						twilightTextBalloon.drawDialog(game.batch, aTwilightObject.getCurrentPositionX() - 200, aTwilightObject.getCurrentPositionY()+300);
-						aTwilightObject.talk();
+						twilightTextBalloon.drawDialog(game.batch, twilightObject.getCurrentPositionX() - 200, twilightObject.getCurrentPositionY()+300);
+						twilightObject.talk();
 					}
 					else {
-						aTwilightObject.standStill();
+						twilightObject.standStill();
 					}
 					if (spikeTalking && dialogIndex < 3)
-						spikeTextBalloon.drawDialog(game.batch, aSpikeObject.getCurrentPositionX() + spikeBalloonPositionX, aSpikeObject.getCurrentPositionY()+300);
+						spikeTextBalloon.drawDialog(game.batch, spikeObject.getCurrentPositionX() + spikeBalloonPositionX, spikeObject.getCurrentPositionY()+300);
 					
 					else if (spikeTalking) 
-						spikeTextBalloon.drawDialog(game.batch, aSpikeObject.getCurrentPositionX() + spikeBalloonPositionX + 50, aSpikeObject.getCurrentPositionY() + 300);*/
+						spikeTextBalloon.drawDialog(game.batch, spikeObject.getCurrentPositionX() + spikeBalloonPositionX + 50, spikeObject.getCurrentPositionY() + 300);*/
 					
 					
 					controlObjects();
@@ -81,15 +87,15 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 					
 					
 					/*//When spike stops dialog continues
-					else if (!dialogScene && aDialogController.firstTextIndex == 3 && !aDialogController.drawFirstTextFlag){
+					else if (!dialogScene && dialogController.firstTextIndex == 3 && !dialogController.drawFirstTextFlag){
 						dialogScene = true;
 						//twilightTalking = true;
 						//twilightTalking = twilightTextBalloon.setNextDialog();
-						aTwilightObject.moveRight(0);
+						twilightObject.moveRight(0);
 						
 						//reverse direction
-						aSpikeObject.moveLeft(0);
-						aSpikeObject.standStill();
+						spikeObject.moveLeft(0);
+						spikeObject.standStill();
 						spikeBalloonPositionX = -300f;
 						
 					}*/
@@ -104,10 +110,10 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 						if (!twilightTalking) {
 							
 							spikeTalking = spikeTextBalloon.setNextDialog();
-							aSpikeObject.talk();
+							spikeObject.talk();
 							
 							if (!spikeTalking) {
-								aSpikeObject.standStill();
+								spikeObject.standStill();
 								dialogIndex++;
 								if (dialogIndex > 2) {
 									spikeBalloonPositionX = 500;
@@ -127,39 +133,39 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 		
 		private void controlObjects() {
 			//start moving spike on scene three
-			if (aDialogController.secondTextIndex == 3) {
+			if (dialogController.secondTextIndex == 3) {
 				
 				
-				if (aSpikeObject.getCurrentPositionX() < aSpikeQuestCamera.getCameraWidth()-200) {
+				if (spikeObject.getCurrentPositionX() < spikeQuestCamera.getCameraWidth()-200) {
 					
 					//moving, disable dialog
-					aDialogController.dialogEnabled = false;
-					aSpikeObject.moveRight(5);
+					dialogController.dialogEnabled = false;
+					spikeObject.moveRight(5);
 					
 					//get twilight to stop talking
-					aTwilightObject.standStill();
+					twilightObject.standStill();
 					
 					//check again and set objects if true
-					if (aSpikeObject.getCurrentPositionX() >= aSpikeQuestCamera.getCameraWidth()-200) {
-						aTwilightObject.moveRight(0);
-						aSpikeObject.moveLeft(0);
+					if (spikeObject.getCurrentPositionX() >= spikeQuestCamera.getCameraWidth()-200) {
+						twilightObject.moveRight(0);
+						spikeObject.moveLeft(0);
 					}
 				}
 				
 				else {
 					
-					//aSpikeObject.standStill();
-					aDialogController.setSecondTextBalloonPositionX(aSpikeObject.getCurrentPositionX() - 25);
-					aDialogController.dialogEnabled = true;
+					//spikeObject.standStill();
+					dialogController.setSecondTextBalloonPositionX(spikeObject.getCurrentPositionX() - 25);
+					dialogController.dialogEnabled = true;
 				}
 				
 			}
-			else if (aDialogController.areTextBalloonsFinished()) {
-				aSpikeObject.moveRight(5);
-				aTwilightObject.standStill();
-				aDialogController.dialogEnabled = false;
+			else if (dialogController.areTextBalloonsFinished()) {
+				spikeObject.moveRight(5);
+				twilightObject.standStill();
+				dialogController.dialogEnabled = false;
 				
-				if (aSpikeObject.getCurrentPositionX() > aSpikeQuestCamera.getCameraWidth()+500)
+				if (spikeObject.getCurrentPositionX() > spikeQuestCamera.getCameraWidth()+500)
 					setNextScreen();
 			}
 		}
@@ -177,28 +183,28 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 		 */
 		private void setObjects() {
 			
-			aSpikeObject.spawn(0, 0);
-			aTwilightObject.spawn(aSpikeQuestCamera.getCameraWidth()/2 - 100, 0);
-			aSpikeObject.resize(OBJECT_SIZE_RATIO);
-			aTwilightObject.resize(OBJECT_SIZE_RATIO);
-			aTwilightObject.moveLeft(0); //change rotation
+			spikeObject.spawn(0, 0);
+			twilightObject.spawn(spikeQuestCamera.getCameraWidth()/2 - 100, 0);
+			spikeObject.resize(OBJECT_SIZE_RATIO);
+			twilightObject.resize(OBJECT_SIZE_RATIO);
+			twilightObject.moveLeft(0); //change rotation
 			
-			aDialogController.setTextBalloonDefaultPositionsOverObjects(aTwilightObject, aSpikeObject);
-			aDialogController.setSecondTextBalloonPositionX(aDialogController.getSecondTextBalloonPositionX() + 150);
+			dialogController.setTextBalloonDefaultPositionsOverObjects(twilightObject, spikeObject);
+			dialogController.setSecondTextBalloonPositionX(dialogController.getSecondTextBalloonPositionX() + 150);
 		}
 
 		@Override
 		public void dispose () {
-			aSpikeObject.discard();
-			aSpikeQuestCamera.discard();
-			aTwilightObject.discard();
-			aDialogController.discardTextBalloons();
+			spikeObject.discard();
+			spikeQuestCamera.discard();
+			twilightObject.discard();
+			dialogController.discardTextBalloons();
 			
 			game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH);
 			
-			aSpikeObject = null;
-			aSpikeQuestCamera = null;
-			aTwilightObject = null;
+			spikeObject = null;
+			spikeQuestCamera = null;
+			twilightObject = null;
 			
 			super.dispose();
 		}

@@ -29,17 +29,16 @@ import java.util.function.Function;
  */
 public class GameSelectScreen extends AbstractSpikeQuestScreen {
 	private ImageButtonObject  backButton;
-	private TiledMap backgroundTileMap;
     private ArrayList<ImageButtonObject> imageButtonList;
     private float rowHeight, columnWidth = 0;
     private static final int TABLE_PADDING = 100;
 
 	public GameSelectScreen(SpikeQuestGame game) {
 		super(game);
-        initialize();
     }
 
-    private void initialize() {
+    @Override
+    public void initialize() {
         int rows = 5;
         int columns = 5;
         imageButtonList = new ArrayList<ImageButtonObject>();
@@ -60,8 +59,6 @@ public class GameSelectScreen extends AbstractSpikeQuestScreen {
             }
         });
         backButton.setPosition(gameCamera.getCameraPositionX() - gameCamera.getCameraWidth()/2 + 50, 50);
-
-
 	}
 
     private void setImageButtonPositions(int rows, int columns) {

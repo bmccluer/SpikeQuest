@@ -20,11 +20,11 @@ public class PonyvilleStartScreen extends AbstractSpikeQuestScreen {
 	private  int mapHeight = 702; //set to the size of the backdrop
 	private final int CAMERA_SIZE = 1000;
 	
-	private SpikeObject aSpikeObject = new SpikeObject();
+	private SpikeObject aSpikeObject = null;
 	private StandardObject aPinkieObject = null;
-	private SpikeQuestController aSpikeController = new SpikeQuestController();
-	private DerpyObject aDerpyObject = new DerpyObject();
-	private WagonObject aWagonObject = new WagonObject();
+	private SpikeQuestController aSpikeController = null;
+	private DerpyObject aDerpyObject = null;
+	private WagonObject aWagonObject = null;
 	private float pinkieMinTalkX = 0;
 	private float pinkieMaxTalkX = 0;
 	//private boolean pinkieTalk = false;
@@ -36,18 +36,22 @@ public class PonyvilleStartScreen extends AbstractSpikeQuestScreen {
 	
 	public PonyvilleStartScreen (SpikeQuestGame game) {
 		super(game);
-		
-		gameCamera = new SpikeQuestCamera(CAMERA_SIZE, mapWidth, mapHeight);
-		
-		game.assetManager.setAsset("backdrop/ponyvilleBackdrop2.png", "Texture");
-		game.assetManager.setAsset("backdrop/ponyvilleBackdrop.png", "Texture");
-		game.assetManager.setAsset("music/ponyvilleMusic.mp3", "Music");
-		
-		
-		//bits = SpikeQuestSaveFile.getBits();
-		
 	}
-	
+
+	@Override
+	public void initialize() {
+        aSpikeObject = new SpikeObject();
+        aSpikeController = new SpikeQuestController();
+        aDerpyObject = new DerpyObject();
+        aWagonObject = new WagonObject();
+
+        gameCamera = new SpikeQuestCamera(CAMERA_SIZE, mapWidth, mapHeight);
+
+        game.assetManager.setAsset("backdrop/ponyvilleBackdrop2.png", "Texture");
+        game.assetManager.setAsset("backdrop/ponyvilleBackdrop.png", "Texture");
+        game.assetManager.setAsset("music/ponyvilleMusic.mp3", "Music");
+	}
+
 	public void render(float delta) {
 		
 		//clear the screen
