@@ -97,7 +97,9 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 
 				SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new GameSelectScreen(game), game);
+				game.screenStack.push(new GameSelectScreen(game));
+				SpikeQuestScreenManager.popNextScreen(game);
+				return;
 			}
 	        else if (isButtonPressed(creditsButton)) {
 	        	//TODO; Add credits screen
@@ -126,7 +128,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	
 	private void setNextScreen() {
 		dispose();
-    	SpikeQuestScreenManager.setNextScreen(this, game);
+    	SpikeQuestScreenManager.popNextScreen(this, game);
 	}
 	
 	

@@ -2,6 +2,7 @@ package com.brendanmccluer.spikequest.managers;
 
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
+import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
@@ -40,12 +41,13 @@ public class SpikeQuestScreenManager {
 	 * @param aGame
      * TODO Use Screen Stack
 	 */
-	public static void setNextScreen (AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
+	public static void popNextScreen(AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
 		//TODO DELETE THIS
 		if (debugging) {
 			//nothing
 		}
 
+        //TODO; CREATE SOME SORT OF SAVE FILE CALCULATOR
 		//MainMenuScreen is calling
 		if (aCallingScreen instanceof MainMenuScreen) 
 			handleMainMenuScreen((MainMenuScreen) aCallingScreen, aGame);
@@ -131,11 +133,12 @@ public class SpikeQuestScreenManager {
 	 * @param aCallingScreen
 	 * @param aScreenToNull
 	 * @param aGame
+     * @deprecated
 	 */
-	public static void setNextScreen (AbstractSpikeQuestScreen aCallingScreen, AbstractSpikeQuestScreen aScreenToNull, SpikeQuestGame aGame) {
+	public static void popNextScreen(AbstractSpikeQuestScreen aCallingScreen, AbstractSpikeQuestScreen aScreenToNull, SpikeQuestGame aGame) {
 		//null second screen
 		aScreenToNull = null;
-		setNextScreen(aCallingScreen, aGame);
+		popNextScreen(aCallingScreen, aGame);
 	
 	}
 	
@@ -145,15 +148,37 @@ public class SpikeQuestScreenManager {
 	 * @param aCallingScreen
 	 * @param aScreenToNull
 	 * @param aGame
+     * @deprecated
 	 */
 	public static void forwardScreen (AbstractSpikeQuestScreen aCallingScreen, AbstractSpikeQuestScreen aScreenToForward,  SpikeQuestGame aGame) {
-	
-		//TODO Handle dispose at this level and have screens not dispose themselves
-		//aCallingScreen.dispose();
+
         aScreenToForward.initialize();
 		aGame.setScreen(aScreenToForward);
 	
 	}
+
+    /**
+     * I pop the next screen from the stack and set to the game
+     * @param aGame
+     */
+	public static void popNextScreen(SpikeQuestGame aGame) {
+        if (!aGame.screenStack.isEmpty()) {
+            SpikeQuestScreen nextScreen = aGame.screenStack.pop();
+            try {
+                nextScreen.initialize();
+                aGame.setScreen(nextScreen);
+            }
+            catch (Exception e) {
+                //TODO; CREATE ERROR SCREEN??
+                e.printStackTrace();
+            }
+            return;
+        }
+        //Go back to Main Menu if no screens left or error
+		MainMenuScreen mainMenuScreen = new MainMenuScreen(aGame);
+		mainMenuScreen.initialize();
+        aGame.setScreen(mainMenuScreen);
+    }
 	
 	
 	/**

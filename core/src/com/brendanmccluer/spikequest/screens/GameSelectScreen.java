@@ -2,24 +2,16 @@ package com.brendanmccluer.spikequest.screens;
 
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.reflect.Method;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.ButtonObjectAction;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.buttons.ImageButtonObject;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
-import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.RainbowRaceScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekInstructionScreen;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 /**
  * I render the GameSelect screen
@@ -55,7 +47,8 @@ public class GameSelectScreen extends AbstractSpikeQuestScreen {
             @Override
             public void handle(AbstractSpikeQuestScreen screen) {
                 screen.dispose();
-                SpikeQuestScreenManager.forwardScreen(screen, new MainMenuScreen(game), game);
+                game.screenStack.push(new MainMenuScreen(game));
+                SpikeQuestScreenManager.popNextScreen(game);
             }
         });
         backButton.setPosition(gameCamera.getCameraPositionX() - gameCamera.getCameraWidth()/2 + 50, 50);
@@ -81,8 +74,9 @@ public class GameSelectScreen extends AbstractSpikeQuestScreen {
         anImageButton.setButtonAction(new ButtonObjectAction() {
             @Override
             public void handle(AbstractSpikeQuestScreen screen) {
-                screen.dispose();
-                SpikeQuestScreenManager.forwardScreen(screen, newScreen, game);
+                game.screenStack.push(new GameSelectScreen(game));
+                game.screenStack.push(newScreen);
+                SpikeQuestScreenManager.popNextScreen(game);
             }
         });
         imageButtonList.add(anImageButton);

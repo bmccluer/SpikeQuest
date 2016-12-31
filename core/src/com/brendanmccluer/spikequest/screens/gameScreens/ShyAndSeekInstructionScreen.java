@@ -41,7 +41,13 @@ public class ShyAndSeekInstructionScreen extends AbstractSpikeQuestScreen {
 			
 			if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY) || Gdx.input.justTouched()) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new ShyAndSeekScreen(game), game);
+
+				//if Game has not been set as next,
+				if (game.screenStack.isEmpty() || !(game.screenStack.peek() instanceof ShyAndSeekScreen))
+					game.screenStack.push(new ShyAndSeekScreen(game));
+
+				SpikeQuestScreenManager.popNextScreen(game);
+				//SpikeQuestScreenManager.forwardScreen(this, new ShyAndSeekScreen(game), game);
 			}
 		
 		}

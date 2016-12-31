@@ -204,8 +204,9 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	}
 	
 	private void gameOver() {
-		SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, scoreBoardObject.getScore(), scoreBoardObject.getGems(), this), game);
+		game.screenStack.push(new SaveScoreScreen(game, scoreBoardObject.getScore(), scoreBoardObject.getGems(), this));
 		dispose();
+		SpikeQuestScreenManager.popNextScreen(game);
 	}
 
 	/**

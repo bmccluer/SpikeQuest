@@ -41,7 +41,12 @@ public class BalloonGameIntroScreen extends AbstractSpikeQuestScreen {
 			
 			if (Gdx.input.isButtonPressed(Keys.ANY_KEY) || Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
 				dispose();
-				SpikeQuestScreenManager.setNextScreen(this, game);
+
+				//if Balloon Game has not been set as next,
+				if (game.screenStack.isEmpty() || !(game.screenStack.peek() instanceof BalloonGameScreen))
+					game.screenStack.push(new BalloonGameScreen(game, "normal"));
+
+				SpikeQuestScreenManager.popNextScreen(game);
 			}
 		
 		}

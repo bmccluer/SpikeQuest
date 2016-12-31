@@ -15,6 +15,7 @@ import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.common.objects.ScoreBoardObject;
 import com.brendanmccluer.spikequest.common.objects.ScoreControlObject;
+import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.BalloonObject;
 import com.brendanmccluer.spikequest.objects.GemObject;
@@ -59,7 +60,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	private int popTimer = 1000;
 	private int gameOverTimer = 240;
 	private SpikeQuestSoundEffect spikeAlarm = null;
-	
+
 	public BalloonGameScreen(SpikeQuestGame game, String aScreenType) {
 		super(game);
 		setScreenType(aScreenType);
@@ -165,7 +166,8 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 				}
 				
 				//check game over
-				if (aScoreBoardObject.getLives() <= 0 || (("firstPlay").equalsIgnoreCase(screenType) && aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX)) {
+				//TODO - Endless Mode?
+				if (aScoreBoardObject.getLives() <= 0 || (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX)) {
 					
 					gameOverTimer--;
 					aSpikeObject.standStill();
@@ -265,13 +267,14 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		*/
 		dispose();
 		//if first play, check spikePoints
-		if (!("firstPlay").equalsIgnoreCase(screenType) || aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX) {
+		if (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX) {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
-			SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, aScoreBoardObject.getScore(), aScoreBoardObject.getGems(), this), game);
+			//SpikeQuestScreenManager.forwardScreen(this, new SaveScoreScreen(game, aScoreBoardObject.getScore(), aScoreBoardObject.getGems(), this), game);
+			game.screenStack.push(new SaveScoreScreen(game, aScoreBoardObject.getScore(), aScoreBoardObject.getGems(), this));
+			SpikeQuestScreenManager.popNextScreen(game);
+			return;
 		}
-		else
-			SpikeQuestScreenManager.forwardScreen(this, new BalloonGameScreen(game, "firstPlay"), game);
-		
+		SpikeQuestScreenManager.forwardScreen(this, new BalloonGameScreen(game, "firstPlay"), game);
 		
 	}
 

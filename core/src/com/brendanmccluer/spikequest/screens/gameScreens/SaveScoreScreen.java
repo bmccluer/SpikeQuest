@@ -145,7 +145,8 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 			}
 			if (numberOfSpaces > 5) {
 				//call the screen manager
-				SpikeQuestScreenManager.setNextScreen(callingScreen, this, game);
+				//SpikeQuestScreenManager.popNextScreen(callingScreen, this, game);
+				SpikeQuestScreenManager.popNextScreen(game);
 				dispose();
 			}
 			

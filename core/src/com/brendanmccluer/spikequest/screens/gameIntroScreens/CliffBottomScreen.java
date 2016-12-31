@@ -64,7 +64,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 				//screen end
 				if (dialogController.secondTextIndex == 5) {
 					dispose();
-					SpikeQuestScreenManager.setNextScreen(this, game);
+					SpikeQuestScreenManager.popNextScreen(this, game);
 					return;
 				}
 				
