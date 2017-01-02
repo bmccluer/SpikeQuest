@@ -8,7 +8,7 @@ import com.brendanmccluer.spikequest.interfaces.ButtonObjectAction;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.buttons.ImageButtonObject;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
-import com.brendanmccluer.spikequest.screens.gameScreens.RainbowRaceScreen;
+import com.brendanmccluer.spikequest.screens.gameScreens.RainbowRaceInstructionsScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekInstructionScreen;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class GameSelectScreen extends AbstractSpikeQuestScreen {
 
         addImageButton("buttons/gameSelectButtons/Pinkie'sBalloonGameButton.png", new BalloonGameIntroScreen(game));
         addImageButton("buttons/gameSelectButtons/ShyAndSeekButton.png", new ShyAndSeekInstructionScreen(game));
-        addImageButton("buttons/gameSelectButtons/RainbowRaceButton.png", new RainbowRaceScreen(game));
+        addImageButton("buttons/gameSelectButtons/RainbowRaceButton.png", new RainbowRaceInstructionsScreen(game));
         setImageButtonPositions(rows, columns);
 
         backButton = new ImageButtonObject(new Texture("buttons/goBackButton.png"), this);

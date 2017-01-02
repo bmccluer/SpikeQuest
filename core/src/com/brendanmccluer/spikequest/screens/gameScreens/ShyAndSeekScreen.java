@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.brendanmccluer.covers.shyAndSeekCovers.*;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
+import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.common.objects.ScoreBoardObject;
 import com.brendanmccluer.spikequest.common.objects.ScoreControlObject;
@@ -205,6 +206,7 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	
 	private void gameOver() {
 		game.screenStack.push(new SaveScoreScreen(game, scoreBoardObject.getScore(), scoreBoardObject.getGems(), this));
+		SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 		dispose();
 		SpikeQuestScreenManager.popNextScreen(game);
 	}
