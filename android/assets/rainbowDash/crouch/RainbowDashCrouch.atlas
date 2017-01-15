@@ -1,13 +1,13 @@
 
 RainbowDashCrouch.png
-size: 823,373
+size: 685,344
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 0001
   rotate: false
   xy: 2, 2
-  size: 821, 371
-  orig: 821, 371
+  size: 683, 342
+  orig: 683, 342
   offset: 0, 0
   index: -1

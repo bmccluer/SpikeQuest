@@ -316,7 +316,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private void startScreen() {
         tankObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
         if (!raceStarted) {
-            rainbowDashObject.spawn(gameCamera.getCameraWidth()/2, gameCamera.getCameraHeight()/2);
+            rainbowDashObject.spawn(gameCamera.getCameraWidth()/2 + 20, gameCamera.getCameraHeight()/2 + 20);
             rainbowDashObject.changeToFlying();
         }
         spawnListInTileLayer(rings, RING_LAYER);
