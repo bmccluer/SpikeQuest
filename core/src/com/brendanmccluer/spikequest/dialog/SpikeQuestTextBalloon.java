@@ -1,4 +1,4 @@
-package com.brendanmccluer.spikequest.common.objects;
+package com.brendanmccluer.spikequest.dialog;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,6 +39,12 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 	private float currentYPos = 0;
 	private String soundName = null;
 	private float soundVolume = 0;
+
+	//1/22/2017 added to object instead of using Dialog Controller
+	protected String titleName = "";
+	protected int titleIndex = 0;
+	protected boolean draw = true;
+	protected StandardObject object;
 	
 	/**
 	 * Create new text balloon with no sound effects
@@ -48,18 +54,12 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 		textFile = Gdx.files.internal(textFilePath);
 	}
 
-	/**
-	 * Create a new text balloon with multiple sound effects.
-	 * 
-	 * @throws FileNotFoundException
-	 *//*
-	public SpikeQuestTextBalloon(SpikeQuestSoundEffect[] soundEffects, String[] soundEffectNames, String textFilePath)
-			throws FileNotFoundException {
+	public SpikeQuestTextBalloon(String textFilePath, String titleName, StandardObject object) {
 		super(SpikeQuestStaticFilePaths.TEXT_BALLOON_PATH, "Texture");
-		spikeQuestSoundEffects = soundEffects;
-		spikeQuestSoundEffectNames = soundEffectNames;
 		textFile = Gdx.files.internal(textFilePath);
-	}*/
+		this.titleName = titleName;
+        this.object = object;
+	}
 
 	@Override
 	public boolean isLoaded() {
@@ -80,6 +80,7 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 	 * I load sound effects for the name provided. If the dialog uses sound, call this before loading the text.
 	 * 
 	 * @param anObject
+     * @deprecated
 	 */
 	public void loadSounds(AbstractSpikeQuestObject anObject, String aTitleName, int anEndingIndex) {
 
@@ -98,13 +99,24 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 			
 		}
 	}
+
+    /**
+     * Use Default object and title to load sounds
+     */
+    public void loadSounds() {
+        do {
+            loadDialog(titleName + dialogIndex++);
+            if (soundName != null)
+                object.loadSounds(soundName);
+        } while (!isAtEndOfDialog());
+    }
 	
 	/**
 	 * I look for the Title in the text file which will be in format [Title] and
-	 * load the dialog into memory. return false if fail
+	 * load the dialog into memory.
 	 * 
 	 * @param titleName
-	 * @param batch
+     * @deprecated
 	 */
 	public void loadDialog(String titleName) {
 			dialog = "";
@@ -130,18 +142,15 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 	 * @return
 	 */
 	public boolean isAtEndOfDialog() {
-		
 		//return dialogTimer <= 0 && dialogIndex >= dialog.length();
 		return dialogIndex >= dialog.length();
 	}
 	
 	/**
 	 * Draw next dialog in message box. Return false if it is not ready to draw next section
-	 * 
-	 * @param batch
+	 *
 	 */
 	public boolean setNextDialog() {
-
 		// make sure this is not being called multiple times at once
 		if (dialogTimer <= 0) {
 
@@ -172,9 +181,7 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 					if (i >= dialog.length() - 1) {
 						lastSpaceIndex = dialog.length();
 					}
-
 				}
-
 				// Grab words to last space
 				drawMessage = dialog.substring(dialogIndex, lastSpaceIndex);
 				dialogIndex = lastSpaceIndex;
@@ -192,6 +199,7 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 	 * @param batch
 	 * @param xPos
 	 * @param yPos
+     * @deprecated
 	 */
 	public void drawDialog(SpriteBatch batch, AbstractSpikeQuestObject anObject, float xPos, float yPos) {
 		currentXPos = xPos;
@@ -200,6 +208,17 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 		drawDialog(batch, anObject);
 
 	}
+
+    /**
+     * Draw the object with default positions
+     * @param batch
+     */
+    public void drawDialog(SpriteBatch batch) {
+        currentXPos = object.getCenterX();
+        currentYPos = object.getCenterY() + TEXT_BALLOON_Y_OFFSET;
+        if (draw)
+            drawDialog(batch, object);
+    }
 	
 	/**
 	 * Continuously draw message balloon. Call drawNextDialog to move to next. Draws starting

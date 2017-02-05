@@ -1,5 +1,6 @@
 package com.brendanmccluer.spikequest.managers;
 
+import com.badlogic.gdx.Game;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
@@ -12,6 +13,8 @@ import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
+import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleOutsideRainbowDashScreen;
+import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleStatueScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScreen;
 
 /**
@@ -44,7 +47,13 @@ public class SpikeQuestScreenManager {
 	public static void popNextScreen(AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
 		//TODO DELETE THIS
 		if (debugging) {
-			//nothing
+			AbstractSpikeQuestScreen debugScreen;
+			SpikeQuestSaveFile.setBooleanValue(PonyvilleOutsideRainbowDashScreen.RAINBOW_RACE_TANK_INTRO_BOOLEAN, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
+			debugScreen = new FluttershyBackOfCottageScreen(aGame,"","right");
+			forwardScreen(debugScreen, aGame);
+			return;
 		}
 
         //TODO; CREATE SOME SORT OF SAVE FILE CALCULATOR
@@ -155,6 +164,11 @@ public class SpikeQuestScreenManager {
         aScreenToForward.initialize();
 		aGame.setScreen(aScreenToForward);
 	
+	}
+
+	public static void forwardScreen (AbstractSpikeQuestScreen aScreen, SpikeQuestGame aGame) {
+		aScreen.initialize();
+		aGame.setScreen(aScreen);
 	}
 
     /**

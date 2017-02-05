@@ -8,7 +8,7 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 	private PinkieObject pinkieObject;
 	
-	PonyvilleStatueScreen (SpikeQuestGame game, String aScreenType, String aSpikePosition) {
+	public PonyvilleStatueScreen (SpikeQuestGame game, String aScreenType, String aSpikePosition) {
 		super(game, 1024, 576, 1000, "backdrop/ponyvilleStatue.png", aScreenType, aSpikePosition);
 	}
 
@@ -46,14 +46,14 @@ public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 			//determine end of screen
 			if (("left").equals(getEdgeTouched())) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new PonyvilleCityHallScreen(game, "", "right"), game);
+				SpikeQuestScreenManager.forwardScreen(new PonyvilleCityHallScreen(game, "", "right"), game);
 				return;
 			}
 			
 			//determine end of screen
 			if (("right").equals(getEdgeTouched())) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new PonyvilleParkScreen(game, "", "left"), game);
+				SpikeQuestScreenManager.forwardScreen(new PonyvilleOutsideRainbowDashScreen(game,"","left"), game);
 				return;
 			}
 		}

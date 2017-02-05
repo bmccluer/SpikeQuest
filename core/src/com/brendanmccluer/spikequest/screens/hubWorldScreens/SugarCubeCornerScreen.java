@@ -5,7 +5,7 @@ import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
-import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
+import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.ponies.FlamObject;
 import com.brendanmccluer.spikequest.objects.ponies.FlimObject;

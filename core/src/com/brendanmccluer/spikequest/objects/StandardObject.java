@@ -271,4 +271,5 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		
 		super.discard();
 	}
+
 }

@@ -27,6 +27,7 @@ public class TankObject extends StandardObject {
     private long hitTime = 0;
     private boolean blink = false;
     private boolean isShocked = false;
+    private boolean tankMoveDownFlag = false;
 
 
     public TankObject() {
@@ -99,6 +100,27 @@ public class TankObject extends StandardObject {
         tankHit = true;
         hitTime = System.currentTimeMillis();
 
+    }
+
+    /**
+     * I make Tank hover between min and max Y values
+     * @param min
+     * @param max
+     */
+    public void hover(float min, float max, float speed) {
+        //move Tank
+        if (tankMoveDownFlag) {
+            if (getCenterY() > min)
+                setCurrentPositionY(getCurrentPositionY() - speed);
+            else
+                tankMoveDownFlag = false;
+        }
+        else {
+            if (getCenterY() < max)
+                setCurrentPositionY(getCurrentPositionY() + speed);
+            else
+                tankMoveDownFlag = true;
+        }
     }
 
     //I disable Tank's movements for a while and play shock animation

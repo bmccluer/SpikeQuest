@@ -3,7 +3,7 @@ package com.brendanmccluer.spikequest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
+import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 

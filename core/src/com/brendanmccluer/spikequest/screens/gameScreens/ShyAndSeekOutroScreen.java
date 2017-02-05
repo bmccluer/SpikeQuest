@@ -2,7 +2,7 @@ package com.brendanmccluer.spikequest.screens.gameScreens;
 
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
+import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.ponies.FluttershyObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;

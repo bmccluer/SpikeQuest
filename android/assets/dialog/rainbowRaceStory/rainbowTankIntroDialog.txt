@@ -1,0 +1,3 @@
+[Rainbowdash0] "Come on, Tank... What's wrong?"
+[Tank0] "..."
+[Rainbowdash1] "Are you feeling ok?"

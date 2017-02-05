@@ -6,7 +6,7 @@ import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
-import com.brendanmccluer.spikequest.common.objects.SpikeQuestTextBalloon;
+import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.SpikeObject;
 import com.brendanmccluer.spikequest.objects.ponies.TwilightObject;
