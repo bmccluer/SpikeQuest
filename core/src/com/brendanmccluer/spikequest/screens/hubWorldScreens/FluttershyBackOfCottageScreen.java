@@ -90,7 +90,6 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
                 tankObject.moveLeft(delta * 250);
 				if (spikeObject.getCenterX() < gameCamera.getCameraWidth()/2 + 100) {
                     spikeReady = true;
-                    fluttershyObject.moveRight(0);
                 }
 			}
             if (spikeReady)

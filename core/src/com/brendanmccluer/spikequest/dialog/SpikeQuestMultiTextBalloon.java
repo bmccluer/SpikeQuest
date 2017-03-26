@@ -1,6 +1,7 @@
 package com.brendanmccluer.spikequest.dialog;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,9 +9,16 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
+import com.brendanmccluer.spikequest.objects.StandardObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import static java.lang.System.err;
 
 /**
  * Holds multiple texts for different objects
@@ -37,7 +45,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
     private SpikeQuestTextObject currentTextObject;
 
     //used by Dialog Controller
-    protected String soundName, animationName = null;
+    protected String soundName, methodName = null;
+	protected String[] methodParams = null;
 	protected float soundVolume = 0;
 	protected SpikeQuestTextObject[] textObjects;
 
@@ -48,6 +57,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 		super(SpikeQuestStaticFilePaths.TEXT_BALLOON_PATH, "Texture");
 		textFile = Gdx.files.internal(textFilePath);
 		textObjects = spikeQuestTextObjects;
+		loadObjectAttributes();
 	}
 
 	@Override
@@ -58,16 +68,29 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			message = new BitmapFont();
 			message.setColor(Color.BLACK);
 			textBoxLoaded = true;
-			loadObjectAttributes();
-            //open the file reader
-            fileReader = textFile.read();
-			setNextDialog();
+			try {
+				String aTitleName = readDialog();
+				setCurrentObject(aTitleName);
+				setNextDialog();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 		return textBoxLoaded;
 	}
 
+	public void playSound() {
+		Sound sound = null;
+		if (soundName != null) {
+			sound = (Sound) getAsset(soundName, "Sound");
+			sound.play(soundVolume);
+		}
+
+	}
+
 	/**
-	 * I load all sounds and animations stored in the text file
+	 * I load all sounds stored in the text file
 	 *
 	 */
 	private void loadObjectAttributes() {
@@ -76,17 +99,11 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         try {
             fileReader = textFile.read();
             aTitleName = readDialog();
-            while (aTitleName != null) {
-                setCurrentObject(aTitleName);
-                if (currentTextObject != null) {
-                    if (soundName != null)
-                        currentTextObject.object.loadSounds(soundName);
-                    if (animationName != null);
-                        //TODO load animation name
-                }
-                aTitleName = readDialog();
-            }
-            return;
+            if (aTitleName != null) {
+				if ("IMPORT".equalsIgnoreCase(aTitleName))
+					importSounds();
+				return;
+			}
         } catch (Exception e) {
             System.err.println("Error while reading text file.");
             e.printStackTrace();
@@ -95,7 +112,6 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         finally {
             try {
 				reset();
-                fileReader.close();
             }
             catch (Exception e) {
                 System.err.println("Error: Could not close file reader.");
@@ -103,6 +119,13 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
             }
         }
     }
+
+	private void importSounds() {
+		StringTokenizer tokenizer = new StringTokenizer(dialog,",");
+		while (tokenizer.hasMoreTokens()) {
+			setAsset(tokenizer.nextToken(), "Sound");
+		}
+	}
 
 	/**
 	 * I reset indexes and other attributes
@@ -176,7 +199,61 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				drawMessage = dialog;
 				dialogIndex = dialog.length();
 			}
+			if (soundName != null) {
+				playSound();
+				soundName = null;
+			}
+			if (methodName != null) {
+				invokeMethod(getCurrentObject().object);
+				methodName = null;
+			}
+
 		}
+	}
+
+	private void invokeMethod(StandardObject object) {
+		try {
+			Object t = object;
+
+			Method[] allMethods = object.getClass().getMethods();
+			for (Method m : allMethods) {
+				String mname = m.getName();
+				if (mname.startsWith(methodName)) {
+					try {
+						//convert parameters
+						Object[] parameters = new Object[m.getParameterCount()];
+						for (int i = 0; i < parameters.length; i++) {
+							StringTokenizer tokenizer = new StringTokenizer(methodParams[i],"#");
+							if (tokenizer.countTokens() == 2)
+								parameters[i] = castParameter(tokenizer.nextToken(), tokenizer.nextToken());
+						}
+						Object o = m.invoke(t, parameters);
+
+						// Handle any exceptions thrown by method to be invoked.
+					} catch (InvocationTargetException x) {
+						Throwable cause = x.getCause();
+						err.format("invocation of %s failed: %s%n",
+								mname, cause.getMessage());
+
+					}
+					break;
+				}
+			}
+
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+	}
+
+	private Object castParameter(String aType, String aParameter) {
+		if ("INT".equalsIgnoreCase(aType))
+			return Integer.parseInt(aParameter);
+		if ("STRING".equalsIgnoreCase(aType))
+			return aParameter;
+		if ("FLOAT".equalsIgnoreCase(aType))
+			return Float.parseFloat(aParameter);
+		System.err.println("Unknown Type: " + aType);
+		return null;
 	}
 
     /**
@@ -219,6 +296,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         for (SpikeQuestTextObject textObject : textObjects) {
             if (textObject.title.equalsIgnoreCase(aTitleName)) {
                 currentTextObject = textObject;
+				return;
             }
 
         }
@@ -269,8 +347,21 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
                         soundName = readWord(',');
                         soundVolume = Float.parseFloat(readWord('}'));
                     }
-                    else if (animationName == null && '@' == nextChar) {
-                        animationName = readWord(';');
+					//check for method calls
+					//format: '@' + method + ',' + parameters + ';'
+                    else if (methodName == null && '@' == nextChar) {
+                        StringTokenizer aTokenizer = new StringTokenizer(readWord(';'),",");
+						ArrayList<String> parameters = new ArrayList<String>();
+
+						if (aTokenizer.hasMoreTokens())
+							methodName = aTokenizer.nextToken();
+						while (aTokenizer.hasMoreTokens()) {
+							parameters.add(aTokenizer.nextToken());
+						}
+
+
+						methodParams = new String[parameters.size()];
+						parameters.toArray(methodParams);
                     }
 
                     nextChar = (char) fileReader.read();

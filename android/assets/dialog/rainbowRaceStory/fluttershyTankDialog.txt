@@ -1,5 +1,7 @@
 [Spike] "Fluttershy!"
-[Fluttershy] "Oh hello Spike."
+[Fluttershy]
+@moveRight,INT#0;
+"Oh hello Spike."
 [Spike] "Rainbow Dash says something is wrong with Tank!"
 [Fluttershy] "Oh my goodness! Tank whatever is the matter? Is this about those races you've been doing with Rainbow Dash?"
 [Tank] "*blink*, *blink*"

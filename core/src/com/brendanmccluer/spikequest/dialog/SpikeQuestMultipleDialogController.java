@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.brendanmccluer.spikequest.common.objects.TimerObject;
-import com.brendanmccluer.spikequest.objects.StandardObject;
 
 public class SpikeQuestMultipleDialogController {
 	private final int MARGIN_Y_ABOVE_OBJECT = 25;
@@ -54,20 +53,12 @@ public class SpikeQuestMultipleDialogController {
 				textBalloon.setCurrentXPos(textObject.object.getCenterX());
 				textBalloon.setCurrentYPos(textObject.object.getCenterY() +
 						textObject.object.getCollisionRectangle().getHeight() + MARGIN_Y_ABOVE_OBJECT);
-                //set any sounds
-				if (textBalloon.soundName != null) {
-                    textObject.object.playSoundEffect(textBalloon.soundName);
-                    textObject.object.setSoundVolume(textBalloon.soundVolume);
-                    textBalloon.soundName = null;
-                }
-				//set any animation
-                if (textBalloon.animationName != null) {
-                    //TODO play animation
-                    //currentTextObject.object.playAnimation(animationName)
-                }
-                else
-                    textObject.object.talk();
+
+				//play talk animation if one is not defined
+				if (textBalloon.methodName == null)
+					textObject.object.talk();
 			}
+			//TODO use standard update method instead of stand still
 			else
 				textObject.object.standStill();
 		}
