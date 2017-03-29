@@ -1,13 +1,80 @@
 
 RainbowDashFly.png
-size: 816,320
+size: 816,804
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 0001
   rotate: false
+  xy: 2, 404
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+0002
+  rotate: false
   xy: 2, 2
-  size: 814, 318
-  orig: 814, 318
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+
+RainbowDashFly2.png
+size: 816,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 404
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+0004
+  rotate: false
+  xy: 2, 2
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+
+RainbowDashFly3.png
+size: 816,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0005
+  rotate: false
+  xy: 2, 404
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+0006
+  rotate: false
+  xy: 2, 2
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+
+RainbowDashFly4.png
+size: 816,804
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0007
+  rotate: false
+  xy: 2, 404
+  size: 814, 400
+  orig: 814, 400
+  offset: 0, 0
+  index: -1
+0008
+  rotate: false
+  xy: 2, 2
+  size: 814, 400
+  orig: 814, 400
   offset: 0, 0
   index: -1

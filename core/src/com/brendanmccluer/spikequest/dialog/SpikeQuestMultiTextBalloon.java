@@ -69,6 +69,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			message.setColor(Color.BLACK);
 			textBoxLoaded = true;
 			try {
+				fileReader = textFile.read();
 				String aTitleName = readDialog();
 				setCurrentObject(aTitleName);
 				setNextDialog();
@@ -111,6 +112,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         }
         finally {
             try {
+				fileReader.close();
 				reset();
             }
             catch (Exception e) {

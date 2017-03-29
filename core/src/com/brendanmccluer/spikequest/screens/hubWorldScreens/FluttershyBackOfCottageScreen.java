@@ -113,5 +113,7 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
 			fluttershyObject.discard();
         if (tankObject != null)
             tankObject.discard();
+		if (dialogController != null)
+			dialogController.discard();
     }
 }
