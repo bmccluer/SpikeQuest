@@ -126,7 +126,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 		//flip wagon and fall
 		wagonObject.rotate(180);
 		wagonObject.setGroundPosition(wagonLandingPosition);
-		wagonObject.setGravity(3);
+		wagonObject.setWeight(6000);
 		crashSoundEffect.playSound(false);
 	}
 	

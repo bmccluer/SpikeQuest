@@ -48,7 +48,9 @@ public class SpikeQuestMultipleDialogController {
 			textBalloon.setNextDialog();
 		}
 		for (SpikeQuestTextObject textObject : textBalloon.textObjects) {
-            if (textBalloon.getCurrentObject() == textObject) {
+            if (areTextBalloonsFinished() && !textObject.object.isAnimationSet())
+				textObject.object.standStill();
+			else if (textBalloon.getCurrentObject() == textObject) {
 				//set text balloon over current object
 				textBalloon.setCurrentXPos(textObject.object.getCenterX());
 				textBalloon.setCurrentYPos(textObject.object.getCenterY() +
@@ -58,8 +60,7 @@ public class SpikeQuestMultipleDialogController {
 				if (textBalloon.methodName == null)
 					textObject.object.talk();
 			}
-			//TODO use standard update method instead of stand still
-			else
+			else if (!textObject.object.isAnimationSet())
 				textObject.object.standStill();
 		}
 

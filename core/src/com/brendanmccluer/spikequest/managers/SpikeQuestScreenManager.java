@@ -1,6 +1,8 @@
 package com.brendanmccluer.spikequest.managers;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.loaders.SoundLoader;
+import com.badlogic.gdx.audio.Sound;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
@@ -8,6 +10,7 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
+import com.brendanmccluer.spikequest.screens.gameIntroScreens.PonyvilleSlopeScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
@@ -52,6 +55,7 @@ public class SpikeQuestScreenManager {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 			debugScreen = new FluttershyBackOfCottageScreen(aGame,"","right");
+			//debugScreen = new CliffBottomScreen(aGame, null, null);
 			forwardScreen(debugScreen, aGame);
 			return;
 		}
@@ -62,8 +66,12 @@ public class SpikeQuestScreenManager {
 			handleMainMenuScreen((MainMenuScreen) aCallingScreen, aGame);
 		
 		//CliffBottom calling
-		else if (aCallingScreen instanceof CliffBottomScreen)
+		else if (aCallingScreen instanceof CliffBottomScreen) {
+			aGame.screenStack.push(new SugarCubeCornerScreen(aGame,"intro","right"));
 			forwardScreen(aCallingScreen, new BalloonGameIntroScreen(aGame), aGame);
+
+		}
+
 		
 		//BalloonGameIntro calling
 		else if (aCallingScreen instanceof BalloonGameIntroScreen)
@@ -155,7 +163,6 @@ public class SpikeQuestScreenManager {
 	 * I forward the screen passed and null the callingScreen. I DO NOT dispose the calling screen.
 	 * 
 	 * @param aCallingScreen
-	 * @param aScreenToNull
 	 * @param aGame
      * @deprecated
 	 */

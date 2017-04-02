@@ -150,49 +150,49 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 	 */
 	@Override
 	public void standStill () {
-		checkChangeAnimation(STILL_ANIMATION,stillFrames,stillAtlas);
+		changeAnimation(STILL_ANIMATION,stillFrames,stillAtlas);
 		super.standStill();
 	}
 	
 	@Override
 	public void moveTowardsObject (AbstractSpikeQuestSpriteObject anObject, float moveSpeed)  {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveTowardsObject(anObject, moveSpeed);
 	}
 	
 	@Override
 	public void moveTowardsPoint(float pointX, float pointY, float moveSpeed) {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveTowardsPoint(pointX, pointY, moveSpeed);
 	}
 	
 	public void moveRight (int moveSpeed) {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveRight(moveSpeed);
 	}
 	
 	
 	public void moveLeft (int moveSpeed) {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveLeft(moveSpeed);
 	}
 	
 	@Override
 	public void moveRight (float moveSpeed) {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveRight(moveSpeed);
 	}
 	
 	@Override
 	public void moveLeft (float moveSpeed) {
-		checkChangeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveLeft(moveSpeed);
 	}
 	
 	@Override
 	public void talk () {
 		if (talkAtlas != null)
-			checkChangeAnimation(TALK_ANIMATION,talkFrames,talkAtlas);
+			changeAnimation(TALK_ANIMATION,talkFrames,talkAtlas);
 		//keep sprite in same position in case of offset
 		super.standStill();
 	}
@@ -205,7 +205,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		talkAtlas = aTextureAtlas;
 		talkFrames = maxFrames;
 		
-		checkChangeAnimation("new", maxFrames, aTextureAtlas);
+		changeAnimation("new", maxFrames, aTextureAtlas);
 		
 	}
 	
@@ -221,7 +221,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		 moveAtlas = aTextureAtlas;
 		 moveFrames = maxFrames;
 		 
-		checkChangeAnimation("new", maxFrames, aTextureAtlas);
+		changeAnimation("new", maxFrames, aTextureAtlas);
 	}
 
 	protected TextureAtlas getMoveAtlas () {
@@ -236,7 +236,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		 stillAtlas = aTextureAtlas;
 		 stillFrames = maxFrames;
 		 
-		checkChangeAnimation("new", maxFrames, aTextureAtlas);
+		changeAnimation("new", maxFrames, aTextureAtlas);
 		 
 	}
 	

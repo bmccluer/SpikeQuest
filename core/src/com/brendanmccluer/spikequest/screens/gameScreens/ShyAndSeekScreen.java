@@ -127,7 +127,7 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 
 		for (AbstractAnimalObject i : animalObjects) {
 			availableAnimals.add(i);
-			i.setGravity(0);
+			i.setWeight(0);
 		}
 		for (AbstractCoverObject i : coverObjects)
 			availableCovers.add(i);

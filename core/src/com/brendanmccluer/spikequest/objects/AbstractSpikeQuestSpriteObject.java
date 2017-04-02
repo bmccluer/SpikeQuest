@@ -1,5 +1,6 @@
 package com.brendanmccluer.spikequest.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,12 +18,13 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	protected float currentSize = 1;
 	protected boolean objectFacingRight = true;
 	protected boolean isSpawned = false;
-	protected float gravity = 0.1f;
-	protected float gravityWeight = 0.3f;
+	protected float gravity = 300;
+	protected float gravityWeight = 900;
 	protected float ground = 0; 
 	protected boolean isMidair = false;
 	protected boolean firstJump = true;
 	protected boolean isJumping = false;
+	protected boolean animationSet = false;
 	
 	public AbstractSpikeQuestSpriteObject (String[] assetPaths, String[] assetTypes) {
 		super(assetPaths, assetTypes);
@@ -92,7 +94,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	 * 
 	 * I resize the object. Use resize if wanting to multiply size times ratio 
 	 * 
-	 * @param ratio
+	 * @param size
 	 */
 	public void setSize (float size) {
 		currentSize = size;
@@ -140,7 +142,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	
 	/**
 	 * I move sprite to the right at a defined speed (negative values are converted to positive)
-	 * @param speed
+	 * @param moveSpeed
 	 */
 	public void moveRight (float moveSpeed) {
 		
@@ -247,12 +249,12 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 		
 		//initial jump
 		if (firstJump) {
-			currentPositionY += 10;
+			setCurrentPositionY(getCurrentPositionY() + 2500 * Gdx.graphics.getDeltaTime());
 			firstJump = false;
 		}
 		//in the middle of jump
 		else if (adjustToGravity()) {
-			currentPositionY += 20;
+			setCurrentPositionY(getCurrentPositionY() + 2000 * Gdx.graphics.getDeltaTime());
 		}
 		//done jumping
 		else {
@@ -273,8 +275,8 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	 * if animation was changed
 	 * 
 	 */
-	protected boolean checkChangeAnimation(String animationIndicator, int animationMaxFrames, TextureAtlas atlas) {
-		
+	protected boolean changeAnimation(String animationIndicator, int animationMaxFrames, TextureAtlas atlas) {
+		animationSet = true;
 		if (animationIndicator != null && !(animationIndicator.equalsIgnoreCase(currentAnimation))) {
 			currentAnimation = animationIndicator;
 			try {
@@ -295,9 +297,9 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	protected boolean adjustToGravity () {
 		if (currentPositionY > ground) {
 		
-			currentPositionY = currentPositionY-gravity;
-			gravity += gravityWeight;
-			
+			currentPositionY = currentPositionY-(gravity*Gdx.graphics.getDeltaTime());
+			gravity += gravityWeight*Gdx.graphics.getDeltaTime();
+
 			//check if at ground position
 			if (currentPositionY <= ground) {
 				resetGravity ();
@@ -313,7 +315,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 
 	
 	protected void resetGravity() {
-		gravity = 0.1f;
+		gravity = 300;
 	}
 
 	/**
@@ -341,7 +343,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	 * I make the object heavier or lighter (at zero I will be weightless)
 	 * @param weight
 	 */
-	public void setGravity (float weight) {
+	public void setWeight(float weight) {
 		
 		if (weight < 0) {
 			weight = 0;
@@ -354,6 +356,15 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 		if (objectLoaded) {
 			drawSprite(currentSprite, batch);
 		}
+		animationSet = false;
+	}
+
+	/**
+	 * Check if animation was set before
+	 * next draw
+     */
+	public boolean isAnimationSet() {
+		return animationSet;
 	}
 	
 	/**

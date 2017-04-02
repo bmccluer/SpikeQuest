@@ -59,7 +59,7 @@ public abstract class AbstractPopUpObject extends StandardObject {
 	 */
 	public void popup(float directionX, float directionY) {
 		
-		checkChangeAnimation(POPUP_ANIMATION, MAX_FRAMES[2], (TextureAtlas) getAsset(FILE_PATHS[2], "TextureAtlas"));
+		changeAnimation(POPUP_ANIMATION, MAX_FRAMES[2], (TextureAtlas) getAsset(FILE_PATHS[2], "TextureAtlas"));
 		currentSprite.setPosition(currentPositionX += directionX, currentPositionY += directionY);	
 	}
 

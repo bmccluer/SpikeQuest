@@ -143,6 +143,7 @@ public class SpikeQuestSprite {
 		speedIndex++;
 		
 		//Update animation depending on speed
+		//TODO use game time to determine next change
 		if (speedIndex >= speed) {
 			
 			speedIndex = 0;

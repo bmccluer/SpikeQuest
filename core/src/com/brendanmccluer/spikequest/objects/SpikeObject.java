@@ -173,7 +173,7 @@ public class SpikeObject extends StandardObject {
 			breathingFire = true;
 			
 			//change animation if not set
-			if (checkChangeAnimation(SPIKE_FIRE_ANIMATION_INDICATOR, SPIKE_FIRE_MAX_FRAMES, spikeFireAtlas) && !objectFacingRight) {
+			if (changeAnimation(SPIKE_FIRE_ANIMATION_INDICATOR, SPIKE_FIRE_MAX_FRAMES, spikeFireAtlas) && !objectFacingRight) {
 				//offset to match where spike is standing if he is facing left
 				currentSprite.setPosition(currentPositionX-80, currentPositionY);
 				

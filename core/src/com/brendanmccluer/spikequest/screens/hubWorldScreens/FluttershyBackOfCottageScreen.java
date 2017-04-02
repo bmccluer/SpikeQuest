@@ -81,7 +81,7 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
                 fluttershyObject.moveLeft(0);
                 tankObject.spawn(spikeObject.getCenterX() + 100, 100);
                 tankObject.setSize(0.25f);
-                tankObject.setGravity(0);
+                tankObject.setWeight(0);
 			}
             //attach to batch after initialization
             gameCamera.attachToBatch(game.batch);

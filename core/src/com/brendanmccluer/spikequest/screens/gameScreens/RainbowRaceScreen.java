@@ -1,9 +1,7 @@
 package com.brendanmccluer.spikequest.screens.gameScreens;
 
-import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -153,7 +151,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         gems = new ArrayList<>();
         tankObject = new TankObject();
         rainbowDashObject = new RainbowDashObject();
-        rainbowDashObject.setGravity(0);
+        rainbowDashObject.setWeight(0);
         readySprite = new Sprite(new Texture("textures/ReadyTexture.png"));
         setSprite = new Sprite(new Texture("textures/SetTexture.png"));
         goSprite = new Sprite(new Texture("textures/GoTexture.png"));
@@ -418,7 +416,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
 
             //last section
             if (progressBar.tankPart == 2 && !isWinGame) {
-                tankObject.setGravity(0);
+                tankObject.setWeight(0);
                 tankObject.moveTowardsPoint(finishLine.getCenterX() + 1000, finishLine.getCenterY() ,deltaForegroundX);
                 if (tankObject.getCollisionRectangle().getX() > finishLine.getCenterX() - 45) {
                     finishLine.breakRibbon();
@@ -522,7 +520,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     private void updateLoseGame(float delta) {
         if(!derpyObject.isSpawned()) {
             derpyObject.spawn(0,0);
-            derpyObject.setGravity(0);
+            derpyObject.setWeight(0);
             derpyObject.setBanner("Try Again!");
             derpyObject.setBannerTextSize(2);
             derpyObject.setCurrentPositionXY(foregroundCamera.getCameraPositionX() - foregroundCamera.getCameraWidth()/2 - derpyObject.getCollisionRectangle().getWidth(),

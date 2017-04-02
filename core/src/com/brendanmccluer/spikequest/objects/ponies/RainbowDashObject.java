@@ -26,7 +26,7 @@ public class RainbowDashObject extends StandardObject {
      * Do Rainbow Dash Crouch animation
      */
     public void crouch() {
-        checkChangeAnimation("crouch", maxFrames[2], getTextureAtlas(2));
+        changeAnimation("crouch", maxFrames[2], getTextureAtlas(2));
     }
 
     /**

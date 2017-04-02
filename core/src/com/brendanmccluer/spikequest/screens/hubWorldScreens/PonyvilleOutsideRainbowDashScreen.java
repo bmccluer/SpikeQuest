@@ -95,7 +95,7 @@ public class PonyvilleOutsideRainbowDashScreen extends AbstractSpikeQuestStandar
                 rainbowDashObject.setCurrentPositionX(gameCamera.getCameraWidth() - rainbowDashObject.getCollisionRectangle().getWidth() - 250);
                 tankObject.spawn(rainbowDashObject.getCenterX() + 200, 100);
                 tankObject.setSize(0.25f);
-                tankObject.setGravity(0);
+                tankObject.setWeight(0);
                 rainbowTankDialogController.setTextBalloonDefaultPositionsOverObjects(rainbowDashObject, tankObject);
                 rainbowTankDialogController.setSecondTextBalloonPositionY(rainbowTankDialogController.getSecondTextBalloonPositionY() - 100);
                 screenStart = true;
