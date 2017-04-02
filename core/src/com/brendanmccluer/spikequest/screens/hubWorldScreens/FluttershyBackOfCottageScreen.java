@@ -10,8 +10,6 @@ import com.brendanmccluer.spikequest.objects.ponies.FluttershyObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScreen {
-	public final String RAINBOW_RACE_TANK_INTRO_BOOLEAN = "rainbowRaceIntroComplete";
-	public final String FLUTTERSHY_TANK_INTRO_BOOLEAN = "fluttershyTankIntroComplete";
 	private FluttershyObject fluttershyObject = null;
     private TankObject tankObject = null;
 	private SpikeQuestMultipleDialogController dialogController = null;
@@ -25,7 +23,7 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
     @Override
     public void initialize() {
         super.initialize();
-		if (SpikeQuestSaveFile.getBooleanValue(RAINBOW_RACE_TANK_INTRO_BOOLEAN) && !SpikeQuestSaveFile.getBooleanValue(FLUTTERSHY_TANK_INTRO_BOOLEAN)) {
+		if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE) && !SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE)) {
 			setScreenType("tankIntro");
 			fluttershyObject = new FluttershyObject();
             tankObject = new TankObject();
@@ -92,8 +90,20 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
                     spikeReady = true;
                 }
 			}
-            if (spikeReady)
+            if (spikeReady && !dialogController.areTextBalloonsFinished())
 				dialogController.updateTextAndObjects(delta);
+			if (dialogController.areTextBalloonsFinished()) {
+				SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, true);
+				spikeObject.moveRight(delta * 250);
+				tankObject.moveRight(delta * 150);
+
+				if (spikeObject.getCurrentPositionX() > gameCamera.getCameraWidth() + 200) {
+					dispose();
+					SpikeQuestScreenManager.forwardScreen(new FluttershyCottageScreen(game, " ", "left"), game);
+					return;
+				}
+			}
+
             tankObject.hover(100, 150, 25 * delta);
             game.batch.begin();
             drawBackdrop();

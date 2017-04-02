@@ -16,6 +16,9 @@ public final class SpikeQuestSaveFile {
 	public final static String IS_BALLOON_GAME_NORMAL_KEY = "isBalloonGameNormal";
 	public final static String IS_BALLOON_GAME_COMPLETE_KEY = "isBalloonGameComplete";
 	public final static String IS_SHY_AND_SEEK_COMPLETE_KEY = "isShyAndSeekComplete";
+	public final static String RAINBOW_RACE_INTRO_COMPLETE = "rainbowRaceIntroComplete";
+	public final static String FLUTTERSHY_TANK_INTRO_COMPLETE = "fluttershyTankIntroComplete";
+	public final static String CMC_TANK_INTRO_COMPLETE = "cmcTankIntroComplete";
 	private static Preferences gdxPreferenceFile = null;
 	
 	/**

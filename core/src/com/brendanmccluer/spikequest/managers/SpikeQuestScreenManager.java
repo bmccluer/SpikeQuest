@@ -1,8 +1,5 @@
 package com.brendanmccluer.spikequest.managers;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.assets.loaders.SoundLoader;
-import com.badlogic.gdx.audio.Sound;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
@@ -10,14 +7,12 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
-import com.brendanmccluer.spikequest.screens.gameIntroScreens.PonyvilleSlopeScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleOutsideRainbowDashScreen;
-import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleStatueScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScreen;
 
 /**
@@ -53,7 +48,9 @@ public class SpikeQuestScreenManager {
 			AbstractSpikeQuestScreen debugScreen;
 			SpikeQuestSaveFile.setBooleanValue(PonyvilleOutsideRainbowDashScreen.RAINBOW_RACE_TANK_INTRO_BOOLEAN, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_NORMAL_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, false);
 			debugScreen = new FluttershyBackOfCottageScreen(aGame,"","right");
 			//debugScreen = new CliffBottomScreen(aGame, null, null);
 			forwardScreen(debugScreen, aGame);
@@ -72,7 +69,6 @@ public class SpikeQuestScreenManager {
 
 		}
 
-		
 		//BalloonGameIntro calling
 		else if (aCallingScreen instanceof BalloonGameIntroScreen)
 			setBalloonGameScreen(aGame);
@@ -95,15 +91,23 @@ public class SpikeQuestScreenManager {
 		
 		//continue game
 		if (aMainMenuScreen.continueButtonPressed) { 
-		
-			if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY) && SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY))
+
+			//done talking to Fluttershy about Tank but not CMCs
+			if (!SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE) && SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE))
+				forwardScreen(new FluttershyBackOfCottageScreen(aGame, "normal", "left"), aGame);
+			//done with Fluttershy Game for first time
+			else if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY) && SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY)
+					&& !SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE))
 				forwardScreen(aMainMenuScreen, new FluttershyBackOfCottageScreen(aGame, "normal", "left"), aGame);
-			else if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY))
-				setSugarCubeCornerScreen(aGame);
-			else 
-				//instructions screen
+			//Not done with Balloon game for first time
+			else if (!SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY)) {
+				aGame.screenStack.push(new SugarCubeCornerScreen(aGame, "intro", "right"));
 				forwardScreen(aMainMenuScreen, new BalloonGameIntroScreen(aGame), aGame);
-		
+			}
+			//default
+			else
+				setSugarCubeCornerScreen(aGame);
+
 		}
 		//new game
 		else 
@@ -210,7 +214,7 @@ public class SpikeQuestScreenManager {
 	private static void setSugarCubeCornerScreen(SpikeQuestGame aGame) {
 		SugarCubeCornerScreen aSugarCubeCornerScreen = null;
 		
-		if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_NORMAL_KEY)) 
+		if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY))
 			aSugarCubeCornerScreen = new SugarCubeCornerScreen(aGame, "normal", "right");
 		else 
 			aSugarCubeCornerScreen = new SugarCubeCornerScreen(aGame, "intro", "right");
