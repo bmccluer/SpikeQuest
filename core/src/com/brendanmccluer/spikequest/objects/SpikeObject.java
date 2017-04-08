@@ -106,8 +106,8 @@ public class SpikeObject extends StandardObject {
 		Rectangle spriteRectangle = currentSprite.getSpriteBoundingRectangle();
 		
 		//left bottom corner of area
-		spriteRectangle.setY(spriteRectangle.getHeight() - TOP_OF_HEAD_HEIGHT);
-		//spriteRectangle.setWidth(width)
+		spriteRectangle.setY(spriteRectangle.getY() + spriteRectangle.getHeight() - TOP_OF_HEAD_HEIGHT);
+		spriteRectangle.setHeight(TOP_OF_HEAD_HEIGHT);
 		
 		return spriteRectangle; 
 	}
@@ -238,10 +238,10 @@ public class SpikeObject extends StandardObject {
 	}
 	
 	@Override
-	public void discard () {
-		//spikeTextBalloon.discard();
+	public void dispose() {
+		//spikeTextBalloon.dispose();
 		spikeFireSound = null;
-		super.discard();
+		super.dispose();
 	}
 	
 	@Override

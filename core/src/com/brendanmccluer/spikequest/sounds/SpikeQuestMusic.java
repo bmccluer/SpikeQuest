@@ -1,8 +1,9 @@
 package com.brendanmccluer.spikequest.sounds;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
-public class SpikeQuestMusic {
+public class SpikeQuestMusic implements Disposable {
 	private Music music = null;
 	
 	public SpikeQuestMusic (Music aMusic) {
@@ -12,7 +13,7 @@ public class SpikeQuestMusic {
 	/**
 	 * I play the sound. Set looping with boolean value
 	 * 
-	 * @param canRepeat
+	 * @param canLoop
 	 */
 	public void playMusic (boolean canLoop) {
 		music.setLooping(canLoop);
@@ -31,9 +32,11 @@ public class SpikeQuestMusic {
 		music.stop();
 	}
 
-	public void discard() {
-		music.dispose();
-		music = null;
+	public void dispose() {
+		if (music != null) {
+			music.stop();
+			music.dispose();
+		}
 	}
 	
 }

@@ -86,7 +86,7 @@ public class SpikeQuestMultipleDialogController {
 	}
 
 	public void discard() {
-		textBalloon.discard();
+		textBalloon.dispose();
 		if (timer != null)
 			timer.dispose();
 	}

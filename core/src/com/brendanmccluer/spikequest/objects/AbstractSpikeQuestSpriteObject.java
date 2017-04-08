@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Object that uses a Sprite and Texture Atlases. 
@@ -18,13 +19,15 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	protected float currentSize = 1;
 	protected boolean objectFacingRight = true;
 	protected boolean isSpawned = false;
-	protected float gravity = 300;
-	protected float gravityWeight = 900;
-	protected float ground = 0; 
+	protected float gravity = 0.1f;
+	protected float gravityWeight = 20;
+	protected float ground = 0;
+	protected float jumpPower = 1750;
 	protected boolean isMidair = false;
 	protected boolean firstJump = true;
 	protected boolean isJumping = false;
 	protected boolean animationSet = false;
+	protected Vector3 moveVector = null;
 	
 	public AbstractSpikeQuestSpriteObject (String[] assetPaths, String[] assetTypes) {
 		super(assetPaths, assetTypes);
@@ -139,6 +142,13 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	public boolean isSpawned() {
 		return isSpawned;
 	}
+
+	/*public void update(float delta) {
+
+		//x and y are coordinates. z is speed
+		if (moveVector != null)
+			moveTowardsPoint(moveVector.x, moveVector.y, moveVector.z * delta);
+	}*/
 	
 	/**
 	 * I move sprite to the right at a defined speed (negative values are converted to positive)
@@ -249,12 +259,12 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 		
 		//initial jump
 		if (firstJump) {
-			setCurrentPositionY(getCurrentPositionY() + 2500 * Gdx.graphics.getDeltaTime());
+			setCurrentPositionY(getCurrentPositionY() + jumpPower * Gdx.graphics.getDeltaTime());
 			firstJump = false;
 		}
 		//in the middle of jump
 		else if (adjustToGravity()) {
-			setCurrentPositionY(getCurrentPositionY() + 2000 * Gdx.graphics.getDeltaTime());
+			setCurrentPositionY(getCurrentPositionY() + (jumpPower-100) * Gdx.graphics.getDeltaTime());
 		}
 		//done jumping
 		else {
@@ -297,7 +307,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	protected boolean adjustToGravity () {
 		if (currentPositionY > ground) {
 		
-			currentPositionY = currentPositionY-(gravity*Gdx.graphics.getDeltaTime());
+			currentPositionY = currentPositionY-(gravity);
 			gravity += gravityWeight*Gdx.graphics.getDeltaTime();
 
 			//check if at ground position
@@ -315,7 +325,7 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 
 	
 	protected void resetGravity() {
-		gravity = 300;
+		gravity = 0.1f;
 	}
 
 	/**
@@ -405,8 +415,8 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 	}
 	
 	@Override
-	public void discard () {
+	public void dispose() {
 		currentSprite = null;
-		super.discard();
+		super.dispose();
 	}
 }

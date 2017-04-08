@@ -81,20 +81,18 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	        	
 			}
 	        else if (isButtonPressed(continueButton)) {
-	        	
 	        	//debugging mode
-	        	if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-	        		SpikeQuestScreenManager.setDebugging(true);
-	        	}
-	   
+	        	if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
+	        		game.debugMode = true;
 	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
-	        	
 	        	continueButtonPressed = true;
 	        	setNextScreen();
 	        	
 	        }
 			else if (isButtonPressed(gameSelectButton)) {
-
+				//debugging mode
+				if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
+					game.debugMode = true;
 				SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
 				dispose();
 				game.screenStack.push(new GameSelectScreen(game));
@@ -111,10 +109,10 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 
 	public void dispose () {
 		game.assetManager.disposeAllAssets();
-		continueButton.discard();
-		creditsButton.discard();
-		newGameButton.discard();
-		gameSelectButton.discard();
+		continueButton.dispose();
+		creditsButton.dispose();
+		newGameButton.dispose();
+		gameSelectButton.dispose();
 		gameCamera.discard();
 		
 		continueButton = null;

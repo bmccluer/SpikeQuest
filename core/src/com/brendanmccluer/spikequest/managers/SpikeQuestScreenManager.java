@@ -22,17 +22,6 @@ import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScre
  *
  */
 public class SpikeQuestScreenManager {
-	//Save File Keys
-	public static boolean debugging = false;
-	
-	public static boolean isDebugging() {
-		return debugging;
-	}
-
-	public static void setDebugging(boolean debugging) {
-		SpikeQuestScreenManager.debugging = debugging;
-	}
-
 	/**
 	 * I read the save file and determine which scene to set next. I also set
 	 * both screens passed to null.
@@ -43,8 +32,7 @@ public class SpikeQuestScreenManager {
      * TODO Use Screen Stack
 	 */
 	public static void popNextScreen(AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
-		//TODO DELETE THIS
-		if (debugging) {
+		if (aGame.debugMode) {
 			AbstractSpikeQuestScreen debugScreen;
 			SpikeQuestSaveFile.setBooleanValue(PonyvilleOutsideRainbowDashScreen.RAINBOW_RACE_TANK_INTRO_BOOLEAN, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
@@ -52,7 +40,6 @@ public class SpikeQuestScreenManager {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, false);
 			debugScreen = new FluttershyBackOfCottageScreen(aGame,"","right");
-			//debugScreen = new CliffBottomScreen(aGame, null, null);
 			forwardScreen(debugScreen, aGame);
 			return;
 		}

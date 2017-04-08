@@ -115,7 +115,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		
 		System.err.println("Did not find sound effect: " + aName);
 	}
-	
+
 	/**
 	 * Call this right after playSoundEffect to set the volume
 	 * @param volume
@@ -143,6 +143,10 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		
 		super.spawn(xPos, yPos, stillAtlas, STILL_ANIMATION, stillFrames);
 		
+	}
+
+	public void updateAnimation(float delta) {
+
 	}
 	
 	/**
@@ -245,10 +249,10 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 	}
 	
 	@Override
-	public void discard () {
+	public void dispose() {
 		
 		if (soundEffect != null)
-			soundEffect.discard();
+			soundEffect.dispose();
 		
 		soundEffectLengths = null;
 		soundPaths = null;
@@ -269,7 +273,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 			moveAtlas = null;
 		}
 		
-		super.discard();
+		super.dispose();
 	}
 
 }

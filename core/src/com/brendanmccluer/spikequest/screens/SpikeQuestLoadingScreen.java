@@ -58,7 +58,7 @@ public class SpikeQuestLoadingScreen extends AbstractSpikeQuestScreen {
 	public void dispose() {
 		gameCamera.discard();
 		timer.dispose();
-		spikeObject.discard();
+		spikeObject.dispose();
 		font.dispose();
 		
 		gameCamera = null;

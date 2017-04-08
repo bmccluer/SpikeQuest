@@ -487,25 +487,25 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	public void dispose () {
 		
 		for (AbstractCoverObject i : coverObjects) 
-			i.discard();
+			i.dispose();
 		
 		for (AbstractPopUpObject i : animalObjects)
-			i.discard();
+			i.dispose();
 		
 		for (GemObject i : gemObjects)
-			i.discard();
+			i.dispose();
 		
-		scoreBoardObject.discard();
-		aCircleObject.discard();
+		scoreBoardObject.dispose();
+		aCircleObject.dispose();
 		gameCamera.discard();
 		fluttershyHeadSprite.getTexture().dispose();		
 		backgroundMusic.stopMusic();
-		backgroundMusic.discard();
+		backgroundMusic.dispose();
 		game.assetManager.disposeAsset(BACKDROP_SCREEN);
 		game.assetManager.disposeAsset(FLUTTERSHY_HEAD);
 		scoreControl.discard();
 		if (derpyObject != null)
-			derpyObject.discard();
+			derpyObject.dispose();
 		
 		derpyObject = null;
 		scoreControl = null;

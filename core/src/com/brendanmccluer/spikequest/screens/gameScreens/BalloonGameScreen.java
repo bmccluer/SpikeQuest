@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.brendanmccluer.spikequest.SpikeQuestController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
+import com.brendanmccluer.spikequest.SpikeQuestShapeRenderer;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.common.objects.ScoreBoardObject;
 import com.brendanmccluer.spikequest.common.objects.ScoreControlObject;
-import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.BalloonObject;
 import com.brendanmccluer.spikequest.objects.GemObject;
@@ -60,6 +60,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	private int popTimer = 1000;
 	private int gameOverTimer = 240;
 	private SpikeQuestSoundEffect spikeAlarm = null;
+	private SpikeQuestShapeRenderer shapeRenderer = null;
 
 	public BalloonGameScreen(SpikeQuestGame game, String aScreenType) {
 		super(game);
@@ -79,6 +80,8 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		aScoreControl = new ScoreControlObject();
 		aScoreBoardObject = new ScoreBoardObject();
 		aDerpyObject = new DerpyObject();
+		if (game.debugMode)
+			shapeRenderer = new SpikeQuestShapeRenderer();
 
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH, "Texture");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH, "Music");
@@ -108,63 +111,46 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 			gameCamera.attachToBatch(game.batch);
 			
 			if (!screenStart) {
-				
 				screenStart = true;
 				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH, "Texture");
-				
 				backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH, "Music"));
 				backgroundMusic.playMusic(true);
-				
 				spikeAlarm = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SPIKE_ALARM_SOUND_PATH, "Sound"), 10);
-				
-				aSpikeObject.spawn(gameCamera.getCameraWidth()/2, 0);
-				
+
+                aSpikeObject.spawn(gameCamera.getCameraWidth()/2, 0);
 				//spawn to create sprite
 				aScoreBoardObject.spawn(10,0);
-				
 				//relocate
 				aScoreBoardObject.setCurrentPositionY(gameCamera.getCameraHeight() - aScoreBoardObject.getCollisionRectangle().getHeight() - 10);
-				
-				
-				
 				createSlots();
-				
-				if (aDerpyObject != null) {
+
+                if (aDerpyObject != null) {
 					aDerpyObject.spawn(-200, gameCamera.getCameraHeight() - 200);
 					//aDerpyObject.resize();
 					aDerpyObject.setBanner("Get 2,000 Points!");
 					aDerpyObject.setBannerTextSize(2);
-					
-				}	
-				
-				
+				}
 			}
-			
 			if (gameOverTimer <= 0) {
 				gameOver();
 				return;
 			}
-				
 			else {
-				
 				//check Gems
 				aScoreBoardObject.addGems(GemObject.collectGemsTouched(aGemObjectList, aSpikeObject));
 
 				game.batch.begin();
 				game.batch.draw(currentBackdropTexture, 0, 0);
-				
 				//draw the score and gems
 				aScoreBoardObject.setCurrentPositionX(gameCamera.getCameraPositionX() 
 						- gameCamera.getCameraWidth()/2 + 10);
 				aScoreBoardObject.draw(game.batch);
-				
 				if (aDerpyObject != null) {
 					controlDerpy();
 					
 					if (drawDerpy)
 						aDerpyObject.draw(game.batch);
 				}
-				
 				//check game over
 				//TODO - Endless Mode?
 				if (aScoreBoardObject.getLives() <= 0 || (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX)) {
@@ -199,6 +185,14 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 				}
 					
 				game.batch.end();
+
+				//debug
+                if (shapeRenderer != null) {
+                    shapeRenderer.drawRectangle(aSpikeObject.getCollisionHeadRectangle(), gameCamera);
+                    for (BalloonObject balloon : aBalloonObjectList) {
+                        shapeRenderer.drawRectangle(balloon.getCollisionRectangle(), gameCamera);
+                    }
+                }
 			}	
 		}
 		
@@ -212,25 +206,21 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	 */
 	private void controlDerpy() {
 		boolean isGameOver = aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX || aScoreBoardObject.getLives() <= 0; 
-		
-		
+
 		if (isGameOver) {
-			
 			if (!drawDerpy) {
 				
 				aDerpyObject.spawn(BACKDROP_WIDTH + 25, aDerpyObject.getCurrentPositionY());
 				drawDerpy = true;
 			}
-			
-			 if (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX) {
+			if (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX) {
 				 aDerpyObject.setBanner("SUCCESS!");
 				 aDerpyObject.moveLeft(3);
-			 }
-			 
-			 else if (aScoreBoardObject.getLives() <= 0) {
+			}
+			else if (aScoreBoardObject.getLives() <= 0) {
 				 aDerpyObject.setBanner("Try Again");
 				 aDerpyObject.moveLeft(3);
-			 }
+			}
 		}
 		
 		else if (aDerpyObject.getCurrentPositionX() < BACKDROP_WIDTH + 500)
@@ -247,12 +237,10 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	 * and decreasing the time in which they pop
 	 */
 	private void adjustDifficulty() {
-		
 		if (numberOfBalloons < TOTAL_BALLOONS && aScoreBoardObject.getScore() >= moreBalloonPoints) {
 			numberOfBalloons++;
 			moreBalloonPoints += INCREASE_BALLOON_SCORE;
 		}
-		
 		if (popTimer > LOWESET_POP_TIME && aScoreBoardObject.getScore() >= shorterPopPoints) {
 			popTimer -= 100;
 			shorterPopPoints += INCREASE_POP_SCORE;
@@ -261,10 +249,6 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	}
 
 	private void gameOver() {
-		/*game.batch.begin();
-		game.bitmapFont.drawMultiLine(game.batch, "\n\nGAME OVER\n\n" + "Total Points: " + spikePoints + "\n\nPress \"s\" to play again.", aSpikeQuestCamera.getCameraPositionX()-100, aSpikeQuestCamera.getCameraPositionY()+300);
-		game.batch.end();
-		*/
 		dispose();
 		//if first play, check spikePoints
 		if (aScoreBoardObject.getScore() >= FIRST_PLAY_POINTS_MAX) {
@@ -275,7 +259,6 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 			return;
 		}
 		SpikeQuestScreenManager.forwardScreen(this, new BalloonGameScreen(game, "firstPlay"), game);
-		
 	}
 
 	/**
@@ -299,17 +282,10 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	/**
 	 * I control the number of balloons passed. If the balloons passed exceeds number in
 	 * aBalloonObjectList, more will be spawned when they are loaded
-	 * @param numberOfBalloons2
+	 * @param numberOfBalloons
 	 */
 	private void controlBalloons(int numberOfBalloons) {
-		//int newBalloons = numberOfBalloons - aBalloonObjectList.size()+1;
-		
-		
-		//make more balloons
-		/*if (newBalloons > 0) {
-			createBalloonObjects(newBalloons);
-		}*/
-		
+
 		for (int i = 0; i < numberOfBalloons; i++) {
 			
 			if (aBalloonObjectList.get(i).isLoaded()) {
@@ -319,8 +295,6 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 					aBalloonObjectList.get(i).draw(game.batch);
 			}
 		}
-		
-		
 	}
 	
 
@@ -349,27 +323,8 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		}
 		
 	}
-	
-	/**
-	 * I spawn x amount of balloons and add to aBalloonObjectList. (maximum numbers of balloons to spawn equals the size
-	 * of aBalloonObjectList. Will create new BalloonObjects if number is larger than aBalloonObjectList
-	 * 
-	 * @param number
-	 */
-	/*private void spawnBalloonObjects() {
-		
-		for (int i = 0; i < aBalloonObjectList.size(); i++) {
-			//spawn initially so all loading of the balloon is finished and no delays occur
-			aBalloonObjectList.get(i).spawn(-500, -500, popTimer);
-		}
-		
-	}
-	*/
 
 	private void spawnBalloon(BalloonObject aBalloonObject) {
-		//float cameraHeight = aSpikeQuestCamera.getCameraHeight();
-		//float cameraWidth = aSpikeQuestCamera.getCameraWidth();
-		//float yPosition = 0;
 		int slotPosition = aRandomGenerator.nextInt(slotList.size()); //pick random slot
 		int neighborPosition = 1;
 		int previousSlot = 0;
@@ -397,20 +352,6 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		else {
 			spawnInSlot(aBalloonObject, slotPosition, aRandomGenerator);
 		}
-			
-		/*aBalloonObject.spawn(aRandomGenerator.nextInt((int)(cameraWidth- 100) + 1) + 100, 
-				aRandomGenerator.nextInt((int)(cameraHeight + 500 - cameraHeight + 300) + 1) + cameraHeight + 300);*/
-		
-		
-		
-		//readjust position around other balloons already spawned
-		//for (int i=0; i < aBalloonObjectList.size(); i++) {
-			
-			//if (aBalloonObjectList.get(i).isSpawned()) {
-				
-				//if (aBalloonObject)
-			//}
-		//}
 	}
 	
 	private void spawnInSlot (BalloonObject aBalloonObject, int slotPosition, Random aRandomGenerator) {
@@ -442,12 +383,10 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		
 			//will continue to spawn the balloon until slot is open
 			spawnBalloon(aBalloonObject);
-			
-			
-			
+
 		}
 		
-		//check if hit so no double points are added 
+		//check if hit so no double points are added
 		if (!aBalloonObject.isHit() && (aSpikeObject.isJumping() && aBalloonObject.getCollisionRectangle().overlaps(aSpikeObject.getCollisionHeadRectangle()))) {
 
 			if (aBalloonObject.isRegularBalloon()) {
@@ -461,9 +400,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 				spikeAlarm.playSound(true);
 				aBalloonObject.pop(true);
 			}
-				
-			
-			
+
 		}
 		
 		if (aBalloonObject.getCollisionRectangle().overlaps(aSpikeObject.getFireCollisionZone())) {
@@ -505,72 +442,19 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	
 	@Override
 	public void dispose () {
-		//game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH);
-		//game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH);
-		//game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.GREEN_BACKDROP_PATH);
 		game.assetManager.disposeAllAssets();
-		
-		backgroundMusic.stopMusic();
-		backgroundMusic.discard();
-		backgroundMusic = null;
-		
-		for (int i=0; i < aBalloonObjectList.size(); i++) {
-			aBalloonObjectList.get(i).discard();
-			aBalloonObjectList.set(i, null);
-			
-		}
-		
-		aBalloonObjectList.clear();
-		aBalloonObjectList = null;
-		
+		safeDispose(backgroundMusic);
+		safeDispose(aBalloonObjectList);
 		slotList.clear();
-		slotList = null;
 		slotIsFilled.clear();
-		slotIsFilled = null;
-		
-		for (GemObject i : aGemObjectList)
-			i.discard();
-		
-		aGemObjectList.clear();
-		aGemObjectList = null;
-		
-		slotList = null;
-		slotIsFilled = null;
-		
-		aController = null;
-		aPinkieObject.discard();
-		aPinkieObject = null;
-		aSpikeObject.discard();
-		aSpikeObject = null;
+        safeDispose(aGemObjectList);
+		safeDispose(aPinkieObject);
+		safeDispose(aSpikeObject);
 		aRandomGenerator = null;
-		gameCamera.discard();
-		gameCamera = null;
-		
-		if (aDerpyObject != null) {
-			aDerpyObject.discard();
-			aDerpyObject = null;
-		}
-		
-		spikeAlarm.discard();
-		spikeAlarm = null;
-		
+		safeDispose(aDerpyObject);
+		safeDispose(shapeRenderer);
+		safeDispose(spikeAlarm);
 		super.dispose();
 	}
 	
 }
-
-	//private boolean spikeCollideWithBalloon(BalloonObject aBalloonObject) {
-		/*float aSpikeObjectHead = spikeObject.getCurrentPositionY() + 100;
-		float aBalloonObjectBottom = aBalloonObject.getCurrentPositionY() - 20;
-		float aBalloonObjectHead = aBalloonObject.getCurrentPositionY() + 20;
-		
-		return (aSpikeObjectHead >= aBalloonObjectBottom &&
-				aSpikeObjectHead < aBalloonObjectHead &&
-				aBalloonObject.getCurrentPositionX() > spikeObject.getCurrentPositionX()-50 &&
-						aBalloonObject.getCurrentPositionX() <= spikeObject.getCurrentPositionX() + 50);
-		*/
-		
-		
-	//}
-
-

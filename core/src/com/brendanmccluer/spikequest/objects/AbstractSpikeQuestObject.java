@@ -3,6 +3,7 @@ package com.brendanmccluer.spikequest.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.SpikeQuestAssetManager;
 
 /**
@@ -12,7 +13,7 @@ import com.brendanmccluer.spikequest.SpikeQuestAssetManager;
  * @author Brendan
  *
  */
-public abstract class AbstractSpikeQuestObject {
+public abstract class AbstractSpikeQuestObject implements Disposable {
 	private SpikeQuestAssetManager objectManager = null;
 	protected boolean objectLoaded = false;
 	
@@ -79,7 +80,7 @@ public abstract class AbstractSpikeQuestObject {
 		objectManager.setAsset(filePath, assetType);
 	}
 	
-	public void discard () {
+	public void dispose() {
 		objectManager.disposeAssetsAndManager();
 	}
 	

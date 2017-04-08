@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 
 @Deprecated
@@ -102,9 +101,9 @@ public class ButtonObject extends AbstractSpikeQuestObject {
 	}
 	
 
-	public void discard() {
+	public void dispose() {
 		buttonText = null;
 		
-		super.discard();
+		super.dispose();
 	}
 }

@@ -3,13 +3,14 @@ package com.brendanmccluer.spikequest;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 
 /**
  * Created by brend on 4/7/2017.
  */
 
-public class SpikeQuestShapeRenderer {
+public class SpikeQuestShapeRenderer implements Disposable {
     ShapeRenderer shapeRenderer = null;
 
     public SpikeQuestShapeRenderer() {
@@ -27,7 +28,7 @@ public class SpikeQuestShapeRenderer {
         }
     }
 
-    public void discard() {
+    public void dispose() {
         shapeRenderer.dispose();
     }
 }

@@ -180,13 +180,13 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	@Override
 	public void dispose() {
 		if (pinkieObject != null)
-			pinkieObject.discard();
+			pinkieObject.dispose();
 		if (dialogController != null)
-			dialogController.discardTextBalloons();
+			dialogController.dispose();
 		if (flimObject != null)
-			flimObject.discard();
+			flimObject.dispose();
 		if (flamObject != null)
-			flamObject.discard();
+			flamObject.dispose();
 		
 		dialogController = null;
 		pinkieObject = null;

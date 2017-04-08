@@ -126,7 +126,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 		//flip wagon and fall
 		wagonObject.rotate(180);
 		wagonObject.setGroundPosition(wagonLandingPosition);
-		wagonObject.setWeight(6000);
+		wagonObject.setWeight(600);
 		crashSoundEffect.playSound(false);
 	}
 	
@@ -172,20 +172,20 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	
 	@Override
 	public void dispose() {
-		crashSoundEffect.discard();
+		crashSoundEffect.dispose();
 		crashSoundEffect = null;
-		screamSoundEffect.discard();
+		screamSoundEffect.dispose();
 		screamSoundEffect = null;
 		dialogController = null;
-		pinkieObject.discard();
+		pinkieObject.dispose();
 		pinkieObject = null;
-		spikeObject.discard();
+		spikeObject.dispose();
 		spikeObject = null;
-		pinkieTextBalloon.discard();
+		pinkieTextBalloon.dispose();
 		pinkieTextBalloon = null;
-		spikeQuestTextBalloon.discard();
+		spikeQuestTextBalloon.dispose();
 		spikeQuestTextBalloon = null;
-		wagonObject.discard();
+		wagonObject.dispose();
 		wagonObject = null;
 		game.assetManager.disposeAllAssets();
 	}

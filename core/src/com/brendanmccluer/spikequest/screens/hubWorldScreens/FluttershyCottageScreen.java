@@ -55,7 +55,7 @@ public class FluttershyCottageScreen extends AbstractSpikeQuestStandardScreen {
     @Override
     public void dispose() {
         super.dispose();
-        fluttershyObject.discard();
+        fluttershyObject.dispose();
         fluttershyObject = null;
     }
 }

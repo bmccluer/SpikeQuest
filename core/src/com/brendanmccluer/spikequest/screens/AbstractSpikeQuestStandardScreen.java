@@ -172,7 +172,7 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	
 	
 	/**
-	 * discard spikeObject, background asset, and camera
+	 * dispose spikeObject, background asset, and camera
 	 */
 	@Override
 	public void dispose() {
@@ -190,7 +190,7 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 		gemFont = null;
 		bitFont = null;
 		
-		spikeObject.discard();
+		spikeObject.dispose();
 		spikeObject = null;
 		gameCamera.discard();
 		gameCamera = null;

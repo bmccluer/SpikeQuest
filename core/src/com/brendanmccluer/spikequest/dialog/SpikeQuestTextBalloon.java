@@ -1,6 +1,5 @@
 package com.brendanmccluer.spikequest.dialog;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -327,12 +326,12 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
 	}
 
 	@Override
-	public void discard() {
+	public void dispose() {
 		try {
 			fileReader.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		super.discard();
+		super.dispose();
 	}
 }

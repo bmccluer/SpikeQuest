@@ -1,6 +1,7 @@
 package com.brendanmccluer.spikequest.sounds;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * I play a sound effect using the Sound class.
@@ -8,7 +9,7 @@ import com.badlogic.gdx.audio.Sound;
  * @author Brendan
  *
  */
-public class SpikeQuestSoundEffect {
+public class SpikeQuestSoundEffect implements Disposable {
 	private Sound sound = null;
 	private int soundLength = 0;
 	private int soundIndex = 0;
@@ -35,7 +36,7 @@ public class SpikeQuestSoundEffect {
 	 * I play the sound. Will not overlap the sound if already
 	 * playing unless canOverlap is true
 	 * 
-	 * @param canRepeat
+	 * @param canOverlap
 	 */
 	public void playSound (boolean canOverlap) {
 		//System.out.println(soundIndex);
@@ -93,13 +94,11 @@ public class SpikeQuestSoundEffect {
 		sound.stop();
 	}
 	
-	public void discard () {
-		
+	public void dispose() {
 		if (sound != null) {
 			sound.dispose();
 			sound = null;
 		}
-			
 	}
 	
 	

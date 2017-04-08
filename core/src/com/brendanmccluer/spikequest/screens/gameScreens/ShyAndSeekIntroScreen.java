@@ -97,8 +97,8 @@ public class ShyAndSeekIntroScreen extends AbstractSpikeQuestStandardScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		aDialogController.discardTextBalloons();
-		aFluttershyObject.discard();
+		aDialogController.dispose();
+		aFluttershyObject.dispose();
 		aFluttershyObject = null;
 		aDialogController = null;
 	}

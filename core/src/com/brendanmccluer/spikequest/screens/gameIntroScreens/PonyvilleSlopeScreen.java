@@ -223,16 +223,16 @@ public class PonyvilleSlopeScreen extends AbstractSpikeQuestScreen {
 	@Override
 	public void dispose () {
 		
-		aPinkieSpikeDialogController.discardTextBalloons();
-		aRaritySpikeDialogController.discardTextBalloons();
-		aWagonObject.discard();
-		aRarityObject.discard();
-		aPinkieObject.discard();
-		aSpikeObject.discard();
+		aPinkieSpikeDialogController.dispose();
+		aRaritySpikeDialogController.dispose();
+		aWagonObject.dispose();
+		aRarityObject.dispose();
+		aPinkieObject.dispose();
+		aSpikeObject.dispose();
 		gameCamera.discard();
-		aBlueHatObject.discard();
-		aPinkHatObject.discard();
-		backgroundMusic.discard();
+		aBlueHatObject.dispose();
+		aPinkHatObject.dispose();
+		backgroundMusic.dispose();
 		
 		aBlueHatObject = null;
 		aPinkHatObject = null;

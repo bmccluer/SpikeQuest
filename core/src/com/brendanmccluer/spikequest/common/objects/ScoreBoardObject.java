@@ -189,7 +189,7 @@ public class ScoreBoardObject extends AbstractSpikeQuestSpriteObject {
 	}
 	
 	@Override
-	public void discard() {
+	public void dispose() {
 		
 		if (usingTimer)
 			timerObject.dispose();

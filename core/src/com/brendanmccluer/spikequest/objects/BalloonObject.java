@@ -35,7 +35,7 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 	
 	public BalloonObject() {
 		super(filePaths, fileTypes);
-		gravityWeight = 0.01f;
+		setWeight(1);
 		currentSize = size;
 	}
 	

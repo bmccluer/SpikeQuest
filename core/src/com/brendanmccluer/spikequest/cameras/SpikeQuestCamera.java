@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
-public class SpikeQuestCamera {
+public class SpikeQuestCamera  {
 	private OrthographicCamera camera = null;
 	private float cameraSize = 30; //default
 	private int worldWidth = 0;

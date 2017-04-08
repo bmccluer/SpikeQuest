@@ -678,7 +678,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
      */
     private void disposePartial() {
         if (startLine != null) {
-            startLine.discard();
+            startLine.dispose();
             startLine = null;
         }
         if (readySprite != null) {
@@ -693,7 +693,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         disposeListOfObjects(clouds);
         disposeListOfObjects(rings);
         for (GemObject gem : gems)
-            gem.discard();
+            gem.dispose();
         gems.clear();
         gameCamera.discard();
         foregroundCamera.discard();
@@ -716,7 +716,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         disposeListOfObjects(clouds);
         disposeListOfObjects(rings);
         for (GemObject gem : gems)
-            gem.discard();
+            gem.dispose();
         gems.clear();
         rings = null;
         clouds = null;
@@ -733,11 +733,11 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
         tiledMapList = null;
         progressBar.dispose();
         progressBar = null;
-        finishLine.discard();
+        finishLine.dispose();
         finishLine = null;
         scoreControlObject.discard();
         scoreControlObject = null;
-        derpyObject.discard();
+        derpyObject.dispose();
         derpyObject = null;
         raceStarted = false;
         startCount = 3;
@@ -753,12 +753,12 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     }
 
     /**
-     * I discard each object and also clear the list
+     * I dispose each object and also clear the list
      * @param objects
      */
     private void disposeListOfObjects(List<RainbowRaceObject> objects) {
         for (RainbowRaceObject object : objects)
-            object.discard();
+            object.dispose();
         objects.clear();
     }
 

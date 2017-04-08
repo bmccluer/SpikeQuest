@@ -159,13 +159,13 @@ public class PonyvilleOutsideRainbowDashScreen extends AbstractSpikeQuestStandar
     @Override
 	public void dispose() {
 		super.dispose();
-		rainbowDashObject.discard();
+		rainbowDashObject.dispose();
 
         if (tankObject != null)
-            tankObject.discard();
+            tankObject.dispose();
         if (dialogController != null)
-            dialogController.discardTextBalloons();
+            dialogController.dispose();
         if (rainbowTankDialogController != null)
-            rainbowTankDialogController.discardTextBalloons();
+            rainbowTankDialogController.dispose();
 	}
 }

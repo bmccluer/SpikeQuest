@@ -396,13 +396,13 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	}
 
 	@Override
-	public void discard() {
+	public void dispose() {
 		try {
 			fileReader.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		super.discard();
+		super.dispose();
         textObjects = null;
 	}
 }

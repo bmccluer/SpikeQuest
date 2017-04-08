@@ -3,11 +3,12 @@ package com.brendanmccluer.spikequest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 
-public class SpikeQuestDialogController {
+public class SpikeQuestDialogController implements Disposable {
 	private static final int DEFAULT_OFFSET_Y = 300;
 	
 	private SpikeQuestTextBalloon firstTextBalloon = null;
@@ -311,10 +312,9 @@ public class SpikeQuestDialogController {
 	/**
 	 * I clear the text balloons from memory
 	 */
-	public void discardTextBalloons () {
-		
-		firstTextBalloon.discard();
-		secondTextBalloon.discard();
+	public void dispose() {
+		firstTextBalloon.dispose();
+		secondTextBalloon.dispose();
 		
 		firstTextBalloon = null;
 		secondTextBalloon = null;

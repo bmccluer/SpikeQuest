@@ -62,6 +62,6 @@ public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		pinkieObject.discard();
+		pinkieObject.dispose();
 	}
 }

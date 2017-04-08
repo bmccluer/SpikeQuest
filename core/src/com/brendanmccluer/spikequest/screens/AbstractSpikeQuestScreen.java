@@ -5,12 +5,16 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
+
+import java.util.List;
+
 /**
  * Generic Class for all screens to implement
  * set properties used by every screen here 
@@ -126,6 +130,22 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 	protected void drawBackdrop () {
 		if (currentBackdropTexture != null)
 			game.batch.draw(currentBackdropTexture, 0, 0);
+	}
+
+	/**
+	 * Checks for null before disposing
+	 * @param disposableObject
+     */
+	protected void safeDispose(Disposable disposableObject) {
+		if (disposableObject != null)
+			disposableObject.dispose();
+	}
+
+	protected void safeDispose(List<? extends Disposable> disposableObjects) {
+		if (disposableObjects != null)
+			for (Disposable disposableObject : disposableObjects)
+				disposableObject.dispose();
+		disposableObjects.clear();
 	}
 	
 	/**

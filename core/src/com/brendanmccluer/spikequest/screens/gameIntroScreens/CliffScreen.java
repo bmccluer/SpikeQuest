@@ -86,7 +86,7 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 	@Override
 	public void dispose () {
 		gameCamera.discard();
-		aWagonObject.discard();
+		aWagonObject.dispose();
 		game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH);
 		aWagonObject = null;
 	}

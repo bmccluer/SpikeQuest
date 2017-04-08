@@ -195,10 +195,10 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 
 		@Override
 		public void dispose () {
-			spikeObject.discard();
+			spikeObject.dispose();
 			spikeQuestCamera.discard();
-			twilightObject.discard();
-			dialogController.discardTextBalloons();
+			twilightObject.dispose();
+			dialogController.dispose();
 			
 			game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH);
 			

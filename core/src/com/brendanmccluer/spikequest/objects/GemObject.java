@@ -229,10 +229,10 @@ public class GemObject extends AbstractSpikeQuestSpriteObject {
 	//-------------------------------------
 	
 	@Override
-	public void discard () {
+	public void dispose() {
 		
 		aCollectionSoundEffect = null;
-		super.discard();
+		super.dispose();
 		
 	}
 

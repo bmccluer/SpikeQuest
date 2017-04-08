@@ -165,7 +165,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 		gameCamera.discard();
 		
 		backgroundMusic.stopMusic();
-		backgroundMusic.discard();
+		backgroundMusic.dispose();
 		
 		gameCamera = null;
 		scoreFont = null;
