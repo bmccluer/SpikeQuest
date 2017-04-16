@@ -76,6 +76,7 @@ public class TankObject extends StandardObject {
         Vector2 scale = velocity.cpy();
         scale.scl(delta);
         setCurrentPositionXY(currentPositionX + scale.x, currentPositionY + scale.y);
+        super.update(delta);
         return scale;
     }
 

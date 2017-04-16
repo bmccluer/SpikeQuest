@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import java.util.Vector;
 
 /**
  * Object that uses a Sprite and Texture Atlases. 
@@ -12,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
  *
  */
 public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestObject {
+	protected int AT_POINT_MARGIN = 5;
 	protected float currentPositionX = 0;
 	protected float currentPositionY = 0;
 	protected String currentAnimation = "";
@@ -143,12 +147,27 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 		return isSpawned;
 	}
 
-	/*public void update(float delta) {
+	/**
+	 *
+	 * @param delta
+	 * @return distance moved
+     */
+	public Vector2 update(float delta) {
+		Vector2 oldPosition = new Vector2(currentPositionX, currentPositionY);
 
 		//x and y are coordinates. z is speed
-		if (moveVector != null)
+		if (moveVector != null) {
 			moveTowardsPoint(moveVector.x, moveVector.y, moveVector.z * delta);
-	}*/
+			Rectangle pointRectangle = new Rectangle(moveVector.x, moveVector.y, AT_POINT_MARGIN, AT_POINT_MARGIN);
+			//set point in center of rectangle
+			pointRectangle.setX(pointRectangle.getX() - pointRectangle.getWidth()/2);
+			pointRectangle.setY(pointRectangle.getY() - pointRectangle.getHeight()/2);
+			if (pointRectangle.contains(currentPositionX, currentPositionY))
+				moveVector = null;
+		}
+
+		return oldPosition.sub(currentPositionX, currentPositionY);
+	}
 	
 	/**
 	 * I move sprite to the right at a defined speed (negative values are converted to positive)
@@ -164,6 +183,10 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 		
 		adjustToGravity();
 		currentSprite.setPosition(currentPositionX += Math.abs(moveSpeed), currentPositionY);
+	}
+
+	public void move(float distX, float distY, float speed) {
+		moveToPoint(currentPositionX+distX, currentPositionY+distY, speed);
 	}
 	
 	
@@ -225,8 +248,19 @@ public abstract class AbstractSpikeQuestSpriteObject extends AbstractSpikeQuestO
 				currentPositionY -= Math.abs(moveSpeed);
 		}
 
+		//TODO Adjust to gravity on update() method
 		adjustToGravity();
 		currentSprite.setPosition(currentPositionX, currentPositionY);
+	}
+
+	/**
+	 * Move to a point. Only call once and then call update method
+	 * @param posX
+	 * @param posY
+	 * @param speed
+     */
+	public void moveToPoint(float posX, float posY, float speed) {
+		moveVector = new Vector3(posX, posY, speed);
 	}
 	
 	/**

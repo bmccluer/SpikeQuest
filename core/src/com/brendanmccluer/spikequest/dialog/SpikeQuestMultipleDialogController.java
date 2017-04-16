@@ -10,6 +10,7 @@ public class SpikeQuestMultipleDialogController {
 	private TimerObject timer = null;
 	public boolean dialogEnabled = true;
 	private SpikeQuestMultiTextBalloon textBalloon;
+	private boolean waiting = false;
 
 
 	/**
@@ -39,29 +40,37 @@ public class SpikeQuestMultipleDialogController {
 
 	public void updateTextAndObjects(float delta) {
         // listen for space bar or timer
-		if ((timer == null && (Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()))
-				|| (timer != null && timer.isTimerFinished())) {
+		if (dialogEnabled && !waiting) {
+			if ((timer == null && (Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()))
+					|| (timer != null && timer.isTimerFinished())) {
 
-			if (timer != null)
-				timer.startTimer(0, 3);
-			
-			textBalloon.setNextDialog();
-		}
-		for (SpikeQuestTextObject textObject : textBalloon.textObjects) {
-            if (areTextBalloonsFinished() && !textObject.object.isAnimationSet())
-				textObject.object.standStill();
-			else if (textBalloon.getCurrentObject() == textObject) {
-				//set text balloon over current object
-				textBalloon.setCurrentXPos(textObject.object.getCenterX());
-				textBalloon.setCurrentYPos(textObject.object.getCenterY() +
-						textObject.object.getCollisionRectangle().getHeight() + MARGIN_Y_ABOVE_OBJECT);
+				if (timer != null)
+					timer.startTimer(0, 3);
 
-				//play talk animation if one is not defined
-				if (textBalloon.methodName == null)
-					textObject.object.talk();
+				textBalloon.setNextDialog();
 			}
-			else if (!textObject.object.isAnimationSet())
-				textObject.object.standStill();
+		}
+		waiting = false;
+		for (SpikeQuestTextObject textObject : textBalloon.textObjects) {
+			textObject.object.update(delta);
+			if (textBalloon.waitForAnimation && textObject.object.isAnimating()) {
+				waiting = true;
+			}
+			else {
+				if (!areTextBalloonsFinished() && textBalloon.getCurrentObject() == textObject) {
+					//set text balloon over current object
+					textBalloon.setCurrentXPos(textObject.object.getCenterX());
+					textBalloon.setCurrentYPos(textObject.object.getCenterY() +
+							textObject.object.getCollisionRectangle().getHeight() + MARGIN_Y_ABOVE_OBJECT);
+
+					//play talk animation if a current animation is NOT set
+					if (!textObject.object.isAnimationSet())
+						textObject.object.talk();
+				}
+				//play stand animation if not animating or a current animation is set
+				if (!textObject.object.isAnimationSet())
+					textObject.object.standStill();
+			}
 		}
 
 	}
@@ -77,7 +86,7 @@ public class SpikeQuestMultipleDialogController {
 	 * @param batch
 	 */
 	public void drawText(SpriteBatch batch) {
-		if (dialogEnabled && !textBalloon.isAtEndOfDialog()) {
+		if (!waiting && dialogEnabled && !textBalloon.isAtEndOfDialog()) {
             textBalloon.drawDialog(batch);
 		}
       /*  for (SpikeQuestTextObject textObject : textBalloon.textObjects) {

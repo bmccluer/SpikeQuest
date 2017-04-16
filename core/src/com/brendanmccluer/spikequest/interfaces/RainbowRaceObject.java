@@ -23,7 +23,7 @@ public interface RainbowRaceObject extends Disposable {
 
     public void setPosition(float xPos, float yPos);
 
-    public void update(float speed);
+    public Vector2 update(float speed);
 
     /**
      * I render if set in the camera location

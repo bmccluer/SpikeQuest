@@ -54,7 +54,7 @@ public class RainbowRaceProgressBar extends AbstractSpikeQuestObject{
     }
 
     public void dispose() {
-        dispose();
+        super.dispose();
         progressBarTexture.dispose();
         rainbowMarkerTexture.dispose();
         tankMarkerTexture.dispose();

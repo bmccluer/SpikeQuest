@@ -3,6 +3,7 @@ package com.brendanmccluer.spikequest.objects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 
 /**
@@ -28,6 +29,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 	private int[] soundEffectLengths = null;
 	private String[] soundEffectNames = null;
 	private SpikeQuestSoundEffect soundEffect = null;
+	private boolean isAnimating = false;
 	
 	
 	/**
@@ -49,7 +51,7 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		if (FILE_PATHS.length != MAX_FRAMES.length) {
 			System.err.println("Arrays must match!");
 		}*/
-	
+
 		currentSize = size;
 		canTalk = isTalkingObject;
 	}
@@ -145,10 +147,13 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		
 	}
 
-	public void updateAnimation(float delta) {
-
+	@Override
+	public Vector2 update(float delta) {
+		Vector2 distanceMoved = super.update(delta);
+		isAnimating = moveVector != null;
+		return distanceMoved;
 	}
-	
+
 	/**
 	 * I keep object on currentX and currentY position
 	 */
@@ -169,7 +174,13 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveTowardsPoint(pointX, pointY, moveSpeed);
 	}
-	
+
+	@Override
+	public void moveToPoint(float posX, float posY, float speed) {
+		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
+		super.moveToPoint(posX, posY, speed);
+	}
+
 	public void moveRight (int moveSpeed) {
 		changeAnimation(MOVE_ANIMATION,moveFrames,moveAtlas);
 		super.moveRight(moveSpeed);
@@ -243,7 +254,11 @@ public abstract class StandardObject extends AbstractSpikeQuestSpriteObject {
 		changeAnimation("new", maxFrames, aTextureAtlas);
 		 
 	}
-	
+
+	public boolean isAnimating() {
+		return isAnimating;
+	}
+
 	protected TextureAtlas getSillAtlas () {
 		return stillAtlas;
 	}

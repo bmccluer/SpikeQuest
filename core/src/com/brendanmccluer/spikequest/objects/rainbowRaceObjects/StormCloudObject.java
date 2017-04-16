@@ -37,11 +37,6 @@ public class StormCloudObject extends StandardObject implements RainbowRaceObjec
     }
 
     @Override
-    public void update(float speed) {
-        standStill();
-    }
-
-    @Override
     public void render(SpriteBatch batch, SpikeQuestCamera camera) {
         draw(batch);
     }

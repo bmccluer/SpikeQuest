@@ -40,11 +40,6 @@ public class CloudObject extends StandardObject implements RainbowRaceObject {
     }
 
     @Override
-    public void update(float speed) {
-        standStill();
-    }
-
-    @Override
     public void render(SpriteBatch batch, SpikeQuestCamera camera) {
         draw(batch);
     }

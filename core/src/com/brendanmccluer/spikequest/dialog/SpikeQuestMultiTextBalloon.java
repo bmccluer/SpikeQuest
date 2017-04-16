@@ -45,7 +45,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
     private SpikeQuestTextObject currentTextObject;
 
     //used by Dialog Controller
-    protected String soundName, methodName = null;
+    protected String soundName, methodName, methodObjectName = null;
+	protected boolean waitForAnimation = false;
 	protected String[] methodParams = null;
 	protected float soundVolume = 0;
 	protected SpikeQuestTextObject[] textObjects;
@@ -71,7 +72,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			try {
 				fileReader = textFile.read();
 				String aTitleName = readDialog();
-				setCurrentObject(aTitleName);
+				currentTextObject = getTextObject(aTitleName);
 				setNextDialog();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -149,7 +150,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	}
 	
 	/**
-	 * Draw next dialog in message box. Return false if it is not ready to draw next section
+	 * Execute next dialog in message box.
 	 *
 	 */
 	public void setNextDialog() {
@@ -168,7 +169,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
                         isFinished = true;
                         return;
                     }
-                    setCurrentObject(nextTitle);
+					currentTextObject = getTextObject(nextTitle);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -206,7 +207,10 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				soundName = null;
 			}
 			if (methodName != null) {
-				invokeMethod(getCurrentObject().object);
+				SpikeQuestTextObject textObject = currentTextObject;
+				if (getCurrentObject().title != methodObjectName)
+					textObject = getTextObject(methodObjectName);
+				invokeMethod(textObject.object);
 				methodName = null;
 			}
 
@@ -220,7 +224,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			Method[] allMethods = object.getClass().getMethods();
 			for (Method m : allMethods) {
 				String mname = m.getName();
-				if (mname.startsWith(methodName)) {
+				if (mname.equalsIgnoreCase(methodName)) {
 					try {
 						//convert parameters
 						Object[] parameters = new Object[m.getParameterCount()];
@@ -278,10 +282,6 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 * @param batch
 	 */
 	public void drawDialog(SpriteBatch batch) {
-	/*	if (currentTextObject != null) {
-            currentXPos = currentTextObject.object.getCenterX();
-            currentYPos = currentTextObject.object.getCenterY();
-        }*/
         batch.draw(messageBox, currentXPos - messageBox.getWidth()/2, currentYPos);
 		message.drawWrapped(batch, drawMessage, currentXPos + TEXT_BALLOON_X_OFFSET - messageBox.getWidth()/2, currentYPos
 				+ TEXT_BALLOON_Y_OFFSET, TextBalloonWrapWidth);
@@ -293,15 +293,15 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
     /**
      * I set the object currently focused on
      */
-    private void setCurrentObject(String aTitleName) {
-        currentTextObject = null;
+    private SpikeQuestTextObject getTextObject(String aTitleName) {
+        SpikeQuestTextObject returnTextObject = null;
         for (SpikeQuestTextObject textObject : textObjects) {
             if (textObject.title.equalsIgnoreCase(aTitleName)) {
-                currentTextObject = textObject;
-				return;
+                returnTextObject = textObject;
+				break;
             }
-
         }
+		return returnTextObject;
     }
 
     public SpikeQuestTextObject getCurrentObject() {
@@ -331,10 +331,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
      * @return String
 	 */
 	private String readDialog() throws IOException {
-		int next = 0;
+		int next = fileReader.read();;
         String aTitleName = null;
-
-		next = fileReader.read();
 
 		while (next != -1) {
 			nextChar = (char) next;
@@ -342,36 +340,42 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			if ('[' == nextChar) {
                 aTitleName = readWord(']');
                 nextChar = (char) fileReader.read();
-                while (nextChar != '"' && nextChar != -1) {
-
-                    //check for sound effects
+                while (nextChar != ';' && nextChar != -1) {
+                    //read sound effects
                     if (soundName == null && '{' == nextChar) {
                         soundName = readWord(',');
                         soundVolume = Float.parseFloat(readWord('}'));
                     }
-					//check for method calls
-					//format: '@' + method + ',' + parameters + ';'
+					//read method calls
+					//format: '@' + methodObjectName,waitForAnimation,method(parameters...)
                     else if (methodName == null && '@' == nextChar) {
-                        StringTokenizer aTokenizer = new StringTokenizer(readWord(';'),",");
+                        StringTokenizer aTokenizer = new StringTokenizer(readWord('('),",");
 						ArrayList<String> parameters = new ArrayList<String>();
-
-						if (aTokenizer.hasMoreTokens())
-							methodName = aTokenizer.nextToken();
-						while (aTokenizer.hasMoreTokens()) {
-							parameters.add(aTokenizer.nextToken());
+						if (aTokenizer.countTokens() == 3) {
+							if (aTokenizer.hasMoreTokens())
+								methodObjectName = aTokenizer.nextToken();
+							if (aTokenizer.hasMoreTokens())
+								waitForAnimation = Boolean.parseBoolean(aTokenizer.nextToken());
+							if (aTokenizer.hasMoreTokens())
+								methodName = aTokenizer.nextToken();
+							aTokenizer = new StringTokenizer(readWord(')'),",");
+							while (aTokenizer.hasMoreTokens()) {
+								parameters.add(aTokenizer.nextToken());
+							}
+							methodParams = new String[parameters.size()];
+							parameters.toArray(methodParams);
 						}
-
-
-						methodParams = new String[parameters.size()];
-						parameters.toArray(methodParams);
+						else
+							System.err.println("Error: Expected 3 parameters for method command");
                     }
+					//read text
+					else if (nextChar == '"')
+						dialog = dialog + readWord('"');
 
                     nextChar = (char) fileReader.read();
                 }
-                dialog = dialog + readWord('"');
                 break;
 			}
-
 			next = fileReader.read();
 		}
         return aTitleName;

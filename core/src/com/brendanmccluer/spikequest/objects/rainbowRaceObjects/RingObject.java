@@ -94,7 +94,7 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
      * I move the ring up and down, etc.
      * @param delta
      */
-    public void update(float delta) {
+    public Vector2 update(float delta) {
         //Move up and down
         if (moveUp) {
             if (movePosY >= moveHeight) {
@@ -114,6 +114,7 @@ public class RingObject extends AbstractSpikeQuestObject implements RainbowRaceO
                 position.y -= delta * heightVelocity;
             }
         }
+        return null;
     }
 
     private void getRandomRing() {
