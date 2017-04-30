@@ -1,35 +1,27 @@
-[Spike]
-    "Fluttershy!"
-    ;
-[Fluttershy]
-    @Fluttershy,FALSE,moveRight(INT#0)
-    "Oh hello Spike."
-    ;
-[Spike]
-    "Rainbow Dash says something is wrong with Tank!"
-    ;
-[Fluttershy]
-    "Oh my goodness! Tank whatever is the matter? Is this about those races you've been doing with Rainbow Dash?"
-    ;
-[Tank]
-    @Tank,TRUE,move(FLOAT#-200,FLOAT#0,FLOAT#200)
-    "*blink*, *blink*"
-    ;
-[Fluttershy]
-    "Oh Tank, you know Rainbow Dash loves you just the way you are."
-    ;
-[Spike]
-    "I don't get it. What's the problem?"
-    ;
-[Fluttershy]
-    "Oh, Rainbow Dash has been wanting to race, but everypony is so busy right now. Tank wants to race her, but he feels he's too slow."
-    ;
-[Spike]
-    "Oh well that's easy, we just need to make Tank faster."
-    ;
-[Fluttershy]
-    "I'm sorry Spike, I just don't think..."
-    ;
-[Spike]
-    "Don't worry, I'm on it!"
-    ;
++sounds/AirHorn.wav,sounds/CuckooClock.wav;
+@Talk{Spike,"Fluttershy!"}
+STOP
+@Animate{Fluttershy,moveRight(INT#0)}
+@Talk{Fluttershy,"Oh hello Spike."}
+@Sound{sounds/AirHorn.wav,0.5}
+STOP
+@Talk{Spike,"Rainbow Dash says something is wrong with Tank!"}
+STOP
+@Talk{Fluttershy,"Oh my goodness! Tank whatever is the matter? Is this about those races you've been doing with Rainbow Dash?"}
+STOP
+@Animate{Tank,move(FLOAT#-200,FLOAT#0,FLOAT#200)}
+@Wait{}
+@NoInput{}
+STOP
+@Talk{Fluttershy,"Oh Tank, you know Rainbow Dash loves you just the way you are."}
+STOP
+@Talk{Spike,"I don't get it. What's the problem?"}
+STOP
+@Talk{Fluttershy,"Oh, Rainbow Dash has been wanting to race, but everypony is so busy right now. Tank wants to race her, but he feels he's too slow."}
+STOP
+@Talk{Spike,"Oh well that's easy, we just need to make Tank faster."}
+STOP
+@Talk{Fluttershy,"I'm sorry Spike, I just don't think..."}
+STOP
+@Talk{Spike,"Don't worry, I'm on it!"}
+STOP

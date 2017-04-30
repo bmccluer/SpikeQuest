@@ -90,7 +90,7 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 					else if (!dialogScene && dialogController.firstTextIndex == 3 && !dialogController.drawFirstTextFlag){
 						dialogScene = true;
 						//twilightTalking = true;
-						//twilightTalking = twilightTextBalloon.setNextDialog();
+						//twilightTalking = twilightTextBalloon.executeNext();
 						twilightObject.moveRight(0);
 						
 						//reverse direction
@@ -105,11 +105,11 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 					if ((dialogScene) && Gdx.input.isKeyPressed(Keys.SPACE)) {
 						
 						//Start with Twilight
-						twilightTalking = twilightTextBalloon.setNextDialog();
+						twilightTalking = twilightTextBalloon.executeNext();
 					
 						if (!twilightTalking) {
 							
-							spikeTalking = spikeTextBalloon.setNextDialog();
+							spikeTalking = spikeTextBalloon.executeNext();
 							spikeObject.talk();
 							
 							if (!spikeTalking) {

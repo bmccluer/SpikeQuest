@@ -10,7 +10,7 @@ public class SpikeQuestMultipleDialogController {
 	private TimerObject timer = null;
 	public boolean dialogEnabled = true;
 	private SpikeQuestMultiTextBalloon textBalloon;
-	private boolean waiting = false;
+	private boolean waiting, started = false;
 
 
 	/**
@@ -39,15 +39,17 @@ public class SpikeQuestMultipleDialogController {
 	}
 
 	public void updateTextAndObjects(float delta) {
-        // listen for space bar or timer
+		if(!started) {
+			started = true;
+			textBalloon.executeNext();
+		}
 		if (dialogEnabled && !waiting) {
-			if ((timer == null && (Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()))
+			if ((timer == null && (textBalloon.noInput || Gdx.input.isKeyJustPressed(Keys.SPACE) || Gdx.input.isTouched()))
 					|| (timer != null && timer.isTimerFinished())) {
 
 				if (timer != null)
 					timer.startTimer(0, 3);
-
-				textBalloon.setNextDialog();
+				textBalloon.executeNext();
 			}
 		}
 		waiting = false;
@@ -57,7 +59,7 @@ public class SpikeQuestMultipleDialogController {
 				waiting = true;
 			}
 			else {
-				if (!areTextBalloonsFinished() && textBalloon.getCurrentObject() == textObject) {
+				if (!textBalloon.isDialogEmpty() && !areTextBalloonsFinished() && textBalloon.getCurrentObject() == textObject) {
 					//set text balloon over current object
 					textBalloon.setCurrentXPos(textObject.object.getCenterX());
 					textBalloon.setCurrentYPos(textObject.object.getCenterY() +
@@ -86,7 +88,7 @@ public class SpikeQuestMultipleDialogController {
 	 * @param batch
 	 */
 	public void drawText(SpriteBatch batch) {
-		if (!waiting && dialogEnabled && !textBalloon.isAtEndOfDialog()) {
+		if (!textBalloon.isDialogEmpty() && !waiting && dialogEnabled && !textBalloon.isAtEndOfDialog()) {
             textBalloon.drawDialog(batch);
 		}
       /*  for (SpikeQuestTextObject textObject : textBalloon.textObjects) {

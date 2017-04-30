@@ -2,7 +2,6 @@ package com.brendanmccluer.spikequest.dialog;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,11 +11,12 @@ import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 import com.brendanmccluer.spikequest.objects.StandardObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.System.err;
 
@@ -33,9 +33,6 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	private BitmapFont message = null;
 	private Texture messageBox = null;
 	private String dialog = ""; // entire dialog read from file
-	private FileHandle textFile = null;
-	private InputStream fileReader = null;
-	private char nextChar = 0;
 	private String drawMessage = ""; // portion of dialog that is drawn
 	private int dialogIndex = 0;
 	private int dialogTimer = 0; // used to keep dialog from being called
@@ -43,12 +40,10 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	private float currentXPos = 0;
 	private float currentYPos = 0;
     private SpikeQuestTextObject currentTextObject;
-
+	private Scanner scanner = null;
+	private String textFilePath;
     //used by Dialog Controller
-    protected String soundName, methodName, methodObjectName = null;
-	protected boolean waitForAnimation = false;
-	protected String[] methodParams = null;
-	protected float soundVolume = 0;
+	protected boolean waitForAnimation, noInput = false;
 	protected SpikeQuestTextObject[] textObjects;
 
 	/**
@@ -56,8 +51,9 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 */
 	public SpikeQuestMultiTextBalloon(String textFilePath, SpikeQuestTextObject... spikeQuestTextObjects) {
 		super(SpikeQuestStaticFilePaths.TEXT_BALLOON_PATH, "Texture");
-		textFile = Gdx.files.internal(textFilePath);
 		textObjects = spikeQuestTextObjects;
+		this.textFilePath = textFilePath;
+		scanner = new Scanner(Gdx.files.internal(textFilePath).read());
 		loadObjectAttributes();
 	}
 
@@ -69,20 +65,11 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 			message = new BitmapFont();
 			message.setColor(Color.BLACK);
 			textBoxLoaded = true;
-			try {
-				fileReader = textFile.read();
-				String aTitleName = readDialog();
-				currentTextObject = getTextObject(aTitleName);
-				setNextDialog();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
 		}
 		return textBoxLoaded;
 	}
 
-	public void playSound() {
+	public void playSound(String soundName, float soundVolume) {
 		Sound sound = null;
 		if (soundName != null) {
 			sound = (Sound) getAsset(soundName, "Sound");
@@ -97,15 +84,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 */
 	private void loadObjectAttributes() {
         dialog = "";
-        String aTitleName = null;
         try {
-            fileReader = textFile.read();
-            aTitleName = readDialog();
-            if (aTitleName != null) {
-				if ("IMPORT".equalsIgnoreCase(aTitleName))
-					importSounds();
-				return;
-			}
+            readImports();
         } catch (Exception e) {
             System.err.println("Error while reading text file.");
             e.printStackTrace();
@@ -113,7 +93,6 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         }
         finally {
             try {
-				fileReader.close();
 				reset();
             }
             catch (Exception e) {
@@ -123,13 +102,6 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
         }
     }
 
-	private void importSounds() {
-		StringTokenizer tokenizer = new StringTokenizer(dialog,",");
-		while (tokenizer.hasMoreTokens()) {
-			setAsset(tokenizer.nextToken(), "Sound");
-		}
-	}
-
 	/**
 	 * I reset indexes and other attributes
 	 */
@@ -138,6 +110,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 		for (SpikeQuestTextObject textObject : textObjects) {
 			textObject.index = 0;
 		}
+        scanner.close();
+		scanner = new Scanner(Gdx.files.internal(textFilePath).read());
 	}
 
 	/**
@@ -153,7 +127,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 * Execute next dialog in message box.
 	 *
 	 */
-	public void setNextDialog() {
+	public void executeNext() {
 		// make sure this is not being called multiple times at once
 		if (dialogTimer <= 0) {
 			// end of dialog
@@ -161,15 +135,10 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				// keep timer at zero
 				dialogTimer = 0;
 				dialog = "";
+				noInput = false;
                 try {
-                    String nextTitle = null;
-                    currentTextObject.index++;
-                    nextTitle = readDialog();
-                    if (nextTitle == null) {
+                    if(!readAndExecute())
                         isFinished = true;
-                        return;
-                    }
-					currentTextObject = getTextObject(nextTitle);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -202,22 +171,10 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				drawMessage = dialog;
 				dialogIndex = dialog.length();
 			}
-			if (soundName != null) {
-				playSound();
-				soundName = null;
-			}
-			if (methodName != null) {
-				SpikeQuestTextObject textObject = currentTextObject;
-				if (getCurrentObject().title != methodObjectName)
-					textObject = getTextObject(methodObjectName);
-				invokeMethod(textObject.object);
-				methodName = null;
-			}
-
 		}
 	}
 
-	private void invokeMethod(StandardObject object) {
+	private void invokeMethod(StandardObject object, String methodName, String[] methodParams) {
 		try {
 			Object t = object;
 
@@ -252,12 +209,14 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	}
 
 	private Object castParameter(String aType, String aParameter) {
-		if ("INT".equalsIgnoreCase(aType))
+		if("INT".equalsIgnoreCase(aType))
 			return Integer.parseInt(aParameter);
-		if ("STRING".equalsIgnoreCase(aType))
+		if("STRING".equalsIgnoreCase(aType))
 			return aParameter;
-		if ("FLOAT".equalsIgnoreCase(aType))
+		if("FLOAT".equalsIgnoreCase(aType))
 			return Float.parseFloat(aParameter);
+		if("BOOLEAN".equalsIgnoreCase(aType))
+			return Boolean.parseBoolean(aParameter);
 		System.err.println("Unknown Type: " + aType);
 		return null;
 	}
@@ -282,12 +241,15 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 * @param batch
 	 */
 	public void drawDialog(SpriteBatch batch) {
-        batch.draw(messageBox, currentXPos - messageBox.getWidth()/2, currentYPos);
+		batch.draw(messageBox, currentXPos - messageBox.getWidth()/2, currentYPos);
 		message.drawWrapped(batch, drawMessage, currentXPos + TEXT_BALLOON_X_OFFSET - messageBox.getWidth()/2, currentYPos
 				+ TEXT_BALLOON_Y_OFFSET, TextBalloonWrapWidth);
-
 		if (dialogTimer > 0)
 			dialogTimer--;
+	}
+
+	public boolean isDialogEmpty() {
+		return dialog == null || dialog.isEmpty();
 	}
 
     /**
@@ -324,85 +286,124 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 		this.currentYPos = currentYPos;
 	}
 
-	/**
-	 * I read the next dialog for the next title name. Returns the title name
-	 * 
-	 * @throws IOException
-     * @return String
-	 */
-	private String readDialog() throws IOException {
-		int next = fileReader.read();;
-        String aTitleName = null;
-
-		while (next != -1) {
-			nextChar = (char) next;
-			// Look for title names
-			if ('[' == nextChar) {
-                aTitleName = readWord(']');
-                nextChar = (char) fileReader.read();
-                while (nextChar != ';' && nextChar != -1) {
-                    //read sound effects
-                    if (soundName == null && '{' == nextChar) {
-                        soundName = readWord(',');
-                        soundVolume = Float.parseFloat(readWord('}'));
-                    }
-					//read method calls
-					//format: '@' + methodObjectName,waitForAnimation,method(parameters...)
-                    else if (methodName == null && '@' == nextChar) {
-                        StringTokenizer aTokenizer = new StringTokenizer(readWord('('),",");
-						ArrayList<String> parameters = new ArrayList<String>();
-						if (aTokenizer.countTokens() == 3) {
-							if (aTokenizer.hasMoreTokens())
-								methodObjectName = aTokenizer.nextToken();
-							if (aTokenizer.hasMoreTokens())
-								waitForAnimation = Boolean.parseBoolean(aTokenizer.nextToken());
-							if (aTokenizer.hasMoreTokens())
-								methodName = aTokenizer.nextToken();
-							aTokenizer = new StringTokenizer(readWord(')'),",");
-							while (aTokenizer.hasMoreTokens()) {
-								parameters.add(aTokenizer.nextToken());
-							}
-							methodParams = new String[parameters.size()];
-							parameters.toArray(methodParams);
-						}
-						else
-							System.err.println("Error: Expected 3 parameters for method command");
-                    }
-					//read text
-					else if (nextChar == '"')
-						dialog = dialog + readWord('"');
-
-                    nextChar = (char) fileReader.read();
-                }
-                break;
+    private void readImports() throws IOException {
+        String pattern = "\\+(.+);";
+        boolean stop = false;
+		//get next line with the pattern +...;
+		while (!stop) {
+			String line = scanner.findInLine(pattern);
+			if (line != null) {
+				String[] imports = extractPattern(pattern,line).split(",");
+				for (int i=0; i < imports.length; i++) {
+					setAsset(imports[i] , "Sound");
+				}
+				return;
 			}
-			next = fileReader.read();
+            else if(scanner.hasNextLine())
+                scanner.nextLine();
+            else
+                stop = true;
+        }
+    }
+
+	/**
+	 * I look for all methods before "STOP" and execute them
+	 * @return
+	 * @throws IOException
+     */
+	private boolean readAndExecute() throws IOException {
+		String pattern = "@(.+)";
+		boolean commandFound = false;
+        boolean stop = false;
+        while(!stop) {
+            //NOTE: If successful, findInLine will move scanner to next line automatically
+			String command = scanner.findInLine(pattern);
+			if(command != null) {
+				commandFound = true;
+				try {
+					executeCommand(extractPattern(pattern, command));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			else if(scanner.findInLine("STOP") != null)
+				stop = true;
+            else if(scanner.hasNextLine())
+                scanner.nextLine();
+            else
+                stop = true;
 		}
-        return aTitleName;
+        return commandFound;
 	}
 
-	/**
-	 * read word to the end character
-	 * 
-	 * @param endCharacter
-	 * @throws IOException
-	 */
-	private String readWord(char endCharacter) throws IOException {
-		String aWord = "";
-		nextChar = (char) fileReader.read();
+	private void executeCommand(String command) throws Exception {
+        String commandName = extractPattern("(.+)\\{", command);
+		String commandBody = extractPattern("\\{(.*)\\}", command);
+        if("Sound".equalsIgnoreCase(commandName)) {
+            String[] commandArgs = commandBody.split(",");
+            if(commandArgs.length != 2) {
+                throwUsageError(commandName, 2);
+                return;
+            }
+            String soundName = commandArgs[0];
+            float soundVolume = Float.parseFloat(commandArgs[1]);
+            playSound(soundName, soundVolume);
+        }
+        //Syntax methodObjectName,methodName(arguments...)
+        else if("Animate".equalsIgnoreCase(commandName)) {
+            String[] commandArgsPlusMethod = commandBody.split("\\(");
+            if(commandArgsPlusMethod.length != 2) {
+                throw new Exception("Animate command missing '(' character");
+            }
+			String[] commandArgs = commandArgsPlusMethod[0].split(",");
+			if(commandArgs.length != 2) {
+				throwUsageError(commandName, 2);
+			}
+            String methodObjectName = commandArgs[0];
+            String methodName = commandArgs[1];
+            String[] methodParams = commandArgsPlusMethod[1].replace(")","").split(",");
+            invokeMethod(getTextObject(methodObjectName).object, methodName, methodParams);
+        }
+        else if("Talk".equalsIgnoreCase(commandName)) {
+            String[] commandArgs = commandBody.split(",\"");
+			if (commandArgs.length != 2) {
+				throw new Exception("Talk command missing beginning '\"' character");
+			}
+			String text = commandArgs[1];
+			if (text.charAt(text.length()-1) != '"') {
+				throw new Exception("Talk command missing ending '\"' character");
+			}
+            currentTextObject = getTextObject(commandArgs[0]);
+            currentTextObject.index++;
+            dialog = text.substring(0,text.length()-1);
+        }
+        else if("Wait".equalsIgnoreCase(commandName))
+            waitForAnimation = true;
+        else if("NoInput".equalsIgnoreCase(commandName))
+			noInput = true;
+		else
+            System.err.println("Unrecognized command " + commandName);
+    }
 
-		while (nextChar != (char) -1 && nextChar != endCharacter) {
-			aWord = aWord + nextChar;
-			nextChar = (char) fileReader.read();
-		}
+    private String extractPattern(String regex, String text) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher m = pattern.matcher(text);
+        String result = "";
+        if(!m.find())
+            System.err.println("Pattern not found " + regex);
+        else
+            result = m.group(1);
+        return result;
+    }
 
-		return aWord;
+    private Exception throwUsageError(String commandName, int i) {
+		return new Exception(String.format("Usage error executing command {0}. Expected {1} arguments", commandName, i));
 	}
 
 	@Override
 	public void dispose() {
 		try {
-			fileReader.close();
+			scanner.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
