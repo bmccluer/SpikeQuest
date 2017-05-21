@@ -5,17 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.utils.reflect.Method;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.ButtonObjectAction;
 import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
-
-import java.util.function.Function;
 
 /**
  * Created by brend on 11/20/2016.
@@ -24,11 +17,9 @@ import java.util.function.Function;
 public class ImageButtonObject implements ButtonObjectInterface {
     protected Texture imageTexture = null;
     protected Sprite buttonSprite = null;
-    protected Method function = null;
-    protected Object[] defaultFunctionParms = null;
-    protected Object defaultObject = null;
     protected AbstractSpikeQuestScreen screen;
     protected ButtonObjectAction buttonAction;
+    private boolean isClicked = false;
 
     public ImageButtonObject(Texture imageTexture, AbstractSpikeQuestScreen screen) {
         this.imageTexture = imageTexture;
@@ -37,8 +28,8 @@ public class ImageButtonObject implements ButtonObjectInterface {
     }
 
     @Override
-    public boolean checkMouseOver(float xMousePos, float yMousePos) {
-        if (buttonSprite.getBoundingRectangle().contains(xMousePos,yMousePos))
+    public boolean isTouching(float xPos, float yPos) {
+        if (buttonSprite.getBoundingRectangle().contains(xPos, yPos))
             return true;
         return false;
     }
@@ -46,10 +37,13 @@ public class ImageButtonObject implements ButtonObjectInterface {
     @Override
     public void update(float delta, SpikeQuestCamera gameCamera) {
         if (gameCamera != null) {
-            if (checkMouseOver(gameCamera.getMousePositionX(), gameCamera.getMousePositionY())) {
+            if (isTouching(gameCamera.getMousePositionX(), gameCamera.getMousePositionY())) {
                 buttonSprite.setAlpha(0.5f);
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                     buttonAction.handle(screen);
+                    isClicked = true;
+                }
+
             }
             else
                 buttonSprite.setAlpha(1);
@@ -69,6 +63,11 @@ public class ImageButtonObject implements ButtonObjectInterface {
     @Override
     public boolean isLoaded() {
         return true;
+    }
+
+    @Override
+    public boolean isClicked() {
+        return isClicked;
     }
 
     @Override

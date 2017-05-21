@@ -1,9 +1,7 @@
-+sounds/AirHorn.wav,sounds/CuckooClock.wav;
 @Talk{Spike,"Fluttershy!"}
 STOP
 @Animate{Fluttershy,moveRight(INT#0)}
 @Talk{Fluttershy,"Oh hello Spike."}
-@Sound{sounds/AirHorn.wav,0.5}
 STOP
 @Talk{Spike,"Rainbow Dash says something is wrong with Tank!"}
 STOP

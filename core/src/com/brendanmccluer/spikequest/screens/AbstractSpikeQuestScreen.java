@@ -73,7 +73,7 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 	protected boolean isButtonPressed(ButtonObject aButtonObjectInterface) {
 		/*if (Gdx.app.getType().equals(ApplicationType.Android)) {
 			if (gameCamera != null) {
-				return aButtonObject.checkMouseOver(Gdx.input.is, yMousePos)
+				return aButtonObject.isTouching(Gdx.input.is, yMousePos)
 			}
 		}*/
 			

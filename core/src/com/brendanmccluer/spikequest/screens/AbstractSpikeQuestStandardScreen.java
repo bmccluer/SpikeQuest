@@ -111,6 +111,13 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 			if (spikeObject.getCurrentPositionX() > gameCamera.getCameraPositionX())
 				gameCamera.translateCamera(spikeObject.getCurrentPositionX() - gameCamera.getCameraPositionX(), 0);
 		}
+		if ("center".equalsIgnoreCase(spikePosition)) {
+			spikeObject.setCurrentPositionX(gameCamera.getWorldWidth()/2 - spikeObject.getCollisionRectangle().getWidth());
+
+			//move camera to Spike
+			if (spikeObject.getCurrentPositionX() > gameCamera.getCameraPositionX())
+				gameCamera.translateCamera(spikeObject.getCurrentPositionX() - gameCamera.getCameraPositionX(), 0);
+		}
 		//play music
 		if (useMusic)
 			((Music) game.assetManager.loadAsset(HUB_MAIN_MUSIC_PATH,"Music")).play();

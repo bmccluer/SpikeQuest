@@ -19,6 +19,7 @@ public final class SpikeQuestSaveFile {
 	public final static String RAINBOW_RACE_INTRO_COMPLETE = "rainbowRaceIntroComplete";
 	public final static String FLUTTERSHY_TANK_INTRO_COMPLETE = "fluttershyTankIntroComplete";
 	public final static String CMC_TANK_INTRO_COMPLETE = "cmcTankIntroComplete";
+	public final static String ACCESS_SWEET_APPLE_ACRES_PATH = "accessSweetAppleAcresPath";
 	private static Preferences gdxPreferenceFile = null;
 	
 	/**

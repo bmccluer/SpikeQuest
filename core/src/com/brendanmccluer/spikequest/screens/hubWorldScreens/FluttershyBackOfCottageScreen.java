@@ -98,6 +98,7 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
 				tankObject.moveRight(delta * 150);
 
 				if (spikeObject.getCurrentPositionX() > gameCamera.getCameraWidth() + 200) {
+					SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH, true);
 					dispose();
 					SpikeQuestScreenManager.forwardScreen(new FluttershyCottageScreen(game, " ", "left"), game);
 					return;

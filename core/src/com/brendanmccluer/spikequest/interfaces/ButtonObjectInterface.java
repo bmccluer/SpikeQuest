@@ -9,7 +9,7 @@ import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
  * Created by brend on 11/20/2016.
  */
 public interface ButtonObjectInterface {
-	boolean checkMouseOver(float xMousePos, float yMousePos);
+	boolean isTouching(float xPos, float yPos);
 
 	void update(float delta, SpikeQuestCamera gameCamera);
 
@@ -18,6 +18,8 @@ public interface ButtonObjectInterface {
 	void setPosition(float xPos, float yPos);
 
 	boolean isLoaded();
+
+	boolean isClicked();
 
 	void setButtonAction(ButtonObjectAction action);
 
