@@ -35,13 +35,13 @@ public class SpikeQuestScreenManager {
 	public static void popNextScreen(AbstractSpikeQuestScreen aCallingScreen, SpikeQuestGame aGame) {
 		if (aGame.debugMode) {
 			AbstractSpikeQuestScreen debugScreen;
-			SpikeQuestSaveFile.setBooleanValue(PonyvilleOutsideRainbowDashScreen.RAINBOW_RACE_TANK_INTRO_BOOLEAN, true);
+			SpikeQuestSaveFile.setBooleanValue(PonyvilleOutsideRainbowDashScreen.RAINBOW_RACE_TANK_INTRO_BOOLEAN, false);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_NORMAL_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, false);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH, true);
-			debugScreen = new PonyvilleParkScreen(aGame,"","left");
+			debugScreen = new PonyvilleOutsideRainbowDashScreen(aGame,"","left");
 			forwardScreen(debugScreen, aGame);
 			return;
 		}

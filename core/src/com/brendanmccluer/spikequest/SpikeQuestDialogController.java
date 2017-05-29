@@ -184,13 +184,19 @@ public class SpikeQuestDialogController implements Disposable {
 
 			if (drawFirstTextFlag) {
 				firstTextBalloon.drawDialog(batch, anObjectForFirstText);
-				anObjectForFirstText.talk();
+				if(!"...".contains(firstTextBalloon.getDialog()))
+					anObjectForFirstText.talk();
+				else
+					anObjectForFirstText.standStill();
 			} else
 				anObjectForFirstText.standStill();
 
 			if (drawSecondTextFlag) {
 				secondTextBalloon.drawDialog(batch, anObjectForSecondText);
-				anObjectForSecondText.talk();
+				if(!"...".contains(secondTextBalloon.getDialog()))
+					anObjectForSecondText.talk();
+				else
+					anObjectForSecondText.standStill();
 			} else
 				anObjectForSecondText.standStill();
 

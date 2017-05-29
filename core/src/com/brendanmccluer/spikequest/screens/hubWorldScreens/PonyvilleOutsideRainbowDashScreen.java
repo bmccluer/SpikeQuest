@@ -134,7 +134,8 @@ public class PonyvilleOutsideRainbowDashScreen extends AbstractSpikeQuestStandar
             rainbowDashObject.draw(game.batch);
             spikeObject.draw(game.batch);
             tankObject.draw(game.batch);
-            rainbowTankDialogController.drawTheDialogAndAnimateObjects(game.batch, rainbowDashObject, tankObject);
+            if (!rainbowTankDialogController.areTextBalloonsFinished())
+                rainbowTankDialogController.drawTheDialogAndAnimateObjects(game.batch, rainbowDashObject, tankObject);
             if (startFlag && !dialogController.areTextBalloonsFinished())
                 dialogController.drawTheDialogAndAnimateObjects(game.batch, spikeObject, rainbowDashObject);
             game.batch.end();

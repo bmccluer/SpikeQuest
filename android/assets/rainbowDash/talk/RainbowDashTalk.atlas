@@ -1,31 +1,10 @@
 
-RainbowDashStand.png
+RainbowDashTalk.png
 size: 525,1010
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 0001
-  rotate: false
-  xy: 2, 507
-  size: 523, 503
-  orig: 523, 503
-  offset: 0, 0
-  index: -1
-0012
-  rotate: false
-  xy: 2, 507
-  size: 523, 503
-  orig: 523, 503
-  offset: 0, 0
-  index: -1
-0006
-  rotate: false
-  xy: 2, 507
-  size: 523, 503
-  orig: 523, 503
-  offset: 0, 0
-  index: -1
-0010
   rotate: false
   xy: 2, 507
   size: 523, 503
@@ -39,14 +18,7 @@ repeat: none
   orig: 523, 503
   offset: 0, 0
   index: -1
-0011
-  rotate: false
-  xy: 2, 507
-  size: 523, 503
-  orig: 523, 503
-  offset: 0, 0
-  index: -1
-0005
+0012
   rotate: false
   xy: 2, 507
   size: 523, 503
@@ -60,7 +32,7 @@ repeat: none
   orig: 523, 503
   offset: 0, 0
   index: -1
-0007
+0005
   rotate: false
   xy: 2, 507
   size: 523, 503
@@ -74,6 +46,19 @@ repeat: none
   orig: 523, 503
   offset: 0, 0
   index: -1
+
+RainbowDashTalk2.png
+size: 525,1010
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0003
+  rotate: false
+  xy: 2, 507
+  size: 523, 503
+  orig: 523, 503
+  offset: 0, 0
+  index: -1
 0004
   rotate: false
   xy: 2, 2
@@ -82,12 +67,33 @@ repeat: none
   offset: 0, 0
   index: -1
 
-RainbowDashStand2.png
+RainbowDashTalk3.png
 size: 525,505
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-0003
+0006
+  rotate: false
+  xy: 2, 2
+  size: 523, 503
+  orig: 523, 503
+  offset: 0, 0
+  index: -1
+0011
+  rotate: false
+  xy: 2, 2
+  size: 523, 503
+  orig: 523, 503
+  offset: 0, 0
+  index: -1
+0007
+  rotate: false
+  xy: 2, 2
+  size: 523, 503
+  orig: 523, 503
+  offset: 0, 0
+  index: -1
+0010
   rotate: false
   xy: 2, 2
   size: 523, 503

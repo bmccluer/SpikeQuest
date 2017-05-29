@@ -16,7 +16,7 @@ public class TextureAtlasCreator {
 		//TexturePacker.process("C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\object\\rainbowRaceFinishLine", "Ribbon");
 
 
-		TexturePacker.process("C:\\Users\\brend\\Desktop\\Temp\\Rainbow", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\fly", "RainbowDashFly");
+		TexturePacker.process("C:\\Users\\brend\\Desktop\\Temp\\TextureAtlas", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\rainbowDash\\talk", "RainbowDashTalk");
 
 	}
 

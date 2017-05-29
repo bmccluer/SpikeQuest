@@ -65,9 +65,11 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 			}
 			game.batch.end();
 
-			downButton.update(delta,gameCamera);
-			if(downButton.isClicked())
-				return;
+			if(downButton != null) {
+				downButton.update(delta,gameCamera);
+				if(downButton.isClicked())
+					return;
+			}
 			//move spike slighty further left
 			if (!spikeReady && "right".equals(spikePosition)) {
 				spikeObject.moveLeft(spikeObject.SPIKE_STANDARD_SPEED);
@@ -105,7 +107,7 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+		safeDispose(downButton);
 		game.assetManager.disposeAsset(TREE_PATH);
 	}
 

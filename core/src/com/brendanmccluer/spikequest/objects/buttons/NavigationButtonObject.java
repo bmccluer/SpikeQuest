@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.ButtonObjectAction;
 import com.brendanmccluer.spikequest.interfaces.ButtonObjectInterface;
@@ -18,7 +19,7 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
  * Created by brend on 11/20/2016.
  */
 
-public class NavigationButtonObject implements ButtonObjectInterface {
+public class NavigationButtonObject implements ButtonObjectInterface, Disposable {
     protected Texture imageTexture = null;
     protected Sprite buttonSprite = null;
     protected AbstractSpikeQuestScreen screen;
@@ -147,6 +148,12 @@ public class NavigationButtonObject implements ButtonObjectInterface {
 
     @Override
     public void discard() {
+        imageTexture.dispose();
+        font.dispose();
+    }
+
+    @Override
+    public void dispose() {
         imageTexture.dispose();
         font.dispose();
     }

@@ -60,6 +60,10 @@ public class SpikeQuestTextBalloon extends AbstractSpikeQuestObject {
         this.object = object;
 	}
 
+	public String getDialog() {
+		return drawMessage;
+	}
+
 	@Override
 	public boolean isLoaded() {
 		if (!textBoxLoaded && super.isLoaded()) {
