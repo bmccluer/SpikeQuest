@@ -6,7 +6,7 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestStandardScreen;
 
 public class SweetAppleAcresPathScreen extends AbstractSpikeQuestStandardScreen {
 
-	SweetAppleAcresPathScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
+	public SweetAppleAcresPathScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
 		super(game, 1843, 591, 1000, "backdrop/sweetAppleAcresPath.png", aScreenType, aSpikePosition);
 	}
 	
@@ -35,7 +35,7 @@ public class SweetAppleAcresPathScreen extends AbstractSpikeQuestStandardScreen 
 			//determine end of screen
 			if (("left").equals(getEdgeTouched())) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new SugarCubeCornerScreen(game, "normal", "right"), game);
+				SpikeQuestScreenManager.forwardScreen(new OutsideCmcClubhouseScreen(game,null,"right"),game);
 				return;
 			}
 			

@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.brendanmccluer.spikequest.common.objects.TimerObject;
+import com.brendanmccluer.spikequest.interfaces.LoadableObject;
 
-public class SpikeQuestMultipleDialogController {
+public class SpikeQuestMultipleDialogController implements LoadableObject {
 	private final int MARGIN_Y_ABOVE_OBJECT = 25;
 	private TimerObject timer = null;
 	public boolean dialogEnabled = true;
@@ -96,7 +97,7 @@ public class SpikeQuestMultipleDialogController {
         }*/
 	}
 
-	public void discard() {
+	public void dispose() {
 		textBalloon.dispose();
 		if (timer != null)
 			timer.dispose();

@@ -1,18 +1,77 @@
-[AppleBloom0] "Hey Spike, whatcha doing with Tank?"
-[Spike0] "Trying to figure out how to make him fast, he so can race Rainbow Dash. Not alot of luck just yet."
-[Scootaloo0] "Oh yeah! That would be awesome!"
-[SweetieBell0] "But also kind of impossible. I mean, he's not exactly built for speed."
-[Scootaloo2] "Hey! What kind of attitude is that? He hasn't got wings either but he CAN fly."
-[SweetieBell2] "Well, yeah but that's because he's got that spinning fan thing."
-[AppleBloom2] "Maybe Tank just needs an upgrade. What do you think crusaders? Want to try getting our cutie marks in mechanical engineering?"
-[SweetieBell3] "Sure, how hard could it be?"
-[Scootaloo3] "Aww yeah!"
-[Spike2] "You fillies are great!"
-[All] "Cutie Mark Crusaders go!"
-(Screen blacks out and comes back)
-[AppleBloom3] "All finished and trust us, Tank's gonna be real speedy now."
-[Scootaloo4] "We tinkered with the motor a bit, and added a remote so you control him from the ground."
-[SweetieBell4] "It's amazing what you can learn from PonyTube."
-[Scootaloo5] "Yep, and don't worry we worked all the bugs out. I think..."
-[Spike3] "But no cutie marks huh?"
-[AppleBloom4] "No, but that's all right. We're always happy to help out a friend. Good luck out there you two!"
++sounds/cmcYay.mp3,sounds/scootalooHuh.mp3,sounds/spikeYes.mp3,sounds/sweetieBelleHammer.mp3,sounds/appleBloomPowerTools.mp3,sounds/scootalooLike.mp3,sounds/spikeHuh.mp3,sounds/drilling.wav,sounds/hammering.wav;
+@Animate{Spike,move(FLOAT#-400,FLOAT#0,FLOAT#200)}
+@Animate{Tank,move(FLOAT#-400,FLOAT#0,FLOAT#200)}
+@Wait{}
+@NoInput{}
+STOP
+@Talk{AppleBloom,"Hey Spike, whatcha doing with Tank?"}
+STOP
+@Talk{Spike,"Trying to figure out how to make him fast, he so can race Rainbow Dash. Not a lot of luck just yet."}
+STOP
+@Talk{Scootaloo,"Oh yeah! That would be awesome!"}
+STOP
+@Talk{SweetieBelle,"But also kind of impossible. I mean, he's not exactly built for speed."}
+STOP
+@Sound{sounds/scootalooHuh.mp3,1}
+@Talk{Scootaloo,"Hey! What kind of attitude is that? He hasn't got wings either but he CAN fly."}
+STOP
+@Talk{SweetieBelle,"Well, yeah but that's because he's got that spinning fan thing."}
+STOP
+@Talk{AppleBloom,"Maybe Tank just needs an upgrade. What do you think crusaders? Want to try getting our cutie marks in mechanical engineering?"}
+STOP
+@Talk{SweetieBelle,"Sure, how hard could it be?"}
+STOP
+@Talk{Scootaloo,"Aww yeah!"}
+STOP
+@Sound{sounds/spikeYes.mp3,1}
+@Talk{Spike,"You fillies are great!"}
+STOP
+@Sound{sounds/cmcYay.mp3,0.0025}
+@Talk{AppleBloom,"Cutie Mark Crusaders go!"}
+Talk{SweetieBelle,"Cutie Mark Crusaders go!"}
+Talk{Scootaloo,"Cutie Mark Crusaders go!"}
+STOP
+//Wait{0,5} //TODO make wait method
+//NoInput{}
+STOP
+@Screen{fadeToBlack()} //TODO! implement screen methods
+@Wait{0,4}
+@NoInput{}
+STOP
+@Sound{sounds/sweetieBelleHammer.mp3,1}
+@Wait{0,2}
+@NoInput{}
+STOP
+@Sound{sounds/hammering.wav,1}
+@Wait{0,3}
+@NoInput{}
+STOP
+@Sound{sounds/appleBloomPowerTools.mp3,1}
+@Wait{0,5}
+@NoInput{}
+STOP
+@Sound{sounds/scootalooLike.mp3,1}
+@Wait{0,3}
+@NoInput{}
+STOP
+@Sound{sounds/drilling.wav,1}
+@Sound{sounds/spikeHuh.mp3,1}
+@Wait{0,6}
+@NoInput{}
+STOP
+@Screen{fadeFromBlack()}
+@Wait{0,4}
+@NoInput{}
+STOP
+@Talk{AppleBloom,"All finished and trust us, Tank's gonna be real speedy now."}
+STOP
+@Talk{Scootaloo,"We tinkered with the motor a bit, and added a remote so you control him from the ground."}
+STOP
+@Talk{SweetieBelle,"It's amazing what you can learn from PonyTube."}
+STOP
+@Talk{Scootaloo,"Yep, and don't worry we worked all the bugs out. I think..."}
+STOP
+@Talk{Spike,"But no cutie marks huh?"}
+STOP
+@Talk{AppleBloom,"No, but that's all right. We're always happy to help out a friend. Good luck out there you two!"}
+STOP

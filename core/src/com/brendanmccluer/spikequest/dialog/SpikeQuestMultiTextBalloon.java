@@ -184,6 +184,8 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				if (mname.equalsIgnoreCase(methodName)) {
 					try {
 						//convert parameters
+						if(methodParams.length != m.getParameterCount())
+							throw new InvocationTargetException(new Exception("Invalid Paramters to method " + mname));
 						Object[] parameters = new Object[m.getParameterCount()];
 						for (int i = 0; i < parameters.length; i++) {
 							StringTokenizer tokenizer = new StringTokenizer(methodParams[i],"#");

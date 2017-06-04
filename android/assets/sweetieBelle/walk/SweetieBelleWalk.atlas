@@ -1,0 +1,13 @@
+
+SweetieBelleWalk.png
+size: 327,335
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 325, 333
+  orig: 325, 333
+  offset: 0, 0
+  index: -1

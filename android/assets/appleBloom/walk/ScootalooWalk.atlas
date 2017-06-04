@@ -1,0 +1,13 @@
+
+ScootalooWalk.png
+size: 344,326
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+0001
+  rotate: false
+  xy: 2, 2
+  size: 342, 324
+  orig: 342, 324
+  offset: 0, 0
+  index: -1

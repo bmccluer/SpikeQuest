@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
+import com.brendanmccluer.spikequest.interfaces.LoadableObject;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +25,7 @@ import java.util.List;
  *
  *
  */
-public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
+public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, LoadableObject {
 	protected SpikeQuestGame game;
 	protected SpikeQuestCamera gameCamera = null; 
 	protected boolean screenStart = false;
@@ -31,9 +33,12 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 	protected Texture currentBackdropTexture = null;
 	protected String screenType = "";
 	protected SpikeQuestLoadingScreen loadingScreen = null;
+	private List<LoadableObject> loadList = null;
+	private boolean isAssetManagerLoaded, isObjectsLoaded;
 
 	public AbstractSpikeQuestScreen (SpikeQuestGame game) {
 		this.game = game;
+		loadList = new ArrayList<>();
 	}
 
 	/**
@@ -117,11 +122,15 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 		//reset font for new screens
 		game.bitmapFont.dispose(); 
 		game.bitmapFont = new BitmapFont();
-		
 		if (currentBackdropTexture != null) {
 			currentBackdropTexture.dispose();
 			currentBackdropTexture = null;
 		}
+		disposeLoader();
+	}
+
+	protected void disposeLoader() {
+		safeDispose(loadList);
 	}
 	
 	/**
@@ -166,18 +175,27 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen {
 	public String getScreenType () {
 		return screenType;
 	}
-	
-	
-	/*
-	 * I check if objects are loaded and ready to be drawn. An object that has been
-	 * discarded will be ignored
-	 */
-	protected boolean objectsLoaded (AbstractSpikeQuestObject[] spikeQuestObjects) {
+
+	protected void addToLoader(LoadableObject... objects) {
+		for(LoadableObject object : objects)
+			loadList.add(object);
+	}
+
+	public boolean isLoaded() {
+		if(!isAssetManagerLoaded)
+			isAssetManagerLoaded = game.assetManager.loadAssets();
+		if(!isObjectsLoaded)
+			isObjectsLoaded = loadObjects();
+		return isAssetManagerLoaded && isObjectsLoaded;
+	}
+
+	private boolean loadObjects() {
 		boolean allLoaded = true;
-		for (int i=0;i<spikeQuestObjects.length;i++) {
-			if (spikeQuestObjects[i] != null && !spikeQuestObjects[i].isLoaded()) {
+		for (LoadableObject object : loadList) {
+			if(object == null)
+				System.out.println("Warning. Object in loadList is null");
+			else if(!object.isLoaded())
 				allLoaded = false;
-			}
 		}
 		return allLoaded;
 	}

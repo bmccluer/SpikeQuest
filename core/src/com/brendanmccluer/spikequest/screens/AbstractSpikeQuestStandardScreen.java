@@ -53,6 +53,7 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 		bitFont = new BitmapFont();
 		gemFont = new BitmapFont();
 		spikeObject = new SpikeObject();
+		addToLoader(spikeObject);
 		gameCamera = new SpikeQuestCamera(cameraSize, backdropWidth, backdropHeight);
 		controller = new SpikeQuestController();
         totalGems = Integer.toString(SpikeQuestSaveFile.getGems());
@@ -83,8 +84,9 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	
 	/**
 	 * I load the assets
-	 * 
+	 * Deprecated: Use isLoaded instead
 	 */
+	@Deprecated
 	protected boolean loadAssets() {
 		boolean loaded = game.assetManager.loadAssets() && spikeObject.isLoaded();
 		return loaded;
@@ -183,7 +185,6 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	 */
 	@Override
 	public void dispose() {
-		
 		game.assetManager.disposeAsset(BACKDROP_PATH);
 		game.assetManager.disposeAsset(GEM_PATH);
 		game.assetManager.disposeAsset(BIT_PATH);
@@ -196,10 +197,9 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 		
 		gemFont = null;
 		bitFont = null;
-		
-		spikeObject.dispose();
-		spikeObject = null;
+
 		gameCamera.discard();
 		gameCamera = null;
+		disposeLoader();
 	}
 }

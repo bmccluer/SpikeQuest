@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.SpikeQuestAssetManager;
+import com.brendanmccluer.spikequest.interfaces.LoadableObject;
 
 /**
  * All objects using game extend this class.
@@ -13,7 +14,7 @@ import com.brendanmccluer.spikequest.SpikeQuestAssetManager;
  * @author Brendan
  *
  */
-public abstract class AbstractSpikeQuestObject implements Disposable {
+public abstract class AbstractSpikeQuestObject implements Disposable, LoadableObject {
 	private SpikeQuestAssetManager objectManager = null;
 	protected boolean objectLoaded = false;
 	
