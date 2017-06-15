@@ -19,6 +19,7 @@ public class SpikeQuestGame extends Game{
 	public final String SAVE_FILE_NAME = "SaveFile1";
     public Stack<SpikeQuestScreen> screenStack;
 	public static boolean debugMode = false;
+	public static SpikeQuestGame instance = null;
 	
 	public void create () {
 		SpikeQuestScreen mainMenuScreen = new MainMenuScreen(this);
@@ -29,6 +30,7 @@ public class SpikeQuestGame extends Game{
 
         mainMenuScreen.initialize();
 		this.setScreen(mainMenuScreen);
+		instance = this;
 	}
 	
 	//required for initial render

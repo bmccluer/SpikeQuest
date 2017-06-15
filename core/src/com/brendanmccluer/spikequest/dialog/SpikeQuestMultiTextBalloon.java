@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
-import com.brendanmccluer.spikequest.objects.StandardObject;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -43,8 +44,9 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	private Scanner scanner = null;
 	private String textFilePath;
     //used by Dialog Controller
-	protected boolean waitForAnimation, noInput = false;
+	protected boolean waitForAnimation, noInput;
 	protected SpikeQuestTextObject[] textObjects;
+	protected TimerObject timer = null;
 
 	/**
 	 * Create new text balloon with no sound effects
@@ -136,6 +138,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 				dialogTimer = 0;
 				dialog = "";
 				noInput = false;
+
                 try {
                     if(!readAndExecute())
                         isFinished = true;
@@ -174,18 +177,16 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 		}
 	}
 
-	private void invokeMethod(StandardObject object, String methodName, String[] methodParams) {
+	private void invokeMethod(Object object, String methodName, String[] methodParams) {
+		boolean methodFound = false;
+		Object t = object;
+		Method[] allMethods = object.getClass().getMethods();
 		try {
-			Object t = object;
-
-			Method[] allMethods = object.getClass().getMethods();
 			for (Method m : allMethods) {
 				String mname = m.getName();
-				if (mname.equalsIgnoreCase(methodName)) {
+				if (mname.equalsIgnoreCase(methodName) && m.getParameterCount() == methodParams.length) {
 					try {
-						//convert parameters
-						if(methodParams.length != m.getParameterCount())
-							throw new InvocationTargetException(new Exception("Invalid Paramters to method " + mname));
+						methodFound = true;
 						Object[] parameters = new Object[m.getParameterCount()];
 						for (int i = 0; i < parameters.length; i++) {
 							StringTokenizer tokenizer = new StringTokenizer(methodParams[i],"#");
@@ -204,9 +205,11 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 					break;
 				}
 			}
-
 		} catch (Exception x) {
 			x.printStackTrace();
+		}
+		if(!methodFound) {
+			System.err.println(String.format("Method '%s' with %s parameters not found for %s", methodName, methodParams.length, object.getClass().toString()));
 		}
 	}
 
@@ -352,6 +355,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
             playSound(soundName, soundVolume);
         }
         //Syntax methodObjectName,methodName(arguments...)
+		//Use "Screen" in methodObjectName to perform game screen operations
         else if("Animate".equalsIgnoreCase(commandName)) {
             String[] commandArgsPlusMethod = commandBody.split("\\(");
             if(commandArgsPlusMethod.length != 2) {
@@ -364,7 +368,12 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
             String methodObjectName = commandArgs[0];
             String methodName = commandArgs[1];
             String[] methodParams = commandArgsPlusMethod[1].replace(")","").split(",");
-            invokeMethod(getTextObject(methodObjectName).object, methodName, methodParams);
+			if(methodParams.length == 1 && methodParams[0].isEmpty())
+				methodParams = new String[0]; //pass empty string array for null parameters
+			if("Screen".equalsIgnoreCase(methodObjectName))
+				invokeMethod(SpikeQuestGame.instance.getScreen(), methodName, methodParams);
+			else
+				invokeMethod(getTextObject(methodObjectName).object, methodName, methodParams);
         }
         else if("Talk".equalsIgnoreCase(commandName)) {
             String[] commandArgs = commandBody.split(",\"");
@@ -379,8 +388,26 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
             currentTextObject.index++;
             dialog = text.substring(0,text.length()-1);
         }
-        else if("Wait".equalsIgnoreCase(commandName))
-            waitForAnimation = true;
+        else if("Wait".equalsIgnoreCase(commandName)) {
+			if(commandBody == null || commandBody.isEmpty())
+				waitForAnimation = true;
+			else {
+				String[] commandArgs = commandBody.split(",");
+				if(commandArgs.length != 2) {
+					throwUsageError(commandName, 2);
+					return;
+				}
+				try {
+					int waitMinutes = Integer.parseInt(commandArgs[0]);
+					int waitSeconds = Integer.parseInt(commandArgs[1]);
+					timer = new TimerObject(waitMinutes, waitSeconds);
+					timer.startTimer();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
         else if("NoInput".equalsIgnoreCase(commandName))
 			noInput = true;
 		else

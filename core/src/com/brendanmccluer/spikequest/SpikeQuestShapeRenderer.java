@@ -1,6 +1,8 @@
 package com.brendanmccluer.spikequest;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
@@ -26,6 +28,18 @@ public class SpikeQuestShapeRenderer implements Disposable {
             shapeRenderer.box(rectangle.x, rectangle.y, 0, rectangle.width, rectangle.height, 0);
             shapeRenderer.end();
         }
+    }
+
+    public void drawTransparentRectangle(Rectangle rectangle, SpikeQuestCamera camera, float alpha) {
+        Gdx.gl.glEnable(GL30.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setProjectionMatrix(camera.getProjectionMatrix());
+        shapeRenderer.setColor(new Color(0, 0, 0, alpha));
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.box(rectangle.x, rectangle.y, 0, rectangle.width, rectangle.height, 0);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL30.GL_BLEND);
     }
 
     public void dispose() {

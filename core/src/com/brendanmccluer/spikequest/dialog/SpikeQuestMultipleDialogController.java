@@ -13,18 +13,15 @@ public class SpikeQuestMultipleDialogController implements LoadableObject {
 	private SpikeQuestMultiTextBalloon textBalloon;
 	private boolean waiting, started = false;
 
-
-	/**
-	 * I control text balloons passed
-	 * @param textObjects
-     */
 	public SpikeQuestMultipleDialogController(String fileName, SpikeQuestTextObject... textObjects) {
 		textBalloon = new SpikeQuestMultiTextBalloon(fileName, textObjects);
 	}
 
 	/**
 	 * I set if the dialog is controlled by a timer as opposed to the Space bar
+	 * @deprecated set time in text file
 	 */
+	@Deprecated
 	public void useTimer() {
 		timer = new TimerObject();
 		timer.startTimer(0, 3);
@@ -57,6 +54,9 @@ public class SpikeQuestMultipleDialogController implements LoadableObject {
 		for (SpikeQuestTextObject textObject : textBalloon.textObjects) {
 			textObject.object.update(delta);
 			if (textBalloon.waitForAnimation && textObject.object.isAnimating()) {
+				waiting = true;
+			}
+			else if (textBalloon.timer != null && !textBalloon.timer.isTimerFinished()) {
 				waiting = true;
 			}
 			else {

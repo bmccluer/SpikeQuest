@@ -26,15 +26,13 @@ STOP
 @Sound{sounds/spikeYes.mp3,1}
 @Talk{Spike,"You fillies are great!"}
 STOP
-@Sound{sounds/cmcYay.mp3,0.0025}
-@Talk{AppleBloom,"Cutie Mark Crusaders go!"}
+@Sound{sounds/cmcYay.mp3,0.10}
+Talk{AppleBloom,"Cutie Mark Crusaders go!"}
 Talk{SweetieBelle,"Cutie Mark Crusaders go!"}
 Talk{Scootaloo,"Cutie Mark Crusaders go!"}
+@NoInput{}
 STOP
-//Wait{0,5} //TODO make wait method
-//NoInput{}
-STOP
-@Screen{fadeToBlack()} //TODO! implement screen methods
+@Animate{Screen,fade()}
 @Wait{0,4}
 @NoInput{}
 STOP
@@ -47,20 +45,20 @@ STOP
 @NoInput{}
 STOP
 @Sound{sounds/appleBloomPowerTools.mp3,1}
-@Wait{0,5}
+@Wait{0,3}
 @NoInput{}
 STOP
 @Sound{sounds/scootalooLike.mp3,1}
 @Wait{0,3}
 @NoInput{}
 STOP
-@Sound{sounds/drilling.wav,1}
+@Sound{sounds/drilling.wav,0.35}
 @Sound{sounds/spikeHuh.mp3,1}
-@Wait{0,6}
+@Wait{0,3}
 @NoInput{}
 STOP
-@Screen{fadeFromBlack()}
-@Wait{0,4}
+@Animate{Screen,fade()}
+@Wait{0,3}
 @NoInput{}
 STOP
 @Talk{AppleBloom,"All finished and trust us, Tank's gonna be real speedy now."}

@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Disposable;
+import com.brendanmccluer.spikequest.SpikeQuestFadingEffect;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.LoadableObject;
 import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
-import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 
@@ -33,8 +33,11 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 	protected Texture currentBackdropTexture = null;
 	protected String screenType = "";
 	protected SpikeQuestLoadingScreen loadingScreen = null;
+	protected SpikeQuestFadingEffect fadingEffect = null;
+
 	private List<LoadableObject> loadList = null;
 	private boolean isAssetManagerLoaded, isObjectsLoaded;
+
 
 	public AbstractSpikeQuestScreen (SpikeQuestGame game) {
 		this.game = game;
@@ -96,7 +99,33 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 	public void refresh() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
-	
+
+	public void fade() {
+		fade(100);
+	}
+
+	public void fade(int fadingLevels) {
+		if(fadingEffect == null) {
+			fadingEffect = new SpikeQuestFadingEffect(gameCamera);
+		}
+		fadingEffect.setFade(fadingLevels);
+	}
+
+	/**
+	 * Call batch.begin before this
+	 * @param delta
+     */
+	public void drawEffects(float delta) {
+		boolean isDrawing = game.batch.isDrawing();
+		if(!isDrawing)
+			game.batch.begin();
+		if(fadingEffect != null) {
+			fadingEffect.draw(game.batch);
+		}
+		if(!isDrawing)
+			game.batch.end();
+	}
+
 	@Override
 	public void resize (int width, int height) {
 	}
@@ -126,6 +155,7 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 			currentBackdropTexture.dispose();
 			currentBackdropTexture = null;
 		}
+		safeDispose(fadingEffect);
 		disposeLoader();
 	}
 

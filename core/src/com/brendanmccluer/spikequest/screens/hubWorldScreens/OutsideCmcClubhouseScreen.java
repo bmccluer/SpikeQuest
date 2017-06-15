@@ -57,9 +57,9 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 			if (!screenStart) {
 				startScreen(false);
 				screenStart = true;
-				sweetieBelle.spawn(gameCamera.getCameraPositionX() - 300, 0);
-				applebloom.spawn(gameCamera.getCameraPositionX() - 400, 0);
-				scootaloo.spawn(gameCamera.getCameraPositionX() - 500, 0);
+				scootaloo.spawn(gameCamera.getCameraPositionX() - 400, 0);
+				sweetieBelle.spawn(gameCamera.getCameraPositionX() - 250, 0);
+				applebloom.spawn(gameCamera.getCameraPositionX() - 100, 0);
 				spikeObject.spawn(gameCamera.getCameraWidth() + 150, 0);
 				tank.spawn(spikeObject.getCenterX() + 100, 100);
 				tank.setSize(0.25f);
@@ -71,7 +71,7 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 			gameCamera.attachToBatch(game.batch);
 			game.batch.begin();
 			drawBackdrop();
-			drawBitsAndGems();
+			//drawBitsAndGems();
 			sweetieBelle.draw(game.batch);
 			scootaloo.draw(game.batch);
 			applebloom.draw(game.batch);
@@ -79,6 +79,7 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 			spikeObject.draw(game.batch);
 			game.batch.draw(treeTexture,0,0);
 			dialogController.drawText(game.batch);
+			drawEffects(delta);
 			game.batch.end();
 			/*//determine end of screen
 			if (("left").equals(getEdgeTouched())) {

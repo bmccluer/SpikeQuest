@@ -13,7 +13,13 @@ public class TimerObject  {
 	private int seconds = 0;
 	private TimerEventListener listener = new TimerEventListener();
 	private Timer timer = new Timer(1000, listener);
-	
+
+	public TimerObject() {}
+
+	public TimerObject(int minutes, int seconds) {
+		this.seconds = seconds;
+		this.minutes = minutes;
+	}
 	/**
 	 * I start the timer
 	 */
@@ -22,6 +28,11 @@ public class TimerObject  {
 		this.seconds = seconds;
 
 		timer.start();
+	}
+
+	public void startTimer() {
+		if(seconds > 0 || minutes > 0)
+			timer.start();
 	}
 	
 	public void stopTimer () {
