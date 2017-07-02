@@ -101,14 +101,14 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 	}
 
 	public void fade() {
-		fade(100);
+		fade(5);
 	}
 
-	public void fade(int fadingLevels) {
+	public void fade(int seconds) {
 		if(fadingEffect == null) {
 			fadingEffect = new SpikeQuestFadingEffect(gameCamera);
 		}
-		fadingEffect.setFade(fadingLevels);
+		fadingEffect.setFade(seconds);
 	}
 
 	/**
@@ -183,8 +183,13 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 	protected void safeDispose(List<? extends Disposable> disposableObjects) {
 		if (disposableObjects != null)
 			for (Disposable disposableObject : disposableObjects)
-				disposableObject.dispose();
+				safeDispose(disposableObject);
 		disposableObjects.clear();
+	}
+
+	protected void safeDispose(Disposable... disposables) {
+		for(Disposable disposableObject : disposables)
+			safeDispose(disposableObject);
 	}
 	
 	/**

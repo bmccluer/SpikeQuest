@@ -23,7 +23,7 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 	public OutsideCmcClubhouseScreen(SpikeQuestGame game, String aScreenType, String aSpikePosition) {
 		super(game, 1280, 720, 1200, "backdrop/outsideCmcClubhouse.png", aScreenType, aSpikePosition);
 		if((aScreenType == null || aScreenType.isEmpty()) && !SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE))
-			aScreenType = "cmcTankIntro";
+			screenType = "cmcTankIntro";
 		treeTexture = new Texture("backdrop/outsideCmcClubhouseTree.png");
 	}
 
@@ -64,6 +64,13 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 				tank.spawn(spikeObject.getCenterX() + 100, 100);
 				tank.setSize(0.25f);
 				tank.setWeight(0);
+				tank.controlsDisabled = true;
+			}
+			if(dialogController.areTextBalloonsFinished()) {
+				SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE, true);
+				dispose();
+				SpikeQuestScreenManager.forwardScreen(new OutsideCmcClubhouseScreen(game, "normal", "right"), game);
+				return;
 			}
 			tank.hover(100, 150, 25 * delta);
 			dialogController.updateTextAndObjects(delta);
@@ -81,17 +88,6 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 			dialogController.drawText(game.batch);
 			drawEffects(delta);
 			game.batch.end();
-			/*//determine end of screen
-			if (("left").equals(getEdgeTouched())) {
-				dispose();
-				SpikeQuestScreenManager.forwardScreen(this, new SugarCubeCornerScreen(game, "normal", "right"), game);
-				return;
-			}
-			if (("right").equals(getEdgeTouched())) {
-				dispose();
-				SpikeQuestScreenManager.forwardScreen(new PonyvilleParkScreen(game,"normal","center"),game);
-				return;
-			}*/
 		}
 	}
 
@@ -116,15 +112,15 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 			controlSpike();
 
 			//determine end of screen
-			if (("left").equals(getEdgeTouched())) {
+			/*if (("left").equals(getEdgeTouched())) {
 				dispose();
 				SpikeQuestScreenManager.forwardScreen(this, new SugarCubeCornerScreen(game, "normal", "right"), game);
 				return;
-			}
+			}*/
 			//determine end of screen
 			if (("right").equals(getEdgeTouched())) {
 				dispose();
-				SpikeQuestScreenManager.forwardScreen(new PonyvilleParkScreen(game,"normal","center"),game);
+				SpikeQuestScreenManager.forwardScreen(new SweetAppleAcresPathScreen(game,"normal","left"),game);
 				return;
 			}
 		}
@@ -133,6 +129,5 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 	@Override
 	public void dispose() {
 		super.dispose();
-		safeDispose(treeTexture);
 	}
 }

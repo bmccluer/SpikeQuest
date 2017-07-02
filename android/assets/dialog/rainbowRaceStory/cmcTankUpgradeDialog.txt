@@ -32,7 +32,7 @@ Talk{SweetieBelle,"Cutie Mark Crusaders go!"}
 Talk{Scootaloo,"Cutie Mark Crusaders go!"}
 @NoInput{}
 STOP
-@Animate{Screen,fade()}
+@Animate{Screen,fade(INT#3)}
 @Wait{0,4}
 @NoInput{}
 STOP
@@ -57,7 +57,7 @@ STOP
 @Wait{0,3}
 @NoInput{}
 STOP
-@Animate{Screen,fade()}
+@Animate{Screen,fade(INT#3)}
 @Wait{0,3}
 @NoInput{}
 STOP

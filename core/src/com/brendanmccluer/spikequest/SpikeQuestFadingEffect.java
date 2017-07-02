@@ -11,7 +11,9 @@ import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 
 public class SpikeQuestFadingEffect implements Disposable {
     private float fadingAlpha = 0;
-    private float fadeIncrement = 0;
+    private int fadingDirection = 1;
+    private long msToFade = 1;
+    private long startTime = 0;
     private SpikeQuestShapeRenderer shapeRenderer = null;
     private boolean startFading = false;
     public SpikeQuestCamera camera = null;
@@ -23,13 +25,15 @@ public class SpikeQuestFadingEffect implements Disposable {
 
     /**
      * Will fade to black. If already faded, will undo fade. The more levels passed, the longer it takes to fade
-     * @param fadeLevels
+     * @param seconds
      */
-    public void setFade(int fadeLevels) {
-        int fadeDirection = 1;
+    public void setFade(int seconds) {
+        msToFade = seconds * 1000;
+        startTime = System.currentTimeMillis();
         if(fadingAlpha >= 1)
-            fadeDirection = -1;
-        fadeIncrement = ((float)1/fadeLevels) * fadeDirection;
+            fadingDirection = -1;
+        else
+            fadingDirection = 1;
         startFading = true;
     }
 
@@ -44,17 +48,25 @@ public class SpikeQuestFadingEffect implements Disposable {
     }
 
     private void updateFading() {
-        fadingAlpha += fadeIncrement;
-        if(fadingAlpha >= 1) {
-            fadingAlpha = 1;
+        long currentTime = System.currentTimeMillis();
+        float time = (float)(currentTime - startTime);
+        float fadeRatio = ((time)/msToFade);
+        System.out.println(fadeRatio);
+        //return if time is up
+        if(fadeRatio >= 1) {
+            if(fadingDirection == 1)
+                fadingAlpha = 1;
+            else
+                fadingAlpha = 0;
             startFading = false;
             return;
         }
-        else if(fadingAlpha <= 0) {
-            fadingAlpha = 0;
-            startFading = false;
+        //set fading alpha for reverse fading
+        if(fadingDirection == -1) {
+            fadingAlpha = 1 - fadeRatio;
             return;
         }
+        fadingAlpha = fadeRatio;
     }
 
     private SpikeQuestShapeRenderer getShapeRenderer() {

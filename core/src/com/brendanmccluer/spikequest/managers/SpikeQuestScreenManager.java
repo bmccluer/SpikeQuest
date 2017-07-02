@@ -41,9 +41,11 @@ public class SpikeQuestScreenManager {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_NORMAL_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
-			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, false);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH, true);
-			debugScreen = new OutsideCmcClubhouseScreen(aGame,"cmcTankIntro","right");
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE, false);
+			debugScreen = new SweetAppleAcresPathScreen(aGame,"normal","right");
 			forwardScreen(debugScreen, aGame);
 			return;
 		}
@@ -76,7 +78,6 @@ public class SpikeQuestScreenManager {
 			
 		aCallingScreen = null;
 	}
-	
 
 	private static void handleMainMenuScreen(MainMenuScreen aMainMenuScreen, SpikeQuestGame aGame) {
 		
