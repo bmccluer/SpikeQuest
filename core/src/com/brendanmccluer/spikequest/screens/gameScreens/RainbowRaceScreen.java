@@ -30,6 +30,7 @@ import com.brendanmccluer.spikequest.objects.ponies.RainbowDashObject;
 import com.brendanmccluer.spikequest.objects.rainbowRaceObjects.StormCloudObject;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
+import com.brendanmccluer.spikequest.screens.MainMenuScreenOld;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 import com.brendanmccluer.spikequest.tiles.SpikeQuestTiles;
@@ -42,6 +43,7 @@ import java.util.Random;
  * Created by brend on 6/25/2016.
  */
 public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
+    public static final String SCREEN_TYPE_FIRST_TIME_PLAY = "firstTimePlay";
     private static final int RENDER_LAYER = 0;
     private static final int COLLISION_LAYER = 1;
     private static final int RING_LAYER = 2;
@@ -105,7 +107,7 @@ public class RainbowRaceScreen extends AbstractSpikeQuestScreen {
     }
 
     @Override
-    public void initialize() {
+    public void show() {
         if (tiledMapList == null) {
             startNewGame();
         }

@@ -33,7 +33,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		spikeObject = new SpikeObject();
 		pinkieObject = new PinkieObject();
 		wagonObject = new WagonObject();

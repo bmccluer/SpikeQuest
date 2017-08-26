@@ -20,7 +20,7 @@ public class RainbowRaceInstructionsScreen extends AbstractSpikeQuestScreen {
     }
 
     @Override
-    public void initialize() {
+    public void show() {
         gameCamera = new SpikeQuestCamera(1920, 1080, 5000); //screen properties
         //move the camera slightly to center the picture
         game.assetManager.setAsset(BACKDROP_TEXTURE_PATH, "Texture");
@@ -47,7 +47,7 @@ public class RainbowRaceInstructionsScreen extends AbstractSpikeQuestScreen {
                 dispose();
 
                 //if Game has not been set as next,
-                if (game.screenStack.isEmpty() || !(game.screenStack.peek() instanceof ShyAndSeekScreen))
+                if (game.screenStack.isEmpty() || !(game.screenStack.peek() instanceof RainbowRaceScreen))
                     game.screenStack.push(new RainbowRaceScreen(game));
 
                 SpikeQuestScreenManager.popNextScreen(game);

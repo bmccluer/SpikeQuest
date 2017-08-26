@@ -25,8 +25,8 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
 		paraspriteCageTexture = new Texture("object/ParaspriteCage.png"); //TODO; USE ANIMATED OBJECT
 		//load required assets for intro
 		if (("intro").equalsIgnoreCase(screenType)) {

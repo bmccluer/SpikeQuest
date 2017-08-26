@@ -22,11 +22,6 @@ public class ShyAndSeekOutroScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
-	}
-
-	@Override
 	public void render(float delta) {
 		refresh();
 		useLoadingScreen(delta);

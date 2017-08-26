@@ -1,10 +1,11 @@
 package com.brendanmccluer.spikequest.managers;
 
+import com.badlogic.gdx.Screen;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
-import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
+import com.brendanmccluer.spikequest.screens.MainMenuScreenOld;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.CliffBottomScreen;
 import com.brendanmccluer.spikequest.screens.gameIntroScreens.IntroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
@@ -12,11 +13,8 @@ import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekOutroScreen;
 import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
-import com.brendanmccluer.spikequest.screens.hubWorldScreens.OutsideCmcClubhouseScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleOutsideRainbowDashScreen;
-import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleParkScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScreen;
-import com.brendanmccluer.spikequest.screens.hubWorldScreens.SweetAppleAcresPathScreen;
 
 /**
  * I determine which screens to set
@@ -45,15 +43,15 @@ public class SpikeQuestScreenManager {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE, false);
-			debugScreen = new SweetAppleAcresPathScreen(aGame,"normal","right");
+			debugScreen = new PonyvilleOutsideRainbowDashScreen(aGame,PonyvilleOutsideRainbowDashScreen.SCREEN_TYPE_RACE_INTRO,"left");
 			forwardScreen(debugScreen, aGame);
 			return;
 		}
 
         //TODO; CREATE SOME SORT OF SAVE FILE CALCULATOR
-		//MainMenuScreen is calling
-		if (aCallingScreen instanceof MainMenuScreen) 
-			handleMainMenuScreen((MainMenuScreen) aCallingScreen, aGame);
+		//MainMenuScreenOld is calling
+		if (aCallingScreen instanceof MainMenuScreenOld)
+			handleMainMenuScreen((MainMenuScreenOld) aCallingScreen, aGame);
 		
 		//CliffBottom calling
 		else if (aCallingScreen instanceof CliffBottomScreen) {
@@ -79,7 +77,7 @@ public class SpikeQuestScreenManager {
 		aCallingScreen = null;
 	}
 
-	private static void handleMainMenuScreen(MainMenuScreen aMainMenuScreen, SpikeQuestGame aGame) {
+	private static void handleMainMenuScreen(MainMenuScreenOld aMainMenuScreen, SpikeQuestGame aGame) {
 		
 		//continue game
 		if (aMainMenuScreen.continueButtonPressed) { 
@@ -163,14 +161,10 @@ public class SpikeQuestScreenManager {
      * @deprecated
 	 */
 	public static void forwardScreen (AbstractSpikeQuestScreen aCallingScreen, AbstractSpikeQuestScreen aScreenToForward,  SpikeQuestGame aGame) {
-
-        aScreenToForward.initialize();
 		aGame.setScreen(aScreenToForward);
-	
 	}
 
 	public static void forwardScreen (AbstractSpikeQuestScreen aScreen, SpikeQuestGame aGame) {
-		aScreen.initialize();
 		aGame.setScreen(aScreen);
 	}
 
@@ -180,9 +174,8 @@ public class SpikeQuestScreenManager {
      */
 	public static void popNextScreen(SpikeQuestGame aGame) {
         if (!aGame.screenStack.isEmpty()) {
-            SpikeQuestScreen nextScreen = aGame.screenStack.pop();
+            Screen nextScreen = aGame.screenStack.pop();
             try {
-                nextScreen.initialize();
                 aGame.setScreen(nextScreen);
             }
             catch (Exception e) {
@@ -193,7 +186,6 @@ public class SpikeQuestScreenManager {
         }
         //Go back to Main Menu if no screens left or error
 		MainMenuScreen mainMenuScreen = new MainMenuScreen(aGame);
-		mainMenuScreen.initialize();
         aGame.setScreen(mainMenuScreen);
     }
 	

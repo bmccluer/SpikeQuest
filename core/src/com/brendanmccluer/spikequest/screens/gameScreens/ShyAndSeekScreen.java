@@ -73,7 +73,7 @@ public class ShyAndSeekScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		animalTimer = new TimerObject();
 		availableAnimals = new ArrayList<>();
 		availableCovers = new ArrayList<>();

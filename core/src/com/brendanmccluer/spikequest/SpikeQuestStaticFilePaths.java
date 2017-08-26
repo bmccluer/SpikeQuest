@@ -35,4 +35,6 @@ public final class SpikeQuestStaticFilePaths {
 	public static final String SPIKE_ALARM_SOUND_PATH = "sounds/SpikeAlarm.wav";
 	
 	public static final String GREEN_BACKDROP_PATH = "backdrop/greenBackdrop.png";
+	public static final String PARTICLE_FX_DIRECTORY = "particlesFx";
+	public static final String PARTICLE_FX_SMOKE = PARTICLE_FX_DIRECTORY + "/TrailOfSmoke.pfx";
 }

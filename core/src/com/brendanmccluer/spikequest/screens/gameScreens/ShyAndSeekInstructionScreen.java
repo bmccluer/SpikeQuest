@@ -16,7 +16,7 @@ public class ShyAndSeekInstructionScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		gameCamera = new SpikeQuestCamera(1675, 1564, 931); //screen properties
 		//move the camera slightly to center the picture
 		game.assetManager.setAsset(BACKDROP_TEXTURE_PATH, "Texture");

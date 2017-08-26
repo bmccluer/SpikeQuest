@@ -18,7 +18,7 @@ public class SpikeQuestLoadingScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		spikeObject = new SpikeObject();
 		font = new BitmapFont();
 		timer = new TimerObject();

@@ -52,7 +52,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
         scoreFont = new BitmapFont();
         bitsFont = new BitmapFont();
         gemsFont = new BitmapFont();

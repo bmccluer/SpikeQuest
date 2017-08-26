@@ -26,7 +26,7 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
     }
 
     @Override
-    public void initialize() {
+    public void show() {
         spikeQuestCamera = new SpikeQuestCamera(CAMERA_SIZE, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_WIDTH);;
         twilightObject = new TwilightObject();
         spikeObject = new SpikeObject();

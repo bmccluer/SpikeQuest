@@ -30,7 +30,7 @@ public class GameSelectScreen extends AbstractSpikeQuestScreen {
     }
 
     @Override
-    public void initialize() {
+    public void show() {
         int rows = 5;
         int columns = 5;
         imageButtonList = new ArrayList<ImageButtonObject>();

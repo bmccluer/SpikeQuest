@@ -21,8 +21,8 @@ public class FluttershyBackOfCottageScreen extends AbstractSpikeQuestStandardScr
 	}
 
     @Override
-    public void initialize() {
-        super.initialize();
+    public void show() {
+        super.show();
 		if (SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE) && !SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE)) {
 			setScreenType("tankIntro");
 			fluttershyObject = new FluttershyObject();

@@ -13,8 +13,8 @@ public class PonyvilleStatueScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
 		pinkieObject = new PinkieObject();
 	}
 

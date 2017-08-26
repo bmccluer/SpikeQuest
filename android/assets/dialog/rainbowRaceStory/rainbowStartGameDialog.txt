@@ -1,0 +1,22 @@
+@Animate{RainbowDash,standStill()}
+@NoInput{}
+@Wait{}
+STOP
+@Animate{Tank,move(INT#700,INT#0,INT#200)}
+@NoInput{}
+@Wait{}
+STOP
+@Talk{RainbowDash,"Hey Tank, you look happier. Must have gone well huh?"}
+STOP
+@Animate{Spike,move(INT#200,INT#0,INT#200)}
+@NoInput{}
+@Wait{}
+STOP
+@Talk{Spike,"You bet, and now he's totally ready to race!"}
+STOP
+@Talk{RainbowDash,"What really?"}
+STOP
+@Talk{Spike,"Yep, and this time he's got a need for speed. You'd better prepare yourself Rainbow Dash!"}
+STOP
+@Talk{RainbowDash,"Aww yeah, it is on!"}
+STOP

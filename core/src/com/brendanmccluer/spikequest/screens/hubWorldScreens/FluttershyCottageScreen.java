@@ -13,8 +13,8 @@ public class FluttershyCottageScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
         fluttershyObject = new FluttershyObject();
 	}
 

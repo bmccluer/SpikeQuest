@@ -1,7 +1,9 @@
 package com.brendanmccluer.spikequest.screens.gameIntroScreens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
@@ -15,17 +17,21 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 	private float cliffPosition = 500;
 	private SpikeQuestSoundEffect screamSoundEffect = null;
 	private SpikeQuestSoundEffect crashSoundEffect = null;
+	private ParticleEffect dustParticles = new ParticleEffect();
 	
 	public CliffScreen(SpikeQuestGame game) {
 		super(game);
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH, "Texture");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound");
 		gameCamera = new SpikeQuestCamera(1200, 1452, 817);
+		dustParticles.load(Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_SMOKE), Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_DIRECTORY));
+		dustParticles.scaleEffect(200);
+		dustParticles.start();
 	}
 
 	@Override
@@ -41,19 +47,18 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 				aWagonObject.spawn(-200, cliffPosition);
 				aWagonObject.resize(0.5f);
 				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CLIFF_SCREEN_BACKDROP_PATH, "Texture");
-				
 				screamSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound"), 100);
 				crashSoundEffect = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound"), 100);
-				
 				screenStart = true;
 			}
 			else {
-				
+				dustParticles.setPosition(aWagonObject.getCenterX(), aWagonObject.getCenterY());
 				if (aWagonObject.getCurrentPositionX() < gameCamera.getCameraWidth()-300) {
 					aWagonObject.moveRight(10);
 				}
 				else {
 					//fall!
+					dustParticles.allowCompletion();
 					aWagonObject.setGroundPosition(-200);
 					aWagonObject.rotate(-2);
 					screamSoundEffect.playSound(false);
@@ -70,6 +75,7 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 				
 				game.batch.begin();
 				game.batch.draw(currentBackdropTexture, 0, 0);
+				dustParticles.draw(game.batch, delta);
 				aWagonObject.draw(game.batch);
 				game.batch.end();
 				

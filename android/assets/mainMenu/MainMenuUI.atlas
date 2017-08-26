@@ -1,0 +1,82 @@
+
+MainMenuUI.png
+size: 1922,1441
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Background
+  rotate: false
+  xy: 2, 361
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+ContinueDown
+  rotate: false
+  xy: 2, 271
+  size: 386, 88
+  orig: 386, 88
+  offset: 0, 0
+  index: -1
+ContinueUp
+  rotate: false
+  xy: 778, 271
+  size: 385, 88
+  orig: 385, 88
+  offset: 0, 0
+  index: -1
+GameSelectDown
+  rotate: false
+  xy: 2, 181
+  size: 386, 88
+  orig: 386, 88
+  offset: 0, 0
+  index: -1
+GameSelectUp
+  rotate: false
+  xy: 390, 271
+  size: 386, 88
+  orig: 386, 88
+  offset: 0, 0
+  index: -1
+NewGameDown
+  rotate: false
+  xy: 2, 91
+  size: 386, 88
+  orig: 386, 88
+  offset: 0, 0
+  index: -1
+NewGameUp
+  rotate: false
+  xy: 390, 181
+  size: 386, 88
+  orig: 386, 88
+  offset: 0, 0
+  index: -1
+OptionsDown
+  rotate: false
+  xy: 2, 2
+  size: 379, 87
+  orig: 379, 87
+  offset: 0, 0
+  index: -1
+OptionsUp
+  rotate: false
+  xy: 390, 92
+  size: 379, 87
+  orig: 379, 87
+  offset: 0, 0
+  index: -1
+
+MainMenuUI2.png
+size: 985,1134
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Scroll
+  rotate: false
+  xy: 2, 2
+  size: 983, 1132
+  orig: 983, 1132
+  offset: 0, 0
+  index: -1

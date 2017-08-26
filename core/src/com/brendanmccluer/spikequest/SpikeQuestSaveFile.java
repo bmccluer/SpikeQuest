@@ -2,6 +2,9 @@ package com.brendanmccluer.spikequest;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.brendanmccluer.spikequest.screens.gameScreens.BalloonGameIntroScreen;
+import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
+import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScreen;
 
 /**
  * I access save file information stored on GDX preferences
@@ -20,6 +23,8 @@ public final class SpikeQuestSaveFile {
 	public final static String FLUTTERSHY_TANK_INTRO_COMPLETE = "fluttershyTankIntroComplete";
 	public final static String CMC_TANK_INTRO_COMPLETE = "cmcTankIntroComplete";
 	public final static String ACCESS_SWEET_APPLE_ACRES_PATH = "accessSweetAppleAcresPath";
+	public final static String RAINBOW_RACE_COMPLETE = "rainbowRaceComplete";
+	public final static String DEBUG_SCREEN = "debugScreen";
 	private static Preferences gdxPreferenceFile = null;
 	
 	/**
@@ -41,6 +46,24 @@ public final class SpikeQuestSaveFile {
 		
 		gdxPreferenceFile.putInteger(INTEGER_BITS_KEY_NAME, 0);
 		gdxPreferenceFile.putInteger(INTEGER_GEMS_KEY_NAME, 0);
+	}
+
+	public static void addContinueScreens (SpikeQuestGame game) {
+		//done talking to Fluttershy about Tank but not CMCs
+		if (!getBooleanValue(CMC_TANK_INTRO_COMPLETE) && getBooleanValue(FLUTTERSHY_TANK_INTRO_COMPLETE))
+			game.screenStack.push(new FluttershyBackOfCottageScreen(game, "normal", "left"));
+			//done with Fluttershy Game for first time
+		else if (getBooleanValue(IS_BALLOON_GAME_COMPLETE_KEY) && getBooleanValue(IS_SHY_AND_SEEK_COMPLETE_KEY)
+				&& !getBooleanValue(RAINBOW_RACE_INTRO_COMPLETE))
+			game.screenStack.push(new FluttershyBackOfCottageScreen(game, "normal", "left"));
+			//Not done with Balloon game for first time
+		else if (!getBooleanValue(IS_BALLOON_GAME_COMPLETE_KEY)) {
+			game.screenStack.push(new SugarCubeCornerScreen(game, "intro", "right"));
+			game.screenStack.push(new BalloonGameIntroScreen(game));
+		}
+		else {
+			game.screenStack.push(new SugarCubeCornerScreen(game, "normal", "left"));
+		}
 	}
 	
 	/**
@@ -94,7 +117,7 @@ public final class SpikeQuestSaveFile {
 	 * I return a boolean value from the save file. Use the list of static fields
 	 * in this class.
 	 * 
-	 * @param gameName
+	 * @param
 	 * @return
 	 */
 	public static boolean getBooleanValue(String booleanName) {
@@ -107,6 +130,15 @@ public final class SpikeQuestSaveFile {
 		
 		gdxPreferenceFile.putBoolean(booleanName, aBoolean);
 		gdxPreferenceFile.flush();
+	}
+
+	public static void setStringValue(String name, String value) {
+		gdxPreferenceFile.putString(name, value);
+		gdxPreferenceFile.flush();
+	}
+
+	public static String getStringValue(String name) {
+		return gdxPreferenceFile.getString(name);
 	}
 
 }

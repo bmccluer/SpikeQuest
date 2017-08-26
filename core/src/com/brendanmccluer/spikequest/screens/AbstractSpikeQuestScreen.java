@@ -2,6 +2,7 @@ package com.brendanmccluer.spikequest.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,7 +11,6 @@ import com.brendanmccluer.spikequest.SpikeQuestFadingEffect;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.interfaces.LoadableObject;
-import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestMusic;
 
@@ -25,7 +25,7 @@ import java.util.List;
  *
  *
  */
-public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, LoadableObject {
+public abstract class AbstractSpikeQuestScreen implements Screen, LoadableObject {
 	protected SpikeQuestGame game;
 	protected SpikeQuestCamera gameCamera = null; 
 	protected boolean screenStart = false;
@@ -61,7 +61,7 @@ public abstract class AbstractSpikeQuestScreen implements SpikeQuestScreen, Load
 	private void renderLoadingScreen(float delta) {
 		if (loadingScreen == null) {
 			loadingScreen = new SpikeQuestLoadingScreen(game);
-			loadingScreen.initialize();
+			loadingScreen.show();
 		}
 
 		loadingScreen.render(delta);

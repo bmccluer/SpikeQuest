@@ -39,7 +39,7 @@ public class PonyvilleStartScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
         aSpikeObject = new SpikeObject();
         aSpikeController = new SpikeQuestController();
         aDerpyObject = new DerpyObject();

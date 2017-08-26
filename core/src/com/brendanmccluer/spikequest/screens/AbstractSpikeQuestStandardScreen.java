@@ -49,7 +49,7 @@ public abstract class AbstractSpikeQuestStandardScreen extends AbstractSpikeQues
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		bitFont = new BitmapFont();
 		gemFont = new BitmapFont();
 		spikeObject = new SpikeObject();

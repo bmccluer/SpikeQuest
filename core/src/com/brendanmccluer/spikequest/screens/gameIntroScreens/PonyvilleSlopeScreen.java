@@ -46,7 +46,7 @@ public class PonyvilleSlopeScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
         aPinkieObject = new PinkieObject();
         aWagonObject = new WagonObject();
         aRarityObject = new RarityObject();

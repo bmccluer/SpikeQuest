@@ -1,9 +1,9 @@
 package com.brendanmccluer.spikequest;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Game;
-import com.brendanmccluer.spikequest.interfaces.SpikeQuestScreen;
 import com.brendanmccluer.spikequest.screens.MainMenuScreen;
 
 import java.util.Stack;
@@ -17,19 +17,17 @@ public class SpikeQuestGame extends Game{
 	public final int GAME_SCREEN_WIDTH = 1920;
 	public final int GAME_SCREEN_HEIGHT = 1820;
 	public final String SAVE_FILE_NAME = "SaveFile1";
-    public Stack<SpikeQuestScreen> screenStack;
-	public static boolean debugMode = false;
+    public Stack<Screen> screenStack;
+	public static boolean debugMode = true;
 	public static SpikeQuestGame instance = null;
 	
 	public void create () {
-		SpikeQuestScreen mainMenuScreen = new MainMenuScreen(this);
 		assetManager = new SpikeQuestAssetManager();
 		batch = new SpriteBatch(); 
 		bitmapFont = new BitmapFont();
         screenStack = new Stack<>();
-
-        mainMenuScreen.initialize();
-		this.setScreen(mainMenuScreen);
+		SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+		this.setScreen(new MainMenuScreen(this));
 		instance = this;
 	}
 	

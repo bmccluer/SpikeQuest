@@ -20,8 +20,8 @@ public class ShyAndSeekIntroScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
 		aFluttershyObject = new FluttershyObject();
 		aFluttershyTextBalloon = new SpikeQuestTextBalloon("dialog/fluttershyGameDialog.txt");
 		aSpikeTextBalloon = new SpikeQuestTextBalloon("dialog/fluttershyGameDialog.txt");

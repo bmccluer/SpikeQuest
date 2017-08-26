@@ -68,7 +68,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	}
 
 	@Override
-	public void initialize() {
+	public void show() {
 		aSpikeObject = new SpikeObject();
 		aPinkieObject = new PinkieObject();
 		aBalloonObjectList = new ArrayList<>();

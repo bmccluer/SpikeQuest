@@ -25,8 +25,8 @@ public class PonyvilleParkScreen extends AbstractSpikeQuestStandardScreen {
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
 		game.assetManager.setAsset(TREE_PATH, "Texture");
 		if(SpikeQuestSaveFile.getBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH)) {
 			downButton = new NavigationButtonObject(Direction.DOWN, this, "Sweet Apple Acres");

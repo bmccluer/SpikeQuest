@@ -1,0 +1,24 @@
+{
+  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+    "continue": {
+      "down": "ContinueDown",
+      "up": "ContinueUp"
+    },
+    "newGame": {
+      "down": "NewGameDown",
+      "up": "NewGameUp"
+    },
+    "gameSelect": {
+      "down": "GameSelectDown",
+      "up": "GameSelectUp"
+    },
+    "options": {
+      "down": "OptionsDown",
+      "up": "OptionsUp"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Image": {
+    "Background": { "drawable": "Background"},
+    "Scroll": { "drawable": "Scroll"}
+  }
+}

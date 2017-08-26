@@ -28,8 +28,8 @@ public class OutsideCmcClubhouseScreen extends AbstractSpikeQuestStandardScreen 
 	}
 
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void show() {
+		super.show();
 		if("cmcTankIntro".equals(screenType)) {
 			sweetieBelle = new SweetieBelleObject();
 			scootaloo = new ScootalooObject();
