@@ -18,7 +18,7 @@ public class SpikeQuestGame extends Game{
 	public final int GAME_SCREEN_HEIGHT = 1820;
 	public final String SAVE_FILE_NAME = "SaveFile1";
     public Stack<Screen> screenStack;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	public static SpikeQuestGame instance = null;
 	
 	public void create () {

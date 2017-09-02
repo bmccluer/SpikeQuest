@@ -1,10 +1,15 @@
 package com.brendanmccluer.spikequest.objects;
 
 import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 
 public class BalloonObject extends AbstractSpikeQuestSpriteObject {
@@ -16,6 +21,7 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 	private static final float BALLOON_GROUND_OFFSET = 15f;
 	private static final float HIT_SPEED = 35;
 	private int timerMax = 600;
+	private int balloonIndex = 0;
 	
 	private static float size = 0.33f;
 	private Random randomGenerator = new Random();
@@ -28,6 +34,7 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 	
 	private float groundBeforeAdjustment = 0;
 	private float spawnPositionY = 0;
+	private ParticleEffect balloonParticles = null;
 	
 	private int balloonTimer = timerMax;
 	
@@ -38,7 +45,17 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 		setWeight(1);
 		currentSize = size;
 	}
-	
+
+	@Override
+	public boolean isLoaded() {
+		boolean loaded = super.isLoaded();
+		if(loaded && balloonParticles == null) {
+			balloonParticles = new ParticleEffect();
+			balloonParticles.load(Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_FIREWORK), Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_DIRECTORY));
+		}
+		return loaded;
+	}
+
 	/**
 	 * I spawn a random balloon
 	 * @param xPos
@@ -75,7 +92,29 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 		isPopped = true;
 		isSpawned = false;
 		isJumping = false;
-		
+		float r, g, b;
+
+		if(!isRegularBalloon && playSound) {
+			if(balloonIndex == 3) {
+				r = 0;
+				g = 255.0f;
+				b = 222.0f;
+			}
+			else if(balloonIndex == 4) {
+				r = 255.0f;
+				g = 140.0f;
+				b = 188.0f;
+			}
+			else {
+				r = 255.0f;
+				g = 255.0f;
+				b = 112.0f;
+			}
+			balloonParticles.getEmitters().first().getTint().setColors(new float[] {r/255, g/255, b/255});
+			balloonParticles.start();
+			balloonParticles.setPosition(getCenterX(), getCenterY());
+		}
+
 		//in case gravity was not reset
 		resetGravity();
 		
@@ -126,7 +165,7 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 	 */
 	@Override
 	public void draw (SpriteBatch batch) {
-		
+		balloonParticles.draw(batch, Gdx.graphics.getDeltaTime());
 		if (currentPositionY <= ground)
 			balloonTimer--;
 		
@@ -272,20 +311,20 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 	private TextureAtlas getRandomTexture () {
 		//75% chance of getting discord balloon 
 		int balloonType = randomGenerator.nextInt(4);
-		int index = 0;
+		balloonIndex = 0;
 		
 		//random regular balloon (range is 0-2)
 		if (balloonType == 0) {
-			index = randomGenerator.nextInt(3);
+			balloonIndex = randomGenerator.nextInt(3);
 			isRegularBalloon = true;
 		}
 		else {
 			//random discord balloon (max-min+1) + min. (range 3-5)
-			index = randomGenerator.nextInt(3) + 3;
+			balloonIndex = randomGenerator.nextInt(3) + 3;
 			isRegularBalloon = false;
 		}
 		
-		return (TextureAtlas) getAsset(filePaths[index], "TextureAtlas");
+		return (TextureAtlas) getAsset(filePaths[balloonIndex], "TextureAtlas");
 	}
 
 	@Override

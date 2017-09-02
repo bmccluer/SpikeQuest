@@ -15,6 +15,7 @@ import com.brendanmccluer.spikequest.screens.gameScreens.ShyAndSeekScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.FluttershyBackOfCottageScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.PonyvilleOutsideRainbowDashScreen;
 import com.brendanmccluer.spikequest.screens.hubWorldScreens.SugarCubeCornerScreen;
+import com.brendanmccluer.spikequest.screens.hubWorldScreens.SweetAppleAcresPathScreen;
 
 /**
  * I determine which screens to set
@@ -40,10 +41,10 @@ public class SpikeQuestScreenManager {
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_BALLOON_GAME_NORMAL_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.IS_SHY_AND_SEEK_COMPLETE_KEY, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.FLUTTERSHY_TANK_INTRO_COMPLETE, true);
-			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE, true);
+			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.RAINBOW_RACE_INTRO_COMPLETE, false);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.ACCESS_SWEET_APPLE_ACRES_PATH, true);
 			SpikeQuestSaveFile.setBooleanValue(SpikeQuestSaveFile.CMC_TANK_INTRO_COMPLETE, false);
-			debugScreen = new PonyvilleOutsideRainbowDashScreen(aGame,PonyvilleOutsideRainbowDashScreen.SCREEN_TYPE_RACE_INTRO,"left");
+			debugScreen = new SweetAppleAcresPathScreen(aGame, null, "right");
 			forwardScreen(debugScreen, aGame);
 			return;
 		}

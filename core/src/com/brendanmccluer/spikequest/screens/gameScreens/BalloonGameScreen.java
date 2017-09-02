@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.brendanmccluer.spikequest.SpikeQuestController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
@@ -372,7 +374,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 	private void controlBalloon(BalloonObject aBalloonObject) {
 		
 		if (aBalloonObject.isPopped()) {
-			
+
 			//bad balloon popped on its own
 			if (aBalloonObject.isBadPop()) {
 				spikeAlarm.playSound(true);

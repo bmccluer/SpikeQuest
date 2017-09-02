@@ -37,4 +37,5 @@ public final class SpikeQuestStaticFilePaths {
 	public static final String GREEN_BACKDROP_PATH = "backdrop/greenBackdrop.png";
 	public static final String PARTICLE_FX_DIRECTORY = "particlesFx";
 	public static final String PARTICLE_FX_SMOKE = PARTICLE_FX_DIRECTORY + "/TrailOfSmoke.pfx";
+	public static final String PARTICLE_FX_FIREWORK = PARTICLE_FX_DIRECTORY + "/Firework.pfx";
 }

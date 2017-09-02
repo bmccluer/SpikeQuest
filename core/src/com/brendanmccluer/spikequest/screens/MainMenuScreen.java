@@ -150,8 +150,8 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		btnContinue.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				SpikeQuestSaveFile.addContinueScreens(game);
-				SpikeQuestScreenManager.popNextScreen(game);
+				//SpikeQuestSaveFile.addContinueScreens(game);
+				SpikeQuestScreenManager.popNextScreen(MainMenuScreen.this, game);
 			}
 		});
 		btnGameSelect.addListener(new ChangeListener() {
@@ -212,10 +212,12 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 		table.row().padLeft(50);
         table.add(textField);
 		TextButton screenButton = new TextButton("GO", skinUi);
+		TextButton closeButton = new TextButton("Close", skinUi);
 
         screenButton.setWidth(25);
         table.add(screenButton);
         table.row();
+		table.add(closeButton).padTop(50);
         //Label errorLabel = new Label("", skinUi);
 		screenButton.addListener(new ChangeListener() {
             @Override
@@ -232,7 +234,12 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
                 }
             }
         });
-        //table.add(errorLabel);
+        closeButton.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				rebuildStage();
+			}
+		});
         return table;
 	}
 

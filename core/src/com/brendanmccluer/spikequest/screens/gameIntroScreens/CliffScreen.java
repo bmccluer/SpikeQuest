@@ -17,8 +17,8 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 	private float cliffPosition = 500;
 	private SpikeQuestSoundEffect screamSoundEffect = null;
 	private SpikeQuestSoundEffect crashSoundEffect = null;
-	private ParticleEffect dustParticles = new ParticleEffect();
-	
+	private ParticleEffect dustParticles = null;
+
 	public CliffScreen(SpikeQuestGame game) {
 		super(game);
 	}
@@ -29,6 +29,7 @@ public class CliffScreen extends AbstractSpikeQuestScreen {
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SCREAM_SOUND_PATH, "Sound");
 		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CRASH_SOUND_PATH, "Sound");
 		gameCamera = new SpikeQuestCamera(1200, 1452, 817);
+		dustParticles = new ParticleEffect();
 		dustParticles.load(Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_SMOKE), Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_DIRECTORY));
 		dustParticles.scaleEffect(200);
 		dustParticles.start();
