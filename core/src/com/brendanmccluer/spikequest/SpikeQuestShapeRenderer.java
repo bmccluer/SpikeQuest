@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
@@ -40,6 +41,16 @@ public class SpikeQuestShapeRenderer implements Disposable {
         shapeRenderer.box(rectangle.x, rectangle.y, 0, rectangle.width, rectangle.height, 0);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL30.GL_BLEND);
+    }
+
+    public void drawPolygon(Polygon polygon, SpikeQuestCamera camera) {
+        if (polygon != null && camera != null) {
+            shapeRenderer.setProjectionMatrix(camera.getProjectionMatrix());
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.polygon(polygon.getTransformedVertices());
+            shapeRenderer.end();
+        }
     }
 
     public void dispose() {

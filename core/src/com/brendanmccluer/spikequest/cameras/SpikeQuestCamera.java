@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 
 public class SpikeQuestCamera  {
-	private OrthographicCamera camera = null;
+	public OrthographicCamera camera = null;
 	private float cameraSize = 30; //default
 	private int worldWidth = 0;
 	private int worldHeight = 0;

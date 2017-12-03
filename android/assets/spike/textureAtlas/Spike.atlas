@@ -1,0 +1,111 @@
+
+Spike.png
+size: 1590,927
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 1
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 3
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 4
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 7
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 2
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 9
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 8
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 5
+spike_stand
+  rotate: false
+  xy: 680, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 6
+spike_stand
+  rotate: false
+  xy: 984, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 10
+spike_stand
+  rotate: false
+  xy: 1288, 449
+  size: 302, 478
+  orig: 302, 478
+  offset: 0, 0
+  index: 11
+spike_walk
+  rotate: false
+  xy: 2, 464
+  size: 337, 463
+  orig: 337, 463
+  offset: 0, 0
+  index: 2
+spike_walk
+  rotate: false
+  xy: 2, 2
+  size: 337, 460
+  orig: 337, 460
+  offset: 0, 0
+  index: 1
+spike_walk
+  rotate: false
+  xy: 341, 469
+  size: 337, 458
+  orig: 337, 458
+  offset: 0, 0
+  index: 4
+spike_walk
+  rotate: false
+  xy: 341, 13
+  size: 337, 454
+  orig: 337, 454
+  offset: 0, 0
+  index: 3

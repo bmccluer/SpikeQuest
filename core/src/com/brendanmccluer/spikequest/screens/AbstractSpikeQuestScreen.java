@@ -219,7 +219,7 @@ public abstract class AbstractSpikeQuestScreen implements Screen, LoadableObject
 	public boolean isLoaded() {
 		if(!isAssetManagerLoaded)
 			isAssetManagerLoaded = game.assetManager.loadAssets();
-		if(!isObjectsLoaded)
+		else if(!isObjectsLoaded)
 			isObjectsLoaded = loadObjects();
 		return isAssetManagerLoaded && isObjectsLoaded;
 	}

@@ -5,7 +5,7 @@ import com.brendanmccluer.spikequest.objects.StandardObject;
 public class SweetieBelleObject extends StandardObject {
 	private static final String[] filePaths = {"sweetieBelle/stand/SweetieBelleStand.atlas", "sweetieBelle/walk/SweetieBelleWalk.atlas", "sweetieBelle/talk/SweetieBelleTalk.atlas"};
 	private static final String[] fileTypes = {"TextureAtlas", "TextureAtlas", "TextureAtlas"};
-	private static final int[] maxFrames = {1,1,1};
+	private static final int[] maxFrames = {12,1,12};
 	private static final float STARTING_SIZE = 0.5f;
 	//private static final int[] soundLengths = {10};
 	//private static final String[] soundPaths = {"twilight/talk/TwilightSpike.wav"};

@@ -1,5 +1,6 @@
 package com.brendanmccluer.spikequest.tiles;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Sort;
+import com.brendanmccluer.spikequest.SpikeQuestShapeRenderer;
+import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestSpriteObject;
 
 import java.lang.annotation.Target;
@@ -63,6 +66,16 @@ public class SpikeQuestTiles {
             }
         }
         return null;
+    }
+
+    public static void drawPolygons(TiledMap aMap, int anObjectLayer, SpikeQuestCamera gameCamera) {
+        SpikeQuestShapeRenderer renderer = new SpikeQuestShapeRenderer();
+        MapLayer objectLayer =  aMap.getLayers().get(anObjectLayer);
+        MapObjects objects = objectLayer.getObjects();
+        for (PolygonMapObject polygonMapObject : objects.getByType(PolygonMapObject.class)) {
+            Polygon polygon = polygonMapObject.getPolygon();
+            renderer.drawPolygon(polygon, gameCamera);
+        }
     }
 
     /**
