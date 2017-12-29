@@ -2,24 +2,30 @@ package com.brendanmccluer.spikequest.applejackgame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Intersector.*;
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.brendanmccluer.spikequest.SpikeQuestBox2D;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestShapeRenderer;
 import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
@@ -34,12 +40,11 @@ import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
 import com.brendanmccluer.spikequest.tiles.SpikeQuestTiles;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
-
-import sun.security.provider.ConfigFile;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -57,21 +62,30 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
     private static final int BAKE_DROP_OBJECT_LAYER = 3;
     private static final int APPLE_CART_DROP_OBJECT_LAYER = 4;
     private static final int SLOP_DROP_OBJECT_LAYER = 5;
-    private Stage stage;
+    private static final float PPM_WIDTH = 100;
+    private static final float PPM_HEIGHT = 100;
+    private static final float VIEWPORT_METERS_WIDTH = Gdx.graphics.getWidth()/ PPM_WIDTH;
+    private static final float VIEWPORT_METERS_HEIGHT = Gdx.graphics.getHeight() / PPM_HEIGHT;
+    private static final int NUM_BUCKETS = 3;
+
+    private Stage stage; //stage in pixels
     private ApplejackGamePlayer player;
     private BigMacObject bigMac;
     private static final float BIG_MAC_SPEED = 100;
-    private static final float PLAYER_SPEED = 300;
+    private static final float PLAYER_SPEED = 5;
     private static final float PLAYER_RUN_SPEED = 600;
-    private AppleBucketObject bucket;
     private Group treeDropSpotObjectGroup;
-    private Group treeObjectGroup;
     private TiledMap tileMap;
     private TiledMapRenderer tiledMapRenderer;
     private List<Rectangle> collisionRects;
+    private List<Actor> appleBucketObjectList;
+    private List<Actor> appleTreeObjectList;
    // private int[] renderLayers = { RENDER_LAYER }; //layers that are rendered in the tile map
     private Action buckTreeAction;
     private Action dropHitDetectionAction;
+
+    private World b2world;
+    private Box2DDebugRenderer b2debugRenderer;
 
     //target objects
     private AppleBucketObject bigMacTargetedBucket;
@@ -83,13 +97,20 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
     @Override
     public void render(float delta) {
-        //don't exceed 1 for change in time
-        delta = Math.min(delta, 1);
+        //don't exceed 0.25 for change in time
+        delta = Math.min(delta, 0.25f);
         refresh();
         super.useLoadingScreen(delta);
         if(!isLoaded())
             return;
         if(!screenStart) {
+            buildStage();
+            //null the lists. We don't need them anymore
+            convertSizeToMeters(bigMac, player);
+            convertSizeToMeters(appleTreeObjectList);
+            convertSizeToMeters(appleBucketObjectList);
+            resetObjectsPos();
+            buildBox2DWorld();
             screenStart = true;
         }
         updateController(delta);
@@ -103,51 +124,62 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
             actor.setZIndex(zIndex++);
         }
         stage.act(delta);
-        gameCamera.attachToBatch(game.batch);
-        gameCamera.attachToTileMapRenderer(tiledMapRenderer);
+        game.batch.setProjectionMatrix(stage.getCamera().projection);
         game.batch.begin();
-        drawBackdrop();
         //tiledMapRenderer.render();
+        game.batch.draw(currentBackdropTexture, -VIEWPORT_METERS_WIDTH/2, -VIEWPORT_METERS_HEIGHT/2, VIEWPORT_METERS_WIDTH, VIEWPORT_METERS_HEIGHT);
         game.batch.end();
         stage.draw();
 
-        stage.setDebugAll(SpikeQuestGame.debugMode);
         if(SpikeQuestGame.debugMode) {
-            SpikeQuestShapeRenderer renderer = new SpikeQuestShapeRenderer();
-            renderer.drawRectangle(player.getBounds(), gameCamera);
-            SpikeQuestTiles.drawPolygons(tileMap, COLLISION_LAYER, gameCamera);
+            gameCamera.attachToBatch(game.batch);
+            //SpikeQuestShapeRenderer renderer = new SpikeQuestShapeRenderer();
+            //renderer.drawRectangle(player.getBounds(), stage.getCamera());
+            //SpikeQuestTiles.drawPolygons(tileMap, COLLISION_LAYER, gameCamera);
         }
+        if(b2debugRenderer != null && b2world != null) {
+            b2debugRenderer.render(b2world, stage.getCamera().combined);
+        }
+        b2world.step(delta, 8, 3);
     }
 
     private void updateController(float delta) {
         boolean moving = false;
-        player.velocity.setZero();
+        player.body.setLinearVelocity(Vector2.Zero);
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if((player.getY() + player.getBounds().getHeight()) < gameCamera.getCameraHeight())
-                player.velocity.y = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ? PLAYER_RUN_SPEED : PLAYER_SPEED;
+            if((player.getY() + player.getWorldHeight()) < VIEWPORT_METERS_HEIGHT) {
+                player.body.setLinearVelocity(player.body.getLinearVelocity().x, PLAYER_SPEED);
+            }
+            //player.velocity.y = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ? PLAYER_RUN_SPEED : PLAYER_SPEED;
             player.setCurrentAnimation(player.animWalk);
+            moving = true;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             if(player.getY() > 0)
-                player.velocity.y = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ? -PLAYER_RUN_SPEED : -PLAYER_SPEED;
+                player.body.setLinearVelocity(player.body.getLinearVelocity().x, -PLAYER_SPEED);
             player.setCurrentAnimation(player.animWalk);
+            moving = true;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if(player.getX() > 0)
-                player.velocity.x = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ? -PLAYER_RUN_SPEED : -PLAYER_SPEED;
+                player.body.setLinearVelocity(-PLAYER_SPEED, player.body.getLinearVelocity().y);
             player.setCurrentAnimation(player.animWalk);
             player.setFlip(true, false);
+            moving = true;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            if(player.getX() + player.getBounds().getWidth() < gameCamera.getCameraWidth())
-                player.velocity.x = Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ? PLAYER_RUN_SPEED : PLAYER_SPEED;
+        else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if(player.getX() + player.getWorldWidth() < VIEWPORT_METERS_WIDTH)
+                player.body.setLinearVelocity(PLAYER_SPEED, player.body.getLinearVelocity().y);
             player.setCurrentAnimation(player.animWalk);
             player.setFlip(false, false);
+            moving = true;
         }
-        if(player.velocity.isZero())
+        if(!moving) {
             player.setCurrentAnimation(player.animStand);
-        if(input.justTouched()) {
-            bucket.setPosition(gameCamera.getMousePositionX() - bucket.getWidth()/2, gameCamera.getMousePositionY() - bucket.getHeight()/2);
+        }
+
+        /*if(input.justTouched()) {
+            bucket.setPosition(gameCamera.getMousePositionX() / PPM_WIDTH - bucket.getWorldWidth()/2, gameCamera.getMousePositionY() / PPM_HEIGHT - bucket.getWorldHeight()/2);
             for(Actor dropSpotObject : treeDropSpotObjectGroup.getChildren()) {
                 ((TreeDropSpotObject)dropSpotObject).removeActor();
             }
@@ -157,12 +189,12 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
                 Gdx.app.debug(TAG, "Tree Drop Spot hit by bucket");
                 dropSpotObject.heldActor = bucket;
             }
-        }
+        }*/
         //debug controls
         if(SpikeQuestGame.debugMode) {
-            if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            /*if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 bucket.emptyBucket();
-            }
+            }*/
         }
     }
 
@@ -203,20 +235,44 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
     @Override
     public void resize(int width, int height) {
+        Gdx.app.debug(TAG, "Resizing Game");
+    }
 
+    public void initialize() {
+        Gdx.app.debug(TAG, "Initializing Game");
+        gameCamera = new SpikeQuestCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        currentBackdropTexture = new Texture(Gdx.files.internal("Backdrop/ApplejackGameBackground.png"));
+        stage = new Stage();
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        tileMap = mapLoader.load("tileMaps/AppleJackGame.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+        bigMac = new BigMacObject();
+        player = new ApplejackGamePlayer(SpikeQuestStaticFilePaths.SPIKE_MAIN_TEXTURE_ATLAS, "spike");
+        super.addToLoader(bigMac, player);
+        appleTreeObjectList = new ArrayList<Actor>();
+        for(int i=0; i < SpikeQuestTiles.getTileMapObjectCount(tileMap, TREE_DROP_OBJECT_LAYER); i++) {
+            AppleTreeObject appleTreeObject = new AppleTreeObject();
+            appleTreeObjectList.add(appleTreeObject);
+            super.addToLoader(appleTreeObject);
+        }
+        appleBucketObjectList = new ArrayList<Actor>();
+        for(int i=0; i < NUM_BUCKETS; i++) {
+            AppleBucketObject bucketObject = new AppleBucketObject();
+            appleBucketObjectList.add(bucketObject);
+            super.addToLoader(bucketObject);
+        }
     }
 
     @Override
     public void show() {
-        gameCamera = new SpikeQuestCamera(1920, 1920, 1080);
-        currentBackdropTexture = new Texture(Gdx.files.internal("Backdrop/ApplejackGameBackground.png"));
-        buildStage();
+        initialize();
         buildActions();
-        super.addToLoader(player);
-        input.setInputProcessor(stage);
+        if(SpikeQuestGame.debugMode)
+            b2debugRenderer = new Box2DDebugRenderer();
     }
 
     private void buildActions() {
+        Gdx.app.debug(TAG, "Building actions");
         buckTreeAction = new Action() {
             @Override
             public boolean act(float delta) {
@@ -229,44 +285,115 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
 
     private void buildStage() {
-        Viewport viewport = new StretchViewport(gameCamera.getCameraWidth(), gameCamera.getCameraHeight());
-        viewport.setCamera(gameCamera.camera);
-        stage = new Stage(viewport);
-        TmxMapLoader mapLoader = new TmxMapLoader();
-        treeDropSpotObjectGroup = new Group();
-        treeObjectGroup = new Group();
-        tileMap = mapLoader.load("tileMaps/AppleJackGame.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tileMap);
-        bigMac = new BigMacObject();
-        bucket = new AppleBucketObject();
-        player = new ApplejackGamePlayer(SpikeQuestStaticFilePaths.SPIKE_MAIN_TEXTURE_ATLAS, "spike");
-        player.maxVelocity = PLAYER_RUN_SPEED;
-        player.setScale(0.17f);
-        bigMac.setPosition(gameCamera.getCameraWidth() - 100, gameCamera.getCameraPositionY());
+        Gdx.app.debug(TAG, "Building Stage");
+        stage.clear();
+        //IMPORTANT: STAGE IS SET IN TERMS OF METERS, NOT PIXELS!
+        OrthographicCamera stageCamera = new OrthographicCamera(VIEWPORT_METERS_WIDTH, VIEWPORT_METERS_HEIGHT);
+        stageCamera.position.set(stageCamera.viewportWidth/2f, stageCamera.viewportHeight/2f, 0);
+        stage.setViewport(new StretchViewport(VIEWPORT_METERS_WIDTH, VIEWPORT_METERS_HEIGHT, stageCamera));
+        bigMac.setScale(0.15f);
+        player.setScale(0.25f);
         stage.addActor(bigMac);
-        stage.addActor(bucket);
         stage.addActor(player);
-
+        Iterator<Actor> treeIterator = appleTreeObjectList.iterator();
+        treeDropSpotObjectGroup = new Group();
+        //treeObjectGroup = new Group();
         for(Rectangle rect : SpikeQuestTiles.getTileMapRectangles(tileMap, TREE_DROP_OBJECT_LAYER)){
+            //rectangles are in pixels. Must convert to meters
+            rect.set(rect.getX() / PPM_WIDTH, rect.getY() / PPM_HEIGHT, rect.getWidth() / PPM_WIDTH, rect.getHeight() / PPM_HEIGHT);
             TreeDropSpotObject object = new TreeDropSpotObject();
+            AppleTreeObject appleTreeObject = (AppleTreeObject) treeIterator.next();
             object.setPosition(rect.getX(), rect.getY());
             object.setSize(rect.getWidth(), rect.getHeight());
             treeDropSpotObjectGroup.addActor(object);
-            //create tree object for every dropSpotObject and add to stage
-            AppleTreeObject tree = new AppleTreeObject();
-            tree.setPosition(object.getX() + 20, object.getY());
-            treeObjectGroup.addActor(tree);
-            stage.addActor(tree);
-            super.addToLoader(tree);
-            //set reference to tree in drop spot
-            object.treeObject = tree;
+            object.treeObject = appleTreeObject;
+            object.treeObject.setPosition(object.getX() + 0.5f, object.getY());
+            object.treeObject.setScale(0.30f);
+            stage.addActor(appleTreeObject);
+            //treeObjectGroup.addActor(appleTreeObject);
         }
+        for(Actor actor : appleBucketObjectList) {
+            //bucketObjectGroup.addActor(actor);
+            stage.addActor(actor);
+        }
+        //stage.addActor(bucketObjectGroup);
         stage.addActor(treeDropSpotObjectGroup);
-        super.addToLoader(bigMac, bucket);
+        //stage.addActor(treeObjectGroup);
+        input.setInputProcessor(stage);
+        //stage.setDebugAll(SpikeQuestGame.debugMode);
+    }
+
+    private void resetObjectsPos () {
+        int posX = 3;
+        for(Actor actor : appleBucketObjectList) {
+            actor.setPosition(posX++, 2);
+            actor.setScale(0.25f);
+        }
+        bigMac.setPosition(VIEWPORT_METERS_WIDTH - bigMac.getWorldWidth(), appleTreeObjectList.get(0).getY());
+    }
+
+    private void convertSizeToMeters(Actor... actors) {
+        for (Actor actor : actors) {
+            actor.setSize(actor.getWidth() / PPM_WIDTH, actor.getHeight() / PPM_HEIGHT);
+        }
+    }
+
+    private void convertSizeToMeters(List<Actor> actors) {
+        for (Actor actor : actors) {
+            actor.setSize(actor.getWidth() / PPM_WIDTH, actor.getHeight() / PPM_HEIGHT);
+        }
+    }
+
+    private void buildBox2DWorld() {
+        Gdx.app.debug(TAG, "Building Box2D");
+        if(b2world != null)
+            b2world.dispose();
+        //create world with no gravity
+        b2world = new World(new Vector2(0, 0), true);
+
+        Gdx.app.debug(TAG, "Creating Box2D for Player");
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(player.getX(), player.getY());
+        bodyDef.fixedRotation = true;
+        player.body = b2world.createBody(bodyDef);
+        FixtureDef fixtureDef = new FixtureDef();
+        PolygonShape playerShape = SpikeQuestBox2D.buildRectangleShape(player.getWorldWidth(), player.getWorldHeight());
+        fixtureDef.shape = playerShape;
+        fixtureDef.density = 1;
+        fixtureDef.restitution = 0.1f;
+        fixtureDef.friction = 0.1f;
+        player.body.createFixture(fixtureDef);
+        playerShape.dispose();
+
+        Gdx.app.debug(TAG, "Creating Box2D for Apple Trees");
+        for(Actor actor : appleTreeObjectList) {
+            AppleTreeObject appleTreeObject = (AppleTreeObject) actor;
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(actor.getX() + 0.95f, appleTreeObject.getY() + appleTreeObject.getWorldHeight()/10);
+            //creating the body adds it to the world
+            Body body = b2world.createBody(bodyDef);
+            PolygonShape rectShape = SpikeQuestBox2D.buildRectangleShape(0.70f, 0.15f);
+            body.createFixture(rectShape, 0.0f);
+            rectShape.dispose();
+        }
+
+        Gdx.app.debug(TAG, "Creating Box2D for Collision Map Polygons");
+        for(Polygon polygon : SpikeQuestTiles.getPolygons(tileMap, COLLISION_LAYER)) {
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(0, 0);
+            Body body = b2world.createBody(bodyDef);
+            PolygonShape polygonShape = SpikeQuestBox2D.buildPolygonShape(polygon.getTransformedVertices(), PPM_WIDTH);
+            body.createFixture(polygonShape, 0.0f);
+            polygonShape.dispose();
+        }
+
     }
 
     private void handleCollisions() {
-        Rectangle playerRect = player.getBounds();
+       /* Rectangle playerRect = player.getBounds();
         Polygon polygon = SpikeQuestTiles.getPolygonObjectCollision(tileMap, playerRect, COLLISION_LAYER);
         if(polygon != null) {
             Gdx.app.debug(TAG, "Player collision with collision objects");
@@ -277,9 +404,10 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
             //calculate minimum translation vector to move player away from collision. NOTE player polygon must be first argument
             if(Intersector.overlapConvexPolygons(playerPolygon, polygon, mtv))
                 //normal is the direction vector. Depth is the length to move along the vector
-                player.moveBy(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);
+                player.moveBy(mtv.normal.x * (mtv.depth + 1), mtv.normal.y * (mtv.depth+1));
             return;
-        }
+        }*/
+
        /* for (Actor actor : treeObjectGroup.getChildren()) {
             AppleTreeObject treeObject = (AppleTreeObject)actor;
             Rectangle treeRect = new Rectangle(treeObject.getX(), treeObject.getY(), treeObject.getWidth(), treeObject.getHeight());
@@ -313,7 +441,9 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
     @Override
     public void dispose() {
-        safeDispose(stage, currentBackdropTexture);
+        safeDispose(stage, currentBackdropTexture, b2world);
+        if(b2debugRenderer != null)
+            b2debugRenderer.dispose();
         stage.clear();
         super.dispose();
     }

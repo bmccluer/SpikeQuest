@@ -68,6 +68,16 @@ public class SpikeQuestTiles {
         return null;
     }
 
+    public static List<Polygon> getPolygons(TiledMap tiledMap, int objectLayerNum) {
+        MapLayer objectLayer =  tiledMap.getLayers().get(objectLayerNum);
+        MapObjects objects = objectLayer.getObjects();
+        List<Polygon> polygonList = new ArrayList<Polygon>();
+        for (PolygonMapObject polygonMapObject : objects.getByType(PolygonMapObject.class)) {
+            polygonList.add(polygonMapObject.getPolygon());
+        }
+        return polygonList;
+    }
+
     public static void drawPolygons(TiledMap aMap, int anObjectLayer, SpikeQuestCamera gameCamera) {
         SpikeQuestShapeRenderer renderer = new SpikeQuestShapeRenderer();
         MapLayer objectLayer =  aMap.getLayers().get(anObjectLayer);

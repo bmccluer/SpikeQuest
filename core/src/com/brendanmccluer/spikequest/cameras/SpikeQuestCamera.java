@@ -28,8 +28,6 @@ public class SpikeQuestCamera  {
 		worldHeight = height;
 		cameraSize = size;
 		camera =  new OrthographicCamera(size, size*(h/w));
-
-		
 		//set camera looking at middle of viewport
 		setPositionBottomLeft();
 	}

@@ -56,6 +56,14 @@ public class BigMacObject extends Actor implements LoadableObject {
         }
     }
 
+    public float getWorldWidth() {
+        return getWidth() * getScaleX();
+    }
+
+    public float getWorldHeight() {
+        return getHeight() * getScaleY();
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
@@ -68,7 +76,7 @@ public class BigMacObject extends Actor implements LoadableObject {
     public boolean isLoaded() {
         Gdx.app.debug(BIG_MAC_TAG, "Loading assets");
         sprite = new Sprite((Texture)SpikeQuestGame.instance.assetManager.loadAsset(BIG_MAC_PNG_FILE, "Texture"));
-        setSize((sprite.getWidth()/5) * 0.5f, (sprite.getHeight()/5) * 0.5f);
+        setSize(sprite.getWidth(), sprite.getHeight());
         return true;
     }
 

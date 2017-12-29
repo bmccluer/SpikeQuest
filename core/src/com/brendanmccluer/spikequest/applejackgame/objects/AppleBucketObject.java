@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.interfaces.CreatableObject;
@@ -37,6 +38,10 @@ public class AppleBucketObject extends Actor implements LoadableObject {
         }
     }
 
+    public Rectangle getBounds() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
     public void emptyBucket() {
         Gdx.app.debug(APPLE_BUCKET_TAG, "Apple bucket emptied");
         percentFull = 0;
@@ -60,11 +65,19 @@ public class AppleBucketObject extends Actor implements LoadableObject {
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
+    public float getWorldWidth() {
+        return getWidth() * getScaleX();
+    }
+
+    public float getWorldHeight() {
+        return getHeight() * getScaleY();
+    }
+
     @Override
     public boolean isLoaded() {
         Gdx.app.debug(APPLE_BUCKET_TAG, "Loading assets");
         sprite = new Sprite((Texture) SpikeQuestGame.instance.assetManager.loadAsset("object/appleBucket/appleBucket.png", "Texture"));
-        setSize((sprite.getWidth()/2) * 0.5f, (sprite.getHeight()/2) * 0.5f);
+        setSize(sprite.getWidth(), sprite.getHeight());
         return true;
     }
 

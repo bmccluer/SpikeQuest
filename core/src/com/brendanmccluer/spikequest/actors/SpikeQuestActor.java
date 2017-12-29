@@ -45,8 +45,11 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
+        updateSpriteCurrentFrame();
+    }
+
+    public void updateSpriteCurrentFrame() {
         TextureRegion region = currentAnimation.getKeyFrame(stateTime, true);
-        setSize(region.getRegionWidth(), region.getRegionHeight());
         sprite.setRegion(region);
         sprite.setFlip(isFlipX, isFlipY);
         sprite.setSize(getWidth(), getHeight());
@@ -57,7 +60,15 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
     }
 
     public Rectangle getBounds() {
-        return sprite.getBoundingRectangle();
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    public float getWorldWidth() {
+        return getWidth() * getScaleX();
+    }
+
+    public float getWorldHeight() {
+        return getHeight() * getScaleY();
     }
 
     @Override
@@ -73,6 +84,8 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
         Gdx.app.debug(tag, "Loading assets");
         textureAtlas = (TextureAtlas) SpikeQuestGame.instance.assetManager.loadAsset(textureAtlasPath, "TextureAtlas");
         sprite = new Sprite();
+        //set as default
+        setSize(textureAtlas.getRegions().first().getRegionWidth(), textureAtlas.getRegions().first().getRegionHeight());
         return true;
     }
 
