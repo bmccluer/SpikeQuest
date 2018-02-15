@@ -4,12 +4,11 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.sounds.SpikeQuestSoundEffect;
 
 public class BalloonObject extends AbstractSpikeQuestSpriteObject {
@@ -51,7 +50,7 @@ public class BalloonObject extends AbstractSpikeQuestSpriteObject {
 		boolean loaded = super.isLoaded();
 		if(loaded && balloonParticles == null) {
 			balloonParticles = new ParticleEffect();
-			balloonParticles.load(Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_FIREWORK), Gdx.files.internal(SpikeQuestStaticFilePaths.PARTICLE_FX_DIRECTORY));
+			balloonParticles.load(Gdx.files.internal(SpikeQuestAssets.PARTICLE_FX_FIREWORK), Gdx.files.internal(SpikeQuestAssets.PARTICLE_FX_DIRECTORY));
 		}
 		return loaded;
 	}

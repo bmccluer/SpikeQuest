@@ -5,7 +5,7 @@ package com.brendanmccluer.spikequest;
  * @author Brendan
  *
  */
-public final class SpikeQuestStaticFilePaths {
+public final class SpikeQuestAssets {
 	public static final String SAVE_FILE_NAME = "SaveFile1";
 	public static final String SAVE_SCORE_SCREEN_BACKDROP_PATH = "backdrop/saveScoreScreen.png";
 	
@@ -40,4 +40,6 @@ public final class SpikeQuestStaticFilePaths {
 	public static final String PARTICLE_FX_FIREWORK = PARTICLE_FX_DIRECTORY + "/Firework.pfx";
 
 	public static final String SPIKE_MAIN_TEXTURE_ATLAS = "spike/textureAtlas/Spike.atlas";
+	public static final String BIG_MAC_TEXTURE_ATLAS = "bigMac/textureAtlas/BigMac.atlas";
+	public static final String AJGAME_OBJECTS_TEXTURE_ATLAS = "applejackGame/Objects.atlas";
 }

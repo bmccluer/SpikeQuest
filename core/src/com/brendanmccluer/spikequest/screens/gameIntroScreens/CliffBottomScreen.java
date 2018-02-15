@@ -3,7 +3,7 @@ package com.brendanmccluer.spikequest.screens.gameIntroScreens;
 import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
@@ -26,7 +26,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 	public CliffBottomScreen(SpikeQuestGame game, SpikeQuestSoundEffect aCrashSoundEffect, SpikeQuestSoundEffect aScreamSoundEffect) {
 		super(game);
 
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
+		game.assetManager.setAsset(SpikeQuestAssets.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
 		gameCamera = new SpikeQuestCamera(1300, 1355, 762);
 		this.crashSoundEffect = aCrashSoundEffect;
 		this.screamSoundEffect = aScreamSoundEffect;
@@ -51,7 +51,7 @@ public class CliffBottomScreen extends AbstractSpikeQuestScreen {
 			gameCamera.attachToBatch(game.batch);
 			if (!screenStart) {
 				spawnObjects();
-				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
+				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.CLIFF_BOTTOM_SCREEN_BACKDROP_PATH, "Texture");
 				screenStart = true;
 				dialogController.dialogEnabled = false;
 			}

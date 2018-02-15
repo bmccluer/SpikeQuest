@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.ponies.FlamObject;
@@ -21,7 +21,7 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 	private Texture paraspriteCageTexture = null;
 			
 	public SugarCubeCornerScreen(SpikeQuestGame game, String aScreenType, String aSpikeSpawnString) {
-		super(game, 1097, 617, 1000, SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_BACKDROP_PATH, aScreenType, aSpikeSpawnString);
+		super(game, 1097, 617, 1000, SpikeQuestAssets.SUGAR_CUBE_CORNER_BACKDROP_PATH, aScreenType, aSpikeSpawnString);
 	}
 
 	@Override
@@ -31,8 +31,8 @@ public class SugarCubeCornerScreen extends AbstractSpikeQuestStandardScreen {
 		//load required assets for intro
 		if (("intro").equalsIgnoreCase(screenType)) {
 
-			dialogController = new SpikeQuestDialogController(pinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Pinkie", 1,
-					spikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Spike", 0);
+			dialogController = new SpikeQuestDialogController(pinkieObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Pinkie", 1,
+					spikeObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SUGAR_CUBE_CORNER_INTRO_DIALOG), "Spike", 0);
 			pinkieObject = new PinkieObject();
 		}
 		//load flim and flam if ShyAndSeek is complete

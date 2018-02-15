@@ -8,32 +8,22 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.interfaces.LoadableObject;
 
 /**
  * Created by brend on 11/12/2017.
  */
 
-public abstract class SpikeQuestActor extends Actor implements LoadableObject {
-    public final String textureAtlasPath;
-    public final String regionName;
+public abstract class SpikeQuestAbstractAnimatedActor extends Actor {
     public Animation currentAnimation;
     public Sprite sprite;
-    public TextureAtlas textureAtlas;
     protected final String tag;
     protected float stateTime;
     public boolean isFlipX, isFlipY;
-    public Vector2 previousPosition;
 
-    public SpikeQuestActor(String tag, String textureAtlasPath, String regionName) {
+    public SpikeQuestAbstractAnimatedActor(String tag) {
         this.tag = tag;
-        this.textureAtlasPath = textureAtlasPath;
-        this.regionName = regionName;
-        SpikeQuestGame.instance.assetManager.setAsset(textureAtlasPath, "TextureAtlas");
-        previousPosition = new Vector2();
+        sprite = new Sprite();
     }
 
     public void setFlip(boolean isFlipX, boolean isFlipY) {
@@ -45,8 +35,11 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
+        update(delta);
         updateSpriteCurrentFrame();
     }
+
+    protected abstract void update(float delta);
 
     public void updateSpriteCurrentFrame() {
         TextureRegion region = currentAnimation.getKeyFrame(stateTime, true);
@@ -79,14 +72,12 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
         sprite.draw(batch);
     }
 
-    @Override
-    public boolean isLoaded() {
-        Gdx.app.debug(tag, "Loading assets");
-        textureAtlas = (TextureAtlas) SpikeQuestGame.instance.assetManager.loadAsset(textureAtlasPath, "TextureAtlas");
-        sprite = new Sprite();
-        //set as default
-        setSize(textureAtlas.getRegions().first().getRegionWidth(), textureAtlas.getRegions().first().getRegionHeight());
-        return true;
+    protected abstract void setAnimations(TextureAtlas textureAtlas, String regionName);
+
+    public void reload(TextureAtlas textureAtlas, String regionName) {
+        Gdx.app.debug(tag, "Refreshing assets");
+        setAnimations(textureAtlas, regionName);
+        updateSpriteCurrentFrame();
     }
 
     public void setCurrentAnimation(Animation currentAnimation) {
@@ -94,11 +85,5 @@ public abstract class SpikeQuestActor extends Actor implements LoadableObject {
             this.currentAnimation = currentAnimation;
             stateTime = 0;
         }
-    }
-
-    @Override
-    public void dispose() {
-        Gdx.app.debug(tag, "Disposing assets");
-        SpikeQuestGame.instance.assetManager.disposeAsset(textureAtlasPath);
     }
 }

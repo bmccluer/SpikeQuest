@@ -4,7 +4,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
@@ -30,9 +30,9 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
         spikeQuestCamera = new SpikeQuestCamera(CAMERA_SIZE, game.GAME_SCREEN_WIDTH, game.GAME_SCREEN_WIDTH);;
         twilightObject = new TwilightObject();
         spikeObject = new SpikeObject();
-        dialogController = new SpikeQuestDialogController(twilightObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Twilight", 4,
-                spikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.INTRO_SCREEN_DIALOG_PATH), "Spike", 3);
-        game.assetManager.setAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
+        dialogController = new SpikeQuestDialogController(twilightObject, new SpikeQuestTextBalloon(SpikeQuestAssets.INTRO_SCREEN_DIALOG_PATH), "Twilight", 4,
+                spikeObject, new SpikeQuestTextBalloon(SpikeQuestAssets.INTRO_SCREEN_DIALOG_PATH), "Spike", 3);
+        game.assetManager.setAsset(SpikeQuestAssets.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
         game.assetManager.setAsset("music/ponyvilleMusic.mp3", "Music");
     }
 
@@ -48,7 +48,7 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 				if (!screenStart) {
 					
 					screenStart = true;
-					currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
+					currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.TWILIGHT_LIBRARY_BACKDROP_PATH, "Texture");
 					setObjects();
 					//start music
 					backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset("music/ponyvilleMusic.mp3", "Music"));
@@ -200,7 +200,7 @@ public class IntroScreen extends AbstractSpikeQuestScreen {
 			twilightObject.dispose();
 			dialogController.dispose();
 			
-			game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.TWILIGHT_LIBRARY_BACKDROP_PATH);
+			game.assetManager.disposeAsset(SpikeQuestAssets.TWILIGHT_LIBRARY_BACKDROP_PATH);
 			
 			spikeObject = null;
 			spikeQuestCamera = null;

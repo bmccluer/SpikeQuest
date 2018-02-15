@@ -1,8 +1,11 @@
 package com.brendanmccluer.spikequest;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 
 /**
  * Created by brend on 12/28/2017.
@@ -45,4 +48,6 @@ public class SpikeQuestBox2D {
                 "Transformed rectangle has width %s and height %s", rectWidth, rectHeight, width, height));
         return polygon;
     }
+
+
 }

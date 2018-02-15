@@ -3,7 +3,7 @@ package com.brendanmccluer.spikequest.screens.gameIntroScreens;
 import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestDialogController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.dialog.SpikeQuestTextBalloon;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
@@ -57,10 +57,10 @@ public class PonyvilleSlopeScreen extends AbstractSpikeQuestScreen {
 
         game.assetManager.setAsset("backdrop/slope.png", "Texture");
 
-        aRaritySpikeDialogController = new SpikeQuestDialogController(aRarityObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Rarity", 2,
-                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Spike", 1);
-        aPinkieSpikeDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Pinkie", 1,
-                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestStaticFilePaths.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Spike", 1);
+        aRaritySpikeDialogController = new SpikeQuestDialogController(aRarityObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Rarity", 2,
+                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SLOPE_SCREEN_RARITY_SPIKE_DIALOG_PATH), "Spike", 1);
+        aPinkieSpikeDialogController = new SpikeQuestDialogController(aPinkieObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Pinkie", 1,
+                aSpikeObject, new SpikeQuestTextBalloon(SpikeQuestAssets.SLOPE_SCREEN_PINKIE_SPIKE_DIALOG_PATH), "Spike", 1);
 	}
 
 	@Override

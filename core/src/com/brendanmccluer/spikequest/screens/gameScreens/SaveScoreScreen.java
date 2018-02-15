@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
@@ -91,7 +91,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
         gameCamera = new SpikeQuestCamera(1800, 1554, 917); //screen properties
         fontXPosition = gameCamera.getCameraWidth()/2 + 350;
 
-        game.assetManager.setAsset(SpikeQuestStaticFilePaths.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
+        game.assetManager.setAsset(SpikeQuestAssets.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 			gameCamera.attachToBatch(game.batch);
 			
 			if (!screenStart) {
-				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
+				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.SAVE_SCORE_SCREEN_BACKDROP_PATH, "Texture");
 				backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset(BACKGROUND_MUSIC_PATH, "Music"));
 				backgroundMusic.playMusic(true);
 				screenStart = true;
@@ -175,7 +175,7 @@ public class SaveScoreScreen extends AbstractSpikeQuestScreen {
 		totalScoreFont = null;
 		backgroundMusic = null;
 		
-		game.assetManager.disposeAsset(SpikeQuestStaticFilePaths.SAVE_SCORE_SCREEN_BACKDROP_PATH);
+		game.assetManager.disposeAsset(SpikeQuestAssets.SAVE_SCORE_SCREEN_BACKDROP_PATH);
 		game.assetManager.disposeAsset(BACKGROUND_MUSIC_PATH);
 		
 		super.dispose();

@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.brendanmccluer.spikequest.SpikeQuestController;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
 import com.brendanmccluer.spikequest.SpikeQuestShapeRenderer;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.common.objects.ScoreBoardObject;
 import com.brendanmccluer.spikequest.common.objects.ScoreControlObject;
@@ -85,10 +83,10 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 		if (game.debugMode)
 			shapeRenderer = new SpikeQuestShapeRenderer();
 
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH, "Texture");
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH, "Music");
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.SPIKE_ALARM_SOUND_PATH, "Sound");
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.GREEN_BACKDROP_PATH, "Texture");
+		game.assetManager.setAsset(SpikeQuestAssets.BALLOON_GAME_BACKDROP_PATH, "Texture");
+		game.assetManager.setAsset(SpikeQuestAssets.BALLOON_GAME_MUSIC_PATH, "Music");
+		game.assetManager.setAsset(SpikeQuestAssets.SPIKE_ALARM_SOUND_PATH, "Sound");
+		game.assetManager.setAsset(SpikeQuestAssets.GREEN_BACKDROP_PATH, "Texture");
 
 		game.bitmapFont = new BitmapFont();
 		game.bitmapFont.scale(1.5f);
@@ -114,10 +112,10 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 			
 			if (!screenStart) {
 				screenStart = true;
-				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_BACKDROP_PATH, "Texture");
-				backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_MUSIC_PATH, "Music"));
+				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.BALLOON_GAME_BACKDROP_PATH, "Texture");
+				backgroundMusic = new SpikeQuestMusic((Music) game.assetManager.loadAsset(SpikeQuestAssets.BALLOON_GAME_MUSIC_PATH, "Music"));
 				backgroundMusic.playMusic(true);
-				spikeAlarm = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.SPIKE_ALARM_SOUND_PATH, "Sound"), 10);
+				spikeAlarm = new SpikeQuestSoundEffect((Sound) game.assetManager.loadAsset(SpikeQuestAssets.SPIKE_ALARM_SOUND_PATH, "Sound"), 10);
 
                 aSpikeObject.spawn(gameCamera.getCameraWidth()/2, 0);
 				//spawn to create sprite
@@ -183,7 +181,7 @@ public class BalloonGameScreen extends AbstractSpikeQuestScreen {
 				if (spikeAlarm.isPlaying()) {
 					//continue to play sound until done
 					spikeAlarm.playSound(false);
-					game.batch.draw(((Texture)game.assetManager.loadAsset(SpikeQuestStaticFilePaths.GREEN_BACKDROP_PATH, "Texture")),0,0);
+					game.batch.draw(((Texture)game.assetManager.loadAsset(SpikeQuestAssets.GREEN_BACKDROP_PATH, "Texture")),0,0);
 				}
 					
 				game.batch.end();

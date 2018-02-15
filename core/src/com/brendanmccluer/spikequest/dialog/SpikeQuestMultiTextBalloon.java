@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.common.objects.TimerObject;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 
@@ -52,7 +52,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	 * Create new text balloon with no sound effects
 	 */
 	public SpikeQuestMultiTextBalloon(String textFilePath, SpikeQuestTextObject... spikeQuestTextObjects) {
-		super(SpikeQuestStaticFilePaths.TEXT_BALLOON_PATH, "Texture");
+		super(SpikeQuestAssets.TEXT_BALLOON_PATH, "Texture");
 		textObjects = spikeQuestTextObjects;
 		this.textFilePath = textFilePath;
 		scanner = new Scanner(Gdx.files.internal(textFilePath).read());
@@ -62,7 +62,7 @@ public class SpikeQuestMultiTextBalloon extends AbstractSpikeQuestObject {
 	@Override
 	public boolean isLoaded() {
 		if (!textBoxLoaded && super.isLoaded()) {
-			messageBox = (Texture) getAsset(SpikeQuestStaticFilePaths.TEXT_BALLOON_PATH, "Texture");
+			messageBox = (Texture) getAsset(SpikeQuestAssets.TEXT_BALLOON_PATH, "Texture");
 			TextBalloonWrapWidth = messageBox.getWidth() - 10;
 			message = new BitmapFont();
 			message.setColor(Color.BLACK);

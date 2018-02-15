@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.objects.buttons.ButtonObject;
@@ -42,7 +42,7 @@ public class MainMenuScreenOld extends AbstractSpikeQuestScreen {
         creditsButton.setPosition(gameCamera.getCameraPositionX() + 400, gameCamera.getCameraPositionY() - 300);
 
         //use asset manager to set resources
-        game.assetManager.setAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
+        game.assetManager.setAsset(SpikeQuestAssets.MAIN_MENU_BACKDROP_PATH, "Texture");
     }
 	
 	public void render (float delta){
@@ -54,7 +54,7 @@ public class MainMenuScreenOld extends AbstractSpikeQuestScreen {
 			
 			if (!screenStart) {
 				
-				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
+				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.MAIN_MENU_BACKDROP_PATH, "Texture");
 				
 				screenStart = true;
 			}
@@ -72,9 +72,9 @@ public class MainMenuScreenOld extends AbstractSpikeQuestScreen {
            
 	        //Go to start screen
 	        if (isButtonPressed(newGameButton)) {
-	        	SpikeQuestSaveFile.deleteSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
-	        	SpikeQuestSaveFile.createNewSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
-	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+	        	SpikeQuestSaveFile.deleteSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
+	        	SpikeQuestSaveFile.createNewSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
+	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
 	        	
 	        	newButtonPressed = true;
 	        	setNextScreen();
@@ -84,7 +84,7 @@ public class MainMenuScreenOld extends AbstractSpikeQuestScreen {
 	        	//debugging mode
 	        	if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
 	        		game.debugMode = true;
-	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+	        	SpikeQuestSaveFile.setSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
 	        	continueButtonPressed = true;
 	        	setNextScreen();
 	        	
@@ -93,7 +93,7 @@ public class MainMenuScreenOld extends AbstractSpikeQuestScreen {
 				//debugging mode
 				if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT))
 					game.debugMode = true;
-				SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+				SpikeQuestSaveFile.setSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
 				dispose();
 				game.screenStack.push(new GameSelectScreen(game));
 				SpikeQuestScreenManager.popNextScreen(game);

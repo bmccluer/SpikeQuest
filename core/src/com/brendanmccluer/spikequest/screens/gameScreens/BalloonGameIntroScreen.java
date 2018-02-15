@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 import com.brendanmccluer.spikequest.screens.AbstractSpikeQuestScreen;
@@ -19,7 +19,7 @@ public class BalloonGameIntroScreen extends AbstractSpikeQuestScreen {
 	public void show() {
         gameCamera = new SpikeQuestCamera(1675, 1564, 931); //screen properties
         //move the camera slightly to center the picture
-        game.assetManager.setAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
+        game.assetManager.setAsset(SpikeQuestAssets.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class BalloonGameIntroScreen extends AbstractSpikeQuestScreen {
 		if (game.assetManager.loadAssets()) {
 			
 			if (!screenStart) {
-				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestStaticFilePaths.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
+				currentBackdropTexture = (Texture) game.assetManager.loadAsset(SpikeQuestAssets.BALLOON_GAME_INTRO_BACKDROP_PATH, "Texture");
 				screenStart = true;
 			}
 			

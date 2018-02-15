@@ -18,7 +18,7 @@ public class TextureAtlasCreator {
 		TexturePacker.Settings aSettings = new TexturePacker.Settings();
 		aSettings.maxHeight = 2048;
 		aSettings.maxWidth = 2048;
-		TexturePacker.process(aSettings,"C:\\Users\\brend\\Desktop\\Temp\\Spike", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\spike\\textureAtlas", "Spike");
+		TexturePacker.process(aSettings,"C:\\Users\\brend\\Desktop\\Temp\\TexAtlas", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\applejackGame", "Bucket");
 		//TexturePacker.process("C:\\Users\\brend\\Desktop\\Temp\\TextureAtlas", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\scootaloo\\walk", "ScootalooWalk");
 		//TexturePacker.process("C:\\Users\\brend\\Desktop\\Temp\\TextureAtlas", "C:\\Users\\brend\\Documents\\SpikeQuest\\android\\assets\\scootaloo\\talk", "ScootalooTalk");
 

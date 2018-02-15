@@ -29,7 +29,7 @@ public class SpikeQuestGame extends Game{
 		bitmapFont = new BitmapFont();
         screenStack = new Stack<>();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		SpikeQuestSaveFile.setSaveFile(SpikeQuestStaticFilePaths.SAVE_FILE_NAME);
+		SpikeQuestSaveFile.setSaveFile(SpikeQuestAssets.SAVE_FILE_NAME);
 		instance = this;
 		//this.setScreen(new OutsideCmcClubhouseScreen(this, "cmcTankIntro", ""));
 		//setScreen(new MainMenuScreen(this));

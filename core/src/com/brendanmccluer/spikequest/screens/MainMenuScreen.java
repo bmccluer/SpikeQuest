@@ -4,38 +4,27 @@ package com.brendanmccluer.spikequest.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.brendanmccluer.spikequest.SpikeQuestGame;
 import com.brendanmccluer.spikequest.SpikeQuestSaveFile;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.cameras.SpikeQuestCamera;
 import com.brendanmccluer.spikequest.managers.SpikeQuestScreenManager;
 
-import java.awt.Checkbox;
-
 import javafx.scene.control.ChoiceBox;
-import sun.security.provider.ConfigFile;
 
 /**
  * I render the MainMenu screen
@@ -73,7 +62,7 @@ public class MainMenuScreen extends AbstractSpikeQuestScreen {
 	@Override
 	public void show() {
 		gameCamera = new SpikeQuestCamera(1700, 1554, 917);
-		game.assetManager.setAsset(SpikeQuestStaticFilePaths.MAIN_MENU_BACKDROP_PATH, "Texture");
+		game.assetManager.setAsset(SpikeQuestAssets.MAIN_MENU_BACKDROP_PATH, "Texture");
 		stage = new Stage(new StretchViewport(gameCamera.getCameraWidth(), gameCamera.getCameraHeight()));
 		Gdx.input.setInputProcessor(stage);
 		rebuildStage();

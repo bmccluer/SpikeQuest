@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.brendanmccluer.spikequest.SpikeQuestStaticFilePaths;
+import com.brendanmccluer.spikequest.SpikeQuestAssets;
 import com.brendanmccluer.spikequest.objects.AbstractSpikeQuestObject;
 
 public class SpikeQuestBannerObject extends AbstractSpikeQuestObject {
-	private static final String[] assets = { SpikeQuestStaticFilePaths.ORANGE_BANNER_PATH };
+	private static final String[] assets = { SpikeQuestAssets.ORANGE_BANNER_PATH };
 	private static final String[] types = { "Texture" };
 	private static final int BANNER_PARAMETER = 50;
 	

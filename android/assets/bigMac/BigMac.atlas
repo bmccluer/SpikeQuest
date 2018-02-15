@@ -1,0 +1,27 @@
+
+BigMac.png
+size: 97,122
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bigMac_buck
+  rotate: false
+  xy: 2, 2
+  size: 95, 120
+  orig: 95, 120
+  offset: 0, 0
+  index: 1
+bigMac_walk
+  rotate: false
+  xy: 2, 2
+  size: 95, 120
+  orig: 95, 120
+  offset: 0, 0
+  index: 1
+bigMac_stand
+  rotate: false
+  xy: 2, 2
+  size: 95, 120
+  orig: 95, 120
+  offset: 0, 0
+  index: 1
