@@ -38,6 +38,10 @@ public class ApplejackGamePlayerActor extends SpikeQuestAbstractAnimatedActor {
         animStand = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_stand"), Animation.PlayMode.LOOP_PINGPONG);
         animWalk = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_walk"), Animation.PlayMode.LOOP);
         animDrop = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_drop"), Animation.PlayMode.LOOP_PINGPONG);
-        currentAnimation = animStand;
+    }
+
+    @Override
+    protected Animation getDefaultAnimation() {
+        return animStand;
     }
 }

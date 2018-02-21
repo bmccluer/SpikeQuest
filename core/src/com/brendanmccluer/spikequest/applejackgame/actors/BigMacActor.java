@@ -125,4 +125,9 @@ public class BigMacActor extends SpikeQuestAbstractAnimatedActor {
         animBuck = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_buck"), Animation.PlayMode.LOOP);
         animWalk = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_walk"), Animation.PlayMode.LOOP);
     }
+
+    @Override
+    protected Animation getDefaultAnimation() {
+        return animStand;
+    }
 }

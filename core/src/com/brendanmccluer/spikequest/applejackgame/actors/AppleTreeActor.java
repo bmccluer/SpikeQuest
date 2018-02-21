@@ -47,4 +47,8 @@ public class AppleTreeActor extends SpikeQuestAbstractAnimatedActor {
         shakeAnimation = new Animation(1.0f/10.0f, textureAtlas.findRegions(regionName + "_shake"), Animation.PlayMode.LOOP);
     }
 
+    @Override
+    protected Animation getDefaultAnimation() {
+        return restAnimation;
+    }
 }

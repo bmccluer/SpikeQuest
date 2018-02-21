@@ -74,10 +74,14 @@ public abstract class SpikeQuestAbstractAnimatedActor extends Actor {
 
     protected abstract void setAnimations(TextureAtlas textureAtlas, String regionName);
 
+    protected abstract Animation getDefaultAnimation();
+
     public void reload(TextureAtlas textureAtlas, String regionName) {
         Gdx.app.debug(tag, "Refreshing assets");
         setAnimations(textureAtlas, regionName);
+        setCurrentAnimation(getDefaultAnimation());
         updateSpriteCurrentFrame();
+        setSize(getDefaultAnimation().getKeyFrame(0).getRegionWidth(), getDefaultAnimation().getKeyFrame(0).getRegionHeight());
     }
 
     public void setCurrentAnimation(Animation currentAnimation) {

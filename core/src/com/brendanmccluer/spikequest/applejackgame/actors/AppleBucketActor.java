@@ -71,7 +71,6 @@ public class AppleBucketActor extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion region = getRegionToDraw();
-        setSize(region.getRegionWidth(), region.getRegionHeight());
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         batch.draw(region, getX(), getY(), getOriginX(), getOriginY(),

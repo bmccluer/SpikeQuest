@@ -109,10 +109,8 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         if(!isLoaded())
             return;
         if(!screenStart) {
+            reload();
             buildStage();
-            convertSizeToMeters(bigMac, player);
-            appleTreeObjectList.forEach(this::convertSizeToMeters);
-            appleBucketObjectList.forEach(this::convertSizeToMeters);
             resetObjectsPos();
             buildBox2DWorld();
             buildBox2DContactListeners();
@@ -147,9 +145,6 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         }
         b2world.step(delta, 8, 3);
     }
-
-
-
 
     private void updateController(float delta) {
         boolean moving = false;
@@ -264,6 +259,9 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
     public void initialize() {
         Gdx.app.debug(TAG, "Initializing Game");
+        game.assetManager.setAsset(SpikeQuestAssets.BIG_MAC_TEXTURE_ATLAS, "TextureAtlas");
+        game.assetManager.setAsset(SpikeQuestAssets.AJGAME_OBJECTS_TEXTURE_ATLAS, "TextureAtlas");
+        game.assetManager.setAsset(SpikeQuestAssets.SPIKE_MAIN_TEXTURE_ATLAS, "TextureAtlas");
         gameCamera = new SpikeQuestCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage();
         bigMac = new BigMacActor("BigMacActor");
@@ -282,16 +280,13 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         }
     }
 
-    private void setAssets() {
-        game.assetManager.setAsset(SpikeQuestAssets.BIG_MAC_TEXTURE_ATLAS, "TextureAtlas");
-        game.assetManager.setAsset(SpikeQuestAssets.AJGAME_OBJECTS_TEXTURE_ATLAS, "TextureAtlas");
-        game.assetManager.setAsset(SpikeQuestAssets.SPIKE_MAIN_TEXTURE_ATLAS, "TextureAtlas");
-    }
-
     ///Reload the actors and assets
     private void reload() {
+        Gdx.app.debug(TAG, "Reloading Game");
         currentBackdropTexture = new Texture(Gdx.files.internal("applejackGame/applejackGameBackground.png"));
         reloadMap();
+        player.reload((TextureAtlas) game.assetManager.loadAsset(SpikeQuestAssets.SPIKE_MAIN_TEXTURE_ATLAS, "TextureAtlas"), "spike");
+        player.setScale(0.25f);
         bigMac.reload((TextureAtlas) game.assetManager.loadAsset(SpikeQuestAssets.BIG_MAC_TEXTURE_ATLAS, "TextureAtlas"), "bigMac");
         for (AppleBucketActor appleBucket : appleBucketObjectList) {
             appleBucket.reload((TextureAtlas) game.assetManager.loadAsset(SpikeQuestAssets.AJGAME_OBJECTS_TEXTURE_ATLAS, "textureAtlas"), "appleBucket");
@@ -299,7 +294,9 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         for (AppleTreeActor appleTree : appleTreeObjectList) {
             appleTree.reload((TextureAtlas) game.assetManager.loadAsset(SpikeQuestAssets.AJGAME_OBJECTS_TEXTURE_ATLAS, "textureAtlas"), "appleTree");
         }
-
+        convertSizeToMeters(bigMac, player);
+        appleTreeObjectList.forEach(this::convertSizeToMeters);
+        appleBucketObjectList.forEach(this::convertSizeToMeters);
     }
 
     private void reloadMap() {
@@ -322,8 +319,6 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         OrthographicCamera stageCamera = new OrthographicCamera(VIEWPORT_METERS_WIDTH, VIEWPORT_METERS_HEIGHT);
         stageCamera.position.set(stageCamera.viewportWidth/2f, stageCamera.viewportHeight/2f, 0);
         stage.setViewport(new StretchViewport(VIEWPORT_METERS_WIDTH, VIEWPORT_METERS_HEIGHT, stageCamera));
-        bigMac.setScale(0.15f);
-        player.setScale(0.25f);
         stage.addActor(bigMac);
         stage.addActor(player);
         Iterator<AppleTreeActor> treeIterator = appleTreeObjectList.iterator();
@@ -339,7 +334,6 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
             treeDropSpotObjectGroup.addActor(object);
             object.treeObject = appleTreeObject;
             object.treeObject.setPosition(object.getX() + 0.5f, object.getY());
-            object.treeObject.setScale(0.30f);
             stage.addActor(appleTreeObject);
             //treeObjectGroup.addActor(appleTreeObject);
         }
@@ -358,7 +352,6 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
         int posX = 3;
         for(Actor actor : appleBucketObjectList) {
             actor.setPosition(posX++, 2);
-            actor.setScale(0.25f);
         }
         bigMac.setPosition(VIEWPORT_METERS_WIDTH - bigMac.getWorldWidth(), appleTreeObjectList.get(0).getY());
     }
@@ -368,6 +361,7 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
             convertSizeToMeters(actor);
         }
     }
+
     private void convertSizeToMeters(Actor actor) {
         actor.setSize(actor.getWidth() / PPM_WIDTH, actor.getHeight() / PPM_HEIGHT);
     }
@@ -533,16 +527,19 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
 
     @Override
     public void hide() {
+        Gdx.app.debug(TAG, "Game Hidden");
         dispose();
     }
 
     @Override
     public void pause() {
-
+        Gdx.app.debug(TAG, "Game Paused");
     }
 
     @Override
     public void resume() {
+        Gdx.app.debug(TAG, "Game Resumed");
+        game.assetManager.manager.finishLoading();
         reload();
     }
 
@@ -553,5 +550,6 @@ public class AppleJackGameScreen extends AbstractSpikeQuestScreen {
             b2debugRenderer.dispose();
         stage.clear();
         super.dispose();
+        game.assetManager.disposeAllAssets();
     }
 }

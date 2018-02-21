@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  *
  */
 public class SpikeQuestAssetManager {
-	private AssetManager manager = null;	
+	public AssetManager manager = null;
 	public SpikeQuestAssetManager () {
 		manager = new AssetManager();
 	}
@@ -55,7 +55,7 @@ public class SpikeQuestAssetManager {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * I return the asset requested.
 	 * Return null if not loaded or does not exist
